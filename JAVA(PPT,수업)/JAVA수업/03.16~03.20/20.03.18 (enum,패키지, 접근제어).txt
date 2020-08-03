@@ -1,0 +1,570 @@
+##문제##
+Person 클래스 -> hakbun, irum
+Personable 인터페이스 -> input(), output();
+Sungjuk 클래스 -> kor,eng,math,tot,avg,grade;   Person,Personable 상속
+		process();
+PersonInfo 클래스 -> phone,addr
+
+### 성적 입력 ### MAX=100
+학번
+이름
+국어
+영어
+수학
+
+학번에 exit입력하면 입력끝나고
+### 개인정보 입력 ###
+학번
+이름
+전화번호
+주소
+
+학번에 exit입력하면 개인정보 입력끝나고
+성적표 개인정보 출력
+
+
+public class Person {
+	String hakbun;
+	String irum;
+	
+}
+
+public interface Personable {
+	
+	abstract boolean input();
+	abstract void output();
+}
+
+##다형성X##
+import java.util.Scanner;
+
+public class Sungjuk extends Person implements Personable {
+	
+	int kor,eng,math,tot;
+	String hakbun,irum;
+	double avg;
+	String grade;
+	
+	static int cnt = 0;
+	
+	Sungjuk() {
+		
+	}
+	
+	public boolean input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		hakbun = scan.next();
+		if(hakbun.equals("exit"))
+			return true;
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		math = scan.nextInt();
+		System.out.println();
+		return false;
+
+	}
+	
+	void process() {
+		tot = kor+eng+math;
+		avg = tot/3.;
+		
+		switch((int)avg/10) {
+		case 10:
+		case 9:
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		default:
+			grade = "가";
+		}
+	}
+
+	
+	public void output() {
+		System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",hakbun,irum,kor,eng,math,tot,avg,grade);
+
+	}
+
+}
+import java.util.Scanner;
+
+public class PersonInfo extends Person implements Personable {
+
+	String phone;
+	String addr;
+	static int cnt = 0;
+	PersonInfo() {
+			
+	}
+	public boolean input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		hakbun = scan.next();
+		if(hakbun.equals("exit"))
+			return true;
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("전화번호 입력=> ");
+		phone = scan.next();
+		System.out.print("주소 입력=> ");
+		addr = scan.next();
+		System.out.println();
+		return false;
+	}
+
+	
+	public void output() {
+		System.out.printf("%4s\t%3s\t%15s\t   %4s\n",hakbun,irum,phone,addr);
+
+	}
+
+}
+public class Example {
+	static int MAX = 100;
+	public static void main(String[] args) {
+		Sungjuk obj1[] = new Sungjuk[MAX];
+		PersonInfo obj2[] = new PersonInfo[MAX];
+		
+		sungjukInput(obj1);
+		personInput(obj2);
+		printOutput(obj1,obj2);
+		
+	}
+	
+	static void sungjukInput(Sungjuk obj1[]) {
+		
+		System.out.println(" ### 성적 입력 ###");
+		for(int i =0;i<MAX;i++) {
+			obj1[i] = new Sungjuk();
+			if(obj1[i].input())
+				break;
+			obj1[i].process();
+			Sungjuk.cnt++;
+			
+		}
+	}
+	static void personInput(PersonInfo obj2[]) {
+		System.out.println("\n ### 개인 정보 입력 ###");
+		for(int i=0;i<MAX;i++) {
+			obj2[i] = new PersonInfo();
+			if(obj2[i].input())
+				break;
+			PersonInfo.cnt++;
+		}
+	}
+	static void printOutput(Sungjuk obj1[],PersonInfo obj2[]) {
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		
+		for(int i = 0;i<Sungjuk.cnt;i++) {
+			obj1[i].output();
+		}
+		System.out.println("===========================================================");
+		System.out.println();
+		System.out.println("\t\t    *** 개인 정보 ***");
+		System.out.println("===================================================");
+		System.out.println("  학번\t이름\t   전화번호\t     주소");
+		System.out.println("===================================================");
+		
+		for(int i = 0;i<PersonInfo.cnt;i++) {
+			obj2[i].output();
+		}
+		System.out.println("===================================================");
+	}
+}
+
+###다형성O###
+import java.util.Scanner;
+
+public class Sungjuk extends Person implements Personable {
+	
+	int kor,eng,math,tot;
+	String hakbun,irum;
+	double avg;
+	String grade;
+	
+	Sungjuk() {
+		
+	}
+	
+	public boolean input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		hakbun = scan.next();
+		if(hakbun.equals("exit"))
+			return true;
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		math = scan.nextInt();
+		System.out.println();
+		return false;
+
+	}
+	
+	void process() {
+		tot = kor+eng+math;
+		avg = tot/3.;
+		
+		switch((int)avg/10) {
+		case 10:
+		case 9:
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		default:
+			grade = "가";
+		}
+	}
+
+	
+	public void output() {
+		System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",hakbun,irum,kor,eng,math,tot,avg,grade);
+
+	}
+
+}
+import java.util.Scanner;
+
+public class PersonInfo extends Person implements Personable {
+
+	String phone;
+	String addr;
+	
+	PersonInfo() {
+			
+	}
+	public boolean input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		hakbun = scan.next();
+		if(hakbun.equals("exit"))
+			return true;
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("전화번호 입력=> ");
+		phone = scan.next();
+		System.out.print("주소 입력=> ");
+		addr = scan.next();
+		System.out.println();
+		return false;
+	}
+
+	
+	public void output() {
+		System.out.printf("%4s\t%3s\t%15s\t   %4s\n",hakbun,irum,phone,addr);
+
+	}
+
+}
+
+public class Example02 {
+	static int MAX = 100;
+	public static void main(String[] args) {
+		Sungjuk obj1[] = new Sungjuk[MAX];
+		PersonInfo obj2[] = new PersonInfo[MAX];
+		
+		int cnt1 = sungjukInput(obj1);
+		int cnt2 = personInput(obj2);
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		printOutput(obj1,cnt1);
+		System.out.println("===========================================================");
+		System.out.println();
+		System.out.println("\t\t    *** 개인 정보 ***");
+		System.out.println("===================================================");
+		System.out.println("  학번\t이름\t   전화번호\t     주소");
+		System.out.println("===================================================");
+		printOutput(obj2,cnt2);
+		System.out.println("===================================================");
+		
+	}
+	
+	static int sungjukInput(Sungjuk obj1[]) {
+		int cnt1 = 0;
+		System.out.println(" ### 성적 입력 ###");
+		for(int i =0;i<MAX;i++) {
+		obj1[i] = new Sungjuk();
+			if(obj1[i].input())
+				break;
+			obj1[i].process();
+			cnt1++;
+			
+		}
+		return cnt1;
+	}
+	static int personInput(PersonInfo obj2[]) {
+		int cnt2 = 0;
+		System.out.println("\n ### 개인 정보 입력 ###");
+		for(int i=0;i<MAX;i++) {
+			obj2[i] = new PersonInfo();
+			if(obj2[i].input())
+				break;
+			cnt2++;
+		}
+		return cnt2;
+	}
+	static void printOutput(Personable obj[],int cnt) {
+		
+		for(int i = 0;i<cnt;i++) {
+			obj[i].output();
+		}
+		
+	}
+	
+}
+
+##toLowerCase() 키워드##
+어떤 문자를 받더라도 소문자로 바꿔주는 키워드
+ex)hakbun.toLowerCase().equals("exit")
+hakbun에 입력받은 문자를 소문자로 바꿔준다.
+대문자: toUpperCase()
+
+###null 참조값###
+ : 아무 데이터도 가리키지 않는 참조값
+Point obj; (초기화x)   vs   Point obj = null;  (null값으로 초기화된것.)
+       error(O)                     error(X)    <---컴파일과정
+실행하면 둘다 에러.
+
+#main 메소드에서 return; 은 실행종료 의미.
+
+#instanceof연산자
+ : 캐스트 연산 가능성을 검사하는 키워드
+ obj instanceof CheckingAccount : obj를 CheckingAccount로 캐스팅이 가능한가(되면 true, 안되면 false반환)
+객체  연산자       타입이름
+
+
+##열거 타입##
+ : 한정된 수의 값을 표현하기 위해 필요
+#enum키워드 사용
+ex)
+enum Season{
+      SPRING, SUMMER, FALL, WINTER   <--콤마로 구분
+}
+
+public class ClothingInfo {
+	String code, name, material;
+	Season season;
+	ClothingInfo(String code,String name,String material,Season season){
+		this.code = code;
+		this.name = name;
+		this.material = material;
+		this.season = season;
+	}
+}
+
+public class NewExample {
+
+	public static void main(String[] args) {
+		ClothingInfo obj = new ClothingInfo("32919", "반팔 티셔츠", "면100%", Season.SUMMER);
+		System.out.println("상품코드: "+obj.code);
+		System.out.println("상품명: "+obj.name);
+		System.out.println("소재: "+obj.material);
+		System.out.println("계절구분: "+obj.season);
+	}
+}
+(열거타입은 클래스내부에서 선언가능)
+열거타입은 컴파일하면 내부적으로 클래스가됨
+-> 클래스내부에 values와 valueOf라는 정적메소드가 자동으로 추가됨
+values : 모든 열거 상수를 리턴하는 메소드
+valuesOf : 주어진 문자열에 해당하는 열거 상수를 리턴하는 메소드
+
+###열거상수를 다른 값과 연관짓기
+
+public enum Season {
+	SPRING("봄"),SUMMER("여름"),FALL("가을"),WINTER("겨울");
+	final private String name; //final private 은 반드시 써야하는 키워드
+	Season(String name){
+		this.name = name;
+	}
+	String value() { // 열거 상수에 연관된 값을 리턴하는 메소드
+		return name;
+	}
+}
+
+public class EnumExample3 {
+
+	public static void main(String[] args) {
+		printSeason(Season.SPRING);
+		printSeason(Season.SUMMER);
+		printSeason(Season.FALL);
+		printSeason(Season.WINTER);
+	}
+	static void printSeason(Season season) {
+		System.out.println(season.value());
+	}
+}
+출력: 봄 여름 가을 겨울
+
+public enum Day {
+	MONDAY("월요일"), TUESDAY("화요일"), WEDNESDAY("수요일"), THURSDATY("목요일"), FRIDAY("금요일")
+	, SATURDAY("토요일"), SUNDAY("일요일");
+	final private String name;
+	Day(String name){
+		this.name = name;
+	}
+	String value() {
+		return name;
+	}
+}
+
+public class EnumExample4 {
+
+	public static void main(String[] args) {
+		printOf(Day.MONDAY);
+		printOf(Day.SUNDAY);
+	}
+	static void printOf(Day day) {
+		System.out.println(day.value());
+	}
+
+}
+출력: 월요일 일요일
+
+
+
+##################8장 패키지와 접근제어################
+
+#패키지(package): 클래스와 인터페이스를 묶는 단위
+
+#패키지가 다를경우#
+package geometry;
+
+public class Circle {
+	public int radius;
+	public Circle(int radius){
+		this.radius = radius;
+	}
+	public double getArea() {
+		return radius*radius*3.14;
+	}
+}
+
+package geometry2;
+
+import geometry.Circle; // Ctrl+Shift+o 누르면 자동 삽입
+// import문이 없으면 참조하는 클래스앞에 패키지경로를 삽입하면 된다.
+public class PackageExample1 {
+	public static void main(String[] args) {
+		//geometry.Circle obj = new geometry.Circle(5); <-- import가 없을경우
+		Circle obj = new Circle(5);
+		System.out.println("반지름 = "+obj.radius);
+		System.out.println("원의 넓이 = "+obj.getArea());
+	}
+}
+
+#protected와 default의 차이
+protected는 패키지경로가 달라도 부모-자식 관계이면 참조가능
+default는 아예안됨.
+private은 패키지가 같아도 접근 불가.
+
+## '*' ##
+특수문자 *를 사용한 import 선언문
+: 패키지 내부의 모든 클래스를 import한다는 뜻
+ex) import geometry.*;
+
+##오버라이딩 할때 주의점##
+자식클래스의 오버라이딩한 메소드 접근제한자는
+부모클래스의 메소드 접근제한자허용범위보다 같거나 커야된다.
+ex) 부모클래스 protected사용 
+-> 자식클래스 오버라이딩한 메소드는 protected or public사용해야됨
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

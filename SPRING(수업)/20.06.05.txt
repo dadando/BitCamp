@@ -1,0 +1,47 @@
+#lombok설정(다운로드)  (교재참고)
+https://projectlombok.org/download 들어가서 다운로드후 D드라이브 하위로 복사 
+
+1번방법)실행 인스톨러 창이뜨면 
+Specify location눌러서 sts-bundle하위 sts-1.~~하위 exe파일 선택.
+
+2번방법) cmd실행후 d: 입력후 엔터
+java -jar lombok.jar 입력후 엔터
+
+pom.xml <dependencis>태그안에 다음을 추가.
+<!-- lombok다운로드: https://projectlombok.org/ -->
+<dependency>
+	<groupId>org.projectlombok</groupId>
+	<artifactId>lombok</artifactId>
+	<version>1.18.12</version>
+	<scope>provided</scope>
+</dependency> 
+
+Maven Dependencis에 lombok.jar가 생성됐는지 확인.
+--------------lombok은 써도되고 안써도 된다잉.
+
+#JSoup를 활용한 크롤링 기법
+크롤링(crawling) : 무수히 많은 컴퓨터에 분산 저장되어 있는 문서를 수집하여 검색 대상의 색인으로 포함시키는 기술. 어느 부류의 기술을 얼마나 빨리 검색 대상에 포함시키냐 하는 것이 우위를 결정하는 요소로서 최근 웹 검색의 중요성에 따라 발전되고 있다.
+
+https://jsoup.org/  => API Reference 들어가서 필요한 라이브러리 확인 후 사용
+
+<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup --> 
+<dependency>
+	<groupId>org.jsoup</groupId>
+	<artifactId>jsoup</artifactId>
+	<version>1.11.3</version>
+</dependency>
+
+추가 후  사용.
+
+
+
+
+
+
+
+
+
+
+
+
+

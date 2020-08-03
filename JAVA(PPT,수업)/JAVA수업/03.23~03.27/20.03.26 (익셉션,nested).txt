@@ -1,0 +1,755 @@
+15장 익셉션클래스
+
+checked exception : 컴파일 이전에 문법적으로 검사를 해야한다.
+unchecked exception : 따로 문법적 검사가 필요없다.
+
+익셉션클래스를 사용할때
+1. try-catch문을 사용하던가
+2. throws 구문을 추가해주어야 한다.
+3. e.getMessage() 를 이용하여 에러메시지 내용을 받을 수 있다.
+
+
+# e.printStackTrace(); 메소드
+ : 익셉션에 대한 자세한 정보를 출력하는 메소드
+
+Ex)
+package ExceptionEx;
+
+public class ExceptionExample6 {
+
+	public static void main(String[] args) {
+		int num1 = 2,num2 = 3;
+		try {
+			int result = num1 - num2;
+			if(result<0)
+				throw new Exception("잘못된 결과입니다.");
+			System.out.println(result);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+Ex2)
+package ExceptionEx;
+
+public class ExceptionExample7 {
+
+	public static void main(String[] args) {
+		try {
+			int arr[] = new int[0];
+			System.out.println("합계"+getTotal(arr));
+			System.out.println("평균"+getAverage(arr));
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	static double getAverage(int arr[])throws Exception{
+		if(arr.length ==0) 
+			throw new Exception("비어있는 배열입니다.");
+		return getTotal(arr)/arr.length;
+	}
+	static int getTotal(int arr[])throws Exception{
+		if(arr.length==0) 
+			throw new Exception("비어있는 배열입니다.");
+		int total=0;
+		for(int num:arr)
+			total+=num;
+		return total;
+		
+	}
+
+}
+
+##상속관계에 있는 익셉션을 처리할때
+ 자식익셉션클래스를 갖는 catch문을 
+ 부모익셉션클래스를 갖는 catch문보다 앞에 기술해야된다.
+
+##익셉션클래스를 만드는법
+Ex)
+package ExceptionEx;
+
+public class InvalidInputException extends Exception {
+
+	InvalidInputException(){
+		super("잘못된 입력입니다.");
+	}
+}
+
+package ExceptionEx;
+
+public class ExceptionExample11 {
+
+	public static void main(String[] args) {
+		try {
+			int result = subtract(5,100);
+			System.out.println(result);
+		}
+		catch(InvalidInputException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	static int subtract(int a, int b)throws InvalidInputException{
+		if(a<b)
+			throw new InvalidInputException();
+		return a-b;
+	}
+}
+
+
+
+16장 (nested)네스티드 클래스, 네스티드 인터페이스
+(이너클래스, 이너인터페이스)
+컴파일하면
+클래스 와 클래스$이너클래스 가 생성된다.
+
+Ex)
+package NestedEx;
+
+import java.util.ArrayList;
+
+public class Cart {   // 장바구니 클래스
+	ArrayList<Item> list = new ArrayList<Item>();
+	void addItem(String name, int num, int unitPrice) {
+		list.add(new Item(name,num,unitPrice));
+	}
+	void removeItem(int index) {
+		list.remove(index);
+	}
+	int getItemNum() {
+		return list.size();
+	}
+	Item getItem(int index) {
+		return list.get(index);
+	}
+	int getTotalPrice() {
+		int total=0;
+		for(Item item : list)
+			total+= item.getPrice();
+		return total;
+	}
+	void changeItemNumber(int index,int num) {
+		Item item = list.get(index);
+		item.num = num;
+	}
+	class Item{   // 상품항목 클래스
+		String name;
+		int num;
+		int unitPrice;
+		Item(String name, int num, int unitPrice){
+			this.name = name;
+			this.num = num;
+			this.unitPrice = unitPrice;
+		}
+		int getPrice() {
+			return num*unitPrice;
+		}
+	}
+}
+
+package NestedEx;
+
+public class NestedClassExample1 {
+
+	public static void main(String[] args) {
+		Cart cart = new Cart();
+		cart.addItem("쵸콜렛", 3, 1000);
+		cart.addItem("케이크", 1, 25000);
+		cart.addItem("샴페인", 1, 7000);
+		printCart(cart);
+	}
+	static void printCart(Cart cart) {
+		int num = cart.getItemNum();
+		System.out.println("          상품명     수량     단가         금액");
+		System.out.println("-------------------------------");
+		for(int cnt =0;cnt<num;cnt++) {
+			Cart.Item item = cart.getItem(cnt);
+			System.out.printf("%3d %5s %5d %7d %7d \n", cnt+1,
+					item.name, item.num, item.unitPrice, item.getPrice());
+		}
+		System.out.println("-------------------------------");
+		System.out.printf("           총계                       %10d \n", cart.getTotalPrice());
+	}
+}
+
+연습) +성적개체
+(클래스))))(이너클래스))))
+package NestedEx;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Sungjuk2 {
+	ArrayList<Pyo> list = new ArrayList<Pyo>();
+	
+	void addList() {
+		Pyo obj = new Pyo();
+		obj.input();
+		for(Pyo hakbun:list) {
+			if(hakbun.num.equals(obj.num)) {
+				System.out.println("학번 입력 오류(중복)!!");
+				return;
+			}
+		}
+		obj.process();
+		list.add(obj);
+		System.out.println("성적 정보 입력 성공!!");
+	}
+	
+	int getListNum() {
+		return list.size();
+	}
+	Pyo getList(int index) {
+		return list.get(index);
+	}
+	void removeItem(Pyo obj) {
+		list.remove(obj);
+	}
+	double getTotalAvg() {
+		double totavg = 0.0;
+		for(Pyo pyo:list) {
+			totavg+=pyo.avg;
+		}
+		return totavg;
+	}
+	void changePyoNumber(int index) {
+		Scanner scan = new Scanner(System.in);
+		Pyo pyo = list.get(index);
+		System.out.print("국어 점수=> ");
+		pyo.kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		pyo.eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		pyo.math = scan.nextInt();
+		pyo.process();
+	}
+	
+	class Pyo{
+		String num, name;
+		int kor, eng, math;
+		int tot;
+		double avg;
+		String grade;
+		
+		public Pyo() {
+			
+		}
+		
+		void input() {
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.print("학번 입력=> ");
+			num = scan.next();
+			System.out.print("이름 입력=> ");
+			name = scan.next();
+			System.out.print("국어 점수=> ");
+			kor = scan.nextInt();
+			System.out.print("영어 점수=> ");
+			eng = scan.nextInt();
+			System.out.print("수학 점수=> ");
+			math = scan.nextInt();
+			System.out.println();
+			
+		}
+		void process() {
+			tot = kor+eng+math;
+			avg = tot/3.;
+			
+			switch((int)avg/10) {
+			case 10:
+			case 9:
+				grade = "수";
+				break;
+			case 8:
+				grade = "우";
+				break;
+			case 7:
+				grade = "미";
+				break;
+			case 6:
+				grade = "양";
+				break;
+			default:
+				grade = "가";
+					
+			}
+		}
+		void output() {
+			System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",num,name,kor,eng,math,tot,avg,grade);
+		}
+	}
+}
+((((본문))))
+package NestedEx;
+
+import java.util.Scanner;
+
+public class SungjukIn {
+
+	public static void main(String[] args) {
+		Sungjuk2 sungjuk = new Sungjuk2();
+		
+		Scanner scan = new Scanner(System.in);
+		
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(sungjuk);
+				break;
+			case 2:
+				studentOutput(sungjuk);
+				break;
+			case 3:
+				studentSearch(sungjuk);
+				break;
+			case 4:
+				studentRevise(sungjuk);
+				break;
+			case 5:
+				studentDelete(sungjuk);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}	
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(Sungjuk2 sungjuk) {
+		
+		sungjuk.addList();
+		System.out.println();
+	}
+	
+	private static void studentOutput(Sungjuk2 sungjuk) {
+		int num = sungjuk.getListNum();
+		if(num==0) {
+			System.out.println("출력할 성적 정보가 없습니다.");
+			return;
+		}
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		
+		for(int i=0;i<num;i++) {
+			Sungjuk2.Pyo obj = sungjuk.getList(i);
+			obj.output();
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",
+				num,sungjuk.getTotalAvg()/num);
+		
+	}
+	
+	private static void studentSearch(Sungjuk2 sungjuk) {
+		Scanner scan = new Scanner(System.in);
+		int num = sungjuk.getListNum();
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		for(int i=0;i<num;i++) {
+			if(hakbun.equals(sungjuk.getList(i).num)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				sungjuk.getList(i).output();
+				System.out.println("===========================================================");
+				return;
+			}
+			
+		}
+		System.out.println("\n조회할 학번 입력 오류!!\n");
+	}
+	
+	private static void studentRevise(Sungjuk2 sungjuk) {
+		
+		Scanner scan = new Scanner(System.in);
+		int num = sungjuk.getListNum();
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int i = 0;i<num;i++) {
+			if(hakbun.equals(sungjuk.getList(i).num)) {
+				sungjuk.changePyoNumber(i);
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	private static void studentDelete(Sungjuk2 sungjuk) {
+		Scanner scan = new Scanner(System.in);
+		int num = sungjuk.getListNum();
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int i=0;i<num;i++) {
+			if(hakbun.equals(sungjuk.getList(i).num)) {
+				Sungjuk2.Pyo obj = sungjuk.getList(i);
+				sungjuk.removeItem(obj);
+				System.out.println("\n성적 정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+	}
+}
+
+((강사님))
+package NestedEx;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SungjukInner {
+	ArrayList<Sungjuk> list = new ArrayList<Sungjuk>();
+	
+	void addSungjuk() {
+		Sungjuk obj = new Sungjuk();
+		obj.input();
+		if(checkSungjuk(obj)) {
+			System.out.println("\n학번 입력 오류(중복)!!\n");
+			return;
+		}
+		obj.process();
+		list.add(obj);
+		System.out.println("\n성적 정보 입력 성공!!\n");
+	}
+	
+	void removeSungjuk(Sungjuk obj) {
+		list.remove(obj);
+	}
+	
+	int getSungjukNum() {
+		return list.size();
+	}
+	boolean checkSungjuk(Sungjuk obj) {
+		for(Sungjuk dat:list) {
+			if(dat.hakbun.equals(obj.hakbun)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	ArrayList<Sungjuk> getList(){
+		return list;
+	}
+	Sungjuk getSungjuk(int index) {
+		return list.get(index);
+	}
+	
+	double getTotalAvg() {
+		double tot_avg = 0;
+		for(Sungjuk obj:list) {
+			tot_avg += obj.avg;
+		}
+		return tot_avg;
+	}
+	
+	class Sungjuk{
+		String hakbun, name;
+		int kor, eng, math;
+		int tot;
+		double avg;
+		String grade;
+		
+		public Sungjuk() {
+			
+		}
+		
+		void input() {
+			Scanner scan = new Scanner(System.in);
+			
+			System.out.print("학번 입력=> ");
+			hakbun = scan.next();
+			System.out.print("이름 입력=> ");
+			name = scan.next();
+			System.out.print("국어 점수=> ");
+			kor = scan.nextInt();
+			System.out.print("영어 점수=> ");
+			eng = scan.nextInt();
+			System.out.print("수학 점수=> ");
+			math = scan.nextInt();
+			System.out.println();
+			
+		}
+		void process() {
+			tot = kor+eng+math;
+			avg = tot/3.;
+			switch((int)avg/10) {
+			case 10:
+			case 9:
+				grade = "수";
+				break;
+			case 8:
+				grade = "우";
+				break;
+			case 7:
+				grade = "미";
+				break;
+			case 6:
+				grade = "양";
+				break;
+			default:
+				grade = "가";
+					
+			}
+		}
+		void output() {
+			System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",hakbun,name,kor,eng,math,tot,avg,grade);
+		}
+	}
+}
+
+
+
+package NestedEx;
+
+import java.util.Scanner;
+
+public class SungjukInnerEx01 {
+
+	public static void main(String[] args) {
+		SungjukInner sungjuk = new SungjukInner();
+		
+		Scanner scan = new Scanner(System.in);
+		
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(sungjuk);
+				break;
+			case 2:
+				studentOutput(sungjuk);
+				break;
+			case 3:
+				studentSearch(sungjuk);
+				break;
+			case 4:
+				studentRevise(sungjuk);
+				break;
+			case 5:
+				studentDelete(sungjuk);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}
+
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(SungjukInner sungjuk) {
+		
+		sungjuk.addSungjuk();
+		System.out.println();
+		
+	}
+	
+	private static void studentOutput(SungjukInner sungjuk) {
+		int num = sungjuk.getSungjukNum();
+		if(num==0) {
+			System.out.println("출력할 성적 정보가 없습니다.");
+			return;
+		}
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		
+		for(SungjukInner.Sungjuk dat: sungjuk.getList()) {
+			dat.output();
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",
+				num,sungjuk.getTotalAvg()/num);
+		
+	}
+	
+	private static void studentSearch(SungjukInner sungjuk) {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		
+		for(SungjukInner.Sungjuk dat:sungjuk.getList()) {
+			if(hakbun.equals(dat.hakbun)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				dat.output();
+				System.out.println("===========================================================");
+				return;
+			}
+		}
+		System.out.println("\n조회할 학번 입력 오류!!\n");
+	}
+	
+	private static void studentRevise(SungjukInner sungjuk) {
+		
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(SungjukInner.Sungjuk dat:sungjuk.getList()) {
+			if(hakbun.equals(dat.hakbun)) {
+				System.out.print("국어 점수=> ");
+				dat.kor = scan.nextInt();
+				System.out.print("영어 점수=> ");
+				dat.eng = scan.nextInt();
+				System.out.print("수학 점수=> ");
+				dat.math = scan.nextInt();
+				dat.process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	private static void studentDelete(SungjukInner sungjuk) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(SungjukInner.Sungjuk dat:sungjuk.getList()) {
+			if(hakbun.equals(dat.hakbun)) {
+				sungjuk.removeSungjuk(dat);
+				System.out.println("\n성적 정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+	}
+
+}
+
+##인클로징 외부에서 이너 클래스 객체를 생성하는 방법
+Cart.Item item = cart.new Item("꽃다발",1,50000);
+
+Ex)
+SungjukInner.Sungjuk obj = sungjuk.new Sungjuk();
+
+
+##정적 네스티드 클래스 ##
+ - 이너클래스 앞에 static을 붙인다.
+ - 그 결과 인클로징클래스와 이너클래스간의 종속관계가 사라진다.
+ - 그러면 메인 메소드에서 인클로징클래스 객체를 통해 
+   이너클래스로 접근할 필요가 없다.
+
+Ex)
+package StaticNestedEx;
+
+public class Line {
+	Point point1,point2;
+	Line(int x1, int y1, int x2, int y2){
+		point1 = new Point(x1, y1);
+		point2 = new Point(x2, y2);
+	}
+	void move(int offsetX, int offsetY) {
+		point1.x += offsetX;
+		point1.y += offsetY;
+		point2.x += offsetX;
+		point2.y += offsetY;
+		
+	}
+	static class Point{
+		int x,y;
+		Point(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
+}
+
+package StaticNestedEx;
+
+public class NestedClassExample5 {
+
+	public static void main(String[] args) {
+		Line line = new Line(0, 0, 100, 100);
+		line.move(10, 20);
+		printPoint(line.point1);
+		printPoint(line.point2);
+	}
+	static void printPoint(Line.Point point) {
+		System.out.printf("(%d, %d) \n", point.x,point.y);
+	}
+}
+
+#인클로징 클래스 외부에서 정적 네스티드 클래스의 객체를 생성하는 방법
+ Line.Point point  = new Line.Point(100,200);
+
+package StaticNestedEx;
+
+public class NextedClassExample6 {
+
+	public static void main(String[] args) {
+		Line.Point point = new Line.Point(100,200);
+		System.out.printf("(%d, %d)",point.x,point.y);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

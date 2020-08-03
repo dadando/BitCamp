@@ -1,0 +1,371 @@
+Java를 사용하는 2가지 트랙
+1. Intellij  2. Eclipse
+
+*크롬사용 - 웹 개발에 좋은 브라우저
+Intellij는 toolbox 검색후 다운로드 -> Intellij IDEA Community
+Intellij는 Java와 JavaScript , HTML5 같은 애들을 하나로 묶어서 개발할 수 있다.
+Spring을 사용하기 위해 웹 개발을 배운다.
+(엔터프라이즈 급 솔루션들 - 대규모 웹 프로젝트는 전부 spring)
+
+#
+HTML은 웹에서 UI를 담당한다고 보면  된다,
+UI(User Interface) 라는 것은 사용자 인터페이스
+(버튼, 체크 박스 같은 것들이라고 보면 된다.)
+
+#
+CSS는 HTML 과 연동하여 스타일리쉬한 HTML 을 적용할 수 있게 만들어준다.
+(디자인적인 요소)
+
+#
+JacaScript를 배우는 이유
+UI를 좀 더 예쁘게 좀 더 편리하게 개발하기 위해서 학습.
+
+#
+React :facebook에서 개발, 변화주기가 빠름(굉장히 트렌디쉬함) 
+Vue :프론트 쪽 트렌드
+
+#
+프론트 엔드, 백 엔드란 무엇인가?
+(Front-End, Back-End)
+
+프론트가 UI: 눈에 보이는 것들 (디자인적 요소가 중요함) -HTML, CSS, React, Vue
+백은 서버: 눈에 보이지 않는 것들(기반시설) -spring, Apache Tomcat, NginX, AWS
+DB: 데이터 - 인공지능(데이터 분석) - C++, Python, Keras, TensorFlow, FPGA(아마존)
+
+장단점: 백 - 고려해야 될 것이 많다(프로그래밍 - 논리적 요소)
+	- 눈에 보이지 않는 결과물들
+	- 페이가 좋다.
+    프론트 - 디자인적인 요소에 강해야 된다.
+	- React, Vue 필수
+	- 백보다 페이가 적다. React와 Vue는 예외(JavaScript -논리적 요소필요)
+
+
+
+https://cafe.naver.com/bitjava156
+
+#
+IntlliJ 환경설정
+
+1) Do not import 체크하고 다음
+2) 라이센스 동의 체크하고 다음
+3) Don't send 하고 다음
+4) UI 선정하라고 나오는데 마음에 드는 형태를 고르고 다음
+5) 그 다음부터는 다음다음다음
+6) Welcome to IntelliJ 창이 나타남
+7) Create New Project 
+8) Project SDK가 1.8버전 이상으로 (현재 최신은 1.12)
+9) 확인되면 건들지 말고 next
+10) template 을 쓸거냐고 묻는데 next
+11) 프로젝트 이름을 설정 - First라고 짓는다. 그리고 Finish
+12) First열고 src (마우스 오른쪽버튼)-> New -> javaclass 
+
+
+#####첫번째 (자료형, 변수선언)#####
+
+/* public 및 class라는 키워드는
+ class라는 일종의 자료형을 학습할 때 배우게 됩니다.
+ 자료형에는 int, float, double
+ int는 정수형 float과 double은 정수형을 포함하면서 소수점도 표현가능
+ float과 double의 차이점은 (데이터 크기에 차이가 있다)
+ float은 4바이트 double은 8바이트
+ 바이트 = 1bit
+
+ int 또한 4byte - -21억 ~ 21억
+
+ 이런 정보를 알아야 하는 이유.
+ int에 100억을 입금한다고 가정했을 때 int의 데이터 크기에 의해
+ 데이터에 손실이 발생한다.
+ 원인: underflow, overflow
+ */
+public class First {
+    //psvm (자동완성)
+    public static void main(String[] args) {
+        //변수 선언
+        //변수의 이름은 num이고
+        //num 이라는 변수에 숫자 3을 대입
+
+        /* 변수란 무엇인가?
+           * 무언가를 저장한다.
+           * 특정 자료형을 저장할 수 있는 형태(메모리)
+         */
+        int num =27;
+
+        /* 변수 선언은 어떻게 하는가?
+            1) 먼저 자료형을 적는다. (int, float, double)
+            2) 변수의 이름을 적는다. (주의할점은 변수가 무엇을 나타낼지 명시적인게 좋음)
+            3) 필요하다면 값을 넣는다.
+            4) 마지막에 ; 을 넣는다.
+         */
+        /* 변수를 사용하는 이유
+            복잡한 계산들을 효율적으로 하기 위해서
+         */
+        int test = 31;
+        //sout (자동완성)
+        System.out.println("First");
+        System.out.println(num);
+        System.out.println(test);
+        
+        
+    }
+}
+
+#####두번째 (연산자)#####
+
+public class First {
+    public static void main(String[] args) {
+        int num = 3;
+        int num2 = 7;
+        int num3, num4 = 13;
+        //num3에는 값이 없고 num4에는 13이 있다.
+        int res;
+
+        //덧셈
+        res = num + num2;
+        System.out.println(res);
+        //뺄셈
+        res = num - num2;
+        System.out.println(res);
+        //곱셈
+        res = num * num2;
+        System.out.println(res);
+        /*곱셈의 소수점 확장과 나눗셈의 소수점 확장은
+          데이터타입이 float이나 double의 경우에만 가능
+         */
+        //나눗셈
+        res = num2 / num;
+        System.out.println(res);
+        //mod 연산(나머지)
+        res = num2 % num;
+        System.out.println(res);
+
+        // 변수 앞에 괄호를 치고 그 안에 데이터 타입을 적는다.
+        // type casting(강제 형변환)
+        // 영구적이지 않고 해당상황에서만 적용
+        // object와 관련되있음
+        float res2 = (float)num2 / (float)num;
+        System.out.println(res2);
+    }
+}
+
+#####세번째(비트연산자)#####
+
+public class First {
+    public static void main(String[] args) {
+        int num = 5, num2 = 10;
+
+        /*비트연산자
+            AND, OR, XOR, NOT
+            AND 는 모든 조건이 만족되어야함
+            OR 는 하나만 만족하면됨
+            XOR 는 서로 달라야함
+            NOT 은 반대
+
+            AND 는 조건이 있을 경우 모든 조건이 참
+            OR 는 조건이 있을 경우 조건중 하나만 참이어도 된다.
+            XOR 는 서로 상반되는 조건을 가져야 한다.
+            NOT 은 참이면 거짓이 되고 거짓이면 참이 된다.
+         */
+        //비트: 0 or 1을 저장한다.
+        //바이트 : 8비트
+        //int 는 4바이트 = 32비트
+
+        //1비트 : 0 , 1 - 2개
+        //2비트 : 00, 01, 10, 11 - 4개
+        //3비트 : 000. 001. 010, 011, 100, 101, 110, 111 - 8개
+        //4비트 : 16개
+        //32비트 : 2^32개 = 대략42억 : -21억 ~ 21억
+        //5->> 0101   10->> 1010   13->> 1101
+
+        // AND: num = 5, num2 = 10
+        // 5 : 0 0101  10: 0 1010
+        // 5 AND 10 -->> 0 0000 : 0
+        // 5 OR 10 -->> 0 1111 : 15
+        // 5 XOR 10 -->> 0 1111 : 15
+        // NOT 5 -->> 1 1010 : -6
+
+        // 아스키코드표
+        // A = 65, a= 97
+        // 65 = 1000001
+        // 32 = 0100000
+        // XOR = 1100001 =97
+        // 97 = 1100001
+        // 32 = 0100000
+        // XOR = 1000001 = 64+1 = 65
+
+        // NOT은 무조건 비트를 뒤집는다.
+        // 5 = 00101
+        // ~5 = -6
+        // ~5 = 11010 : 2의 보수를 봐야함
+        // 계산 방법은 5+1 을 하고 부호를 반전
+        
+        //쉬프트 연산자 : 꺽쇠 뒤에 오는 숫자만큼 비트를 이동시킨다.
+        // >>,<< 이동시키는 방향을 나타낸다.
+        // 5 << 2 = 10100 2자리 왼쪽으로 보낸다.
+        // 5 << 2  = 5 * 2^2 = 5*4 =20
+        // 5 << 3 = 5 * 2^3 = 5*8 = 40
+        //사용하는 이유 : 속도가 굉장히 빠르다.
+        // 5 >> 1 : 오른쪽으로 1번민다.
+        // 5 >> 1 : 00101 -> 00010 = 2
+        // 비트 연산자는 정수에서만 가능하다.
+        // 그러므로 소수점은 버린다.
+
+        System.out.println(num & num2);
+        System.out.println(num | num2);
+        System.out.println(num ^ num2);
+        System.out.println(~num);
+        System.out.println(num<<2);
+        System.out.println(num>>1);
+        System.out.println(128>>3);
+        
+
+    }
+}
+
+EX)  
+1) 26 & 13  : 0001 1010 & 0000 1101 = 0000 1000  : 8
+2) 41  |  65  :  0010 1001 | 0100 0001 = 0110 1001  : 105  
+3) 22 ^ 42  :  0001 0110 ^ 0010 1010 = 0011 1100 : 60    
+
+#####네번째 (scan, if문)#####
+
+import java.util.Scanner;
+
+public class First {
+    public static void main(String[] args) {
+        // 사용자 입력을 받을 수 있다.
+        // scanner 는 class
+        // scanner 는 키보드 입력을 받을 수 있다.
+        // 키보드 입력을 받는 무언가가 생성된다.
+        Scanner scan = new Scanner(System.in);
+
+        int num1, num2;
+
+        // println 은 자동으로 엔터가 적용됨.
+        // print 는 엔터가 적용되지 않음.
+        System.out.print("첫 번째 정수: ");
+        // 키보드로 들어온 숫자값을 처리한다.
+        num1 = scan.nextInt();
+
+        System.out.print("두 번째 정수: ");
+        num2 = scan.nextInt();
+
+        System.out.println(num1);
+        System.out.println(num2);
+
+        //if 문을 만드는 방법
+        //1) if를 적고 괄호를 열고 닫는다.
+        //2) 괄호 안에는 조건을 적는다.
+        //3) 괄호가 닫힌 부분에 중괄호를 열고 닫는다.
+        //4) 중괄호 안에는 조건이 만족되면 무엇을 할것인지 적는다.
+        //5) 필요하다면 else를 사용한다.
+        //6) 마찬가지로 else이후에 중괄호를 열고 닫는다.
+        //7) 중괄호 안에는 else인 경우 동작할 코드를 적는다.
+        if(num1>num2) {
+            System.out.println("num1이 num2보다 크다.");
+        }else{
+            System.out.println("num2가 num1보다 작다.");
+        }
+    }
+}
+
+#####다섯번째(Random)#####
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class First {
+    public static void main(String[] args) {
+        Random rand = new Random();
+
+        //난수의 범위 = bound
+        //bound쓸때 자동완성 이용후 ()안에 숫자만 입력하면 실행가능.
+        // bound는 현재 2 이므로 랜덤값은 0 혹은 1 로 2개가 나온다.
+        //그러나 3 혹은 4를 얻고 싶을 수도 있다.
+        //이 경우에는 전체범위를 +3 하여 올린다.
+        System.out.println(rand.nextInt(2)+3);
+    }
+}
+
+
+#####오늘 배운것들의 종합 문제#####
+
+prob1) 임의의 난수를 사용자로부터 입력받도록 한다.
+         두 개의 난수 모두 최소 7 보다는 크게 만들도록 한다.
+         입력 받은 난수의 대소 비교를 하여 무엇이 더 큰지 비교하는 프로그램을 작성하시오.
+
+(나의 답)
+import java.util.Random;
+import java.util.Scanner;
+
+public class First {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        Random rand = new Random();
+        int num1, num2;
+
+        num1 = rand.nextInt(scan.nextInt()) + 7;
+        num2 = rand.nextInt(scan.nextInt()) + 7;
+        System.out.println(num1);
+        System.out.println(num2);
+
+        if (num1>num2) {
+            System.out.println("num1이 num2보다 크다.");
+        }else{
+            System.out.println("num2가 num1보다 크다.");
+        }
+
+    }
+}
+
+(솔루션)
+import java.util.Random;
+import java.util.Scanner;
+
+public class First {
+    public static void main(String[] args) {
+        /*임의의 난수를 사용자로부터 입력받도록 한다.
+                두 개의 난수 모두 최소 7 보다는 크게 만들도록 한다.
+        입력 받은 난수의 대소 비교를 하여 무엇이 더 큰지 비교하는 프로그램을 작성하시오.
+
+        1) 임의의 난수를 사용자에게 입력 받는다. scnner 사용
+        2) 두개의 난수가 모두 7보다 커야한다. 난수 생성 후 +7을 해줘야 함
+        3) 대소 비교는 최소 2개의 숫자가 생성됨
+        4) 그리고 if 문이 사용된다.
+
+        * 난수인데 사용자 입력을 받는다는게 무슨 소리일까?
+          앞서 bound 고정된 숫자값을 적어서 사용했음 이것을 난수로 만들면?
+          랜덤의 범위가 바뀜
+        */
+        //final은 상수값(고정값) 에 사용함
+        //여러명이 같이 개발할때 매우 중요하다.
+        //final 이 붙어있으면 되도록 바꿀 경우
+        //왜 바꿔야 하는지 회의를 해야하는 수준
+        final int FIX =7;
+        Random rand = new Random();
+        Scanner scan = new Scanner(System.in);
+
+        int range;
+        System.out.println("난수 범위를 입력하시오: ");
+        range = scan.nextInt();
+
+        int num1 , num2;
+        num1 = rand.nextInt(range) + FIX;
+        num2 = rand.nextInt(range) + FIX;
+
+        System.out.println("num1 = " +num1);
+        System.out.println("num2 = " +num2);
+
+        if(num1>num2){
+            System.out.println("num1 > num2");
+        }else{
+            System.out.println("num1 <= num2");
+        }
+    }
+}
+
+
+
+
+
+
+

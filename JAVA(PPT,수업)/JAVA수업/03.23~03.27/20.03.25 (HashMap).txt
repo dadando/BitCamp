@@ -1,0 +1,504 @@
+13장
+
+#해쉬테이블: hashCode메소드
+
+Ex)
+package HashEx;
+
+import java.util.HashMap;
+
+public class HashExample2 {
+
+	public static void main(String[] args) {
+		HashMap<Name, Integer> hashtable = new HashMap<Name, Integer>();
+		hashtable.put(new Name("해리", "포터"), new Integer(95));
+		hashtable.put(new Name("헤르미온느", "그레인져"), new Integer(100));
+		hashtable.put(new Name("론", "위즐리"), new Integer(85));
+		hashtable.put(new Name("드레이코", "말포이"), new Integer(93));
+		hashtable.put(new Name("네빌", "롱버텀"), new Integer(70));
+		Integer num = hashtable.get(new Name("헤르미온느", "그레인저"));
+		System.out.println("헤르미온느 그레인져의 성적은? "+num);
+		// 출력이 null이 나오는 이유는 Name클래스가 Object클래스로부터
+		// 상속받은 hashCode메소드를 그대로 사용하고 있기 때문.
+	}
+}
+
+#hashCode메소드 오버라이딩
+public int hashCode() {
+		return firstName.hashCode() + lastName.hashCode();
+} 
+
+Ex)
+package HashEx;
+
+public class Name {
+	String firstName;
+	String lastName;
+	Name(String firstName, String lastName){
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	public int hashCode() {
+		return firstName.hashCode() + lastName.hashCode();
+	}
+}
+package HashEx;
+
+public class HashCodeExample2 {
+
+	public static void main(String[] args) {
+		Name obj1 = new Name("헤르미온느","그레인져");
+		Name obj2 = new Name("헤르미온느","그레인져");
+		int hash1 = obj1.hashCode();
+		int hash2 = obj2.hashCode();
+		System.out.println(hash1);
+		System.out.println(hash2);
+	}
+
+}
+==> 오버라이딩을 통해 다른주소이지만 동일한 해쉬코드가 만들어진다.
+package HashEx;
+
+public class Name {
+	String firstName;
+	String lastName;
+	Name(String firstName, String lastName){
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	public int hashCode() {
+		return firstName.hashCode() + lastName.hashCode();
+	}
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Name))
+			return false;
+		Name name = (Name)obj;
+		if(firstName.equals(name.firstName)
+				&&lastName.equals(name.lastName))
+			return true;
+		else
+			return false;
+	}
+}
+
+
+##집합 HashSet클래스
+
+Ex)
+package HashEx;
+
+import java.util.HashSet;
+import java.util.Iterator;
+
+public class SetExample1 {
+
+	public static void main(String[] args) {
+		HashSet<String> set = new HashSet<String>();
+		set.add("자바");
+		set.add("카푸치노");
+		set.add("에스프레소");
+		set.add("자바");
+		System.out.println("저장된 데이터의 수 = "+set.size());
+		Iterator<String> iterator = set.iterator();
+		while(iterator.hasNext()) {
+			String str = iterator.next();
+			System.out.println(str);
+		}
+		set.remove("자바");
+		System.out.println();
+		for(String str:set)
+			System.out.println(str);
+
+	}
+
+}
+
+
+HashMap<String,Sungjuk> hashmap = new HashMap<String,Sungjuk>( );
+
+Set<String> keyset = hashmap.keySet();
+
+$$PRACTICE$$
+package HashEx;
+
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Set;
+
+public class 임홍섭 {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		HashMap<String,Sungjuk> hashmap = new HashMap<String,Sungjuk>();
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(hashmap);
+				break;
+			case 2:
+				studentOutput(hashmap);
+				break;
+			case 3:
+				studentSearch(hashmap);
+				break;
+			case 4:
+				studentRevise(hashmap);
+				break;
+			case 5:
+				studentDelete(hashmap);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}
+
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(HashMap<String,Sungjuk> hashmap) {
+		
+		Sungjuk obj = new Sungjuk();
+		obj.input();
+		if(!(hashmap.get(obj.hakbun)==null)) {
+			System.out.println("\n학번 입력 오류(중복)!!\n");
+			return;
+		}
+		obj.process();
+		hashmap.put(obj.hakbun,obj);
+		System.out.println("성적 정보 입력 성공!!");
+		System.out.println();
+		
+	}
+	
+	private static void studentOutput(HashMap<String,Sungjuk> hashmap) {
+		if(hashmap.size()==0) {
+			System.out.println("출력할 성적정보가 없습니다.\n");
+			return;
+		}
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("=============================================");
+		System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+		System.out.println("=============================================");
+		Sungjuk.tot_avg =0.0;
+		Set<String> keyset = hashmap.keySet();
+		for(String hakbun : keyset) {
+			Sungjuk.tot_avg += hashmap.get(hakbun).avg;
+			hashmap.get(hakbun).output();
+		}
+		System.out.println("=============================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",hashmap.size(),Sungjuk.tot_avg/hashmap.size());
+		
+	}
+	
+	private static void studentSearch(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		if(!(hashmap.get(hakbun)==null)) {
+				System.out.println("=============================================");
+				System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+				System.out.println("=============================================");
+				hashmap.get(hakbun).output();
+				System.out.println("=============================================");
+				return;
+		}
+		System.out.println("\n조회할 학번 입력 오류!!\n");
+		
+	}
+	
+	private static void studentRevise(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		System.out.println();
+		if(!(hashmap.get(hakbun)==null)) {
+				System.out.print("국어 점수=> ");
+				hashmap.get(hakbun).kor = scan.nextInt();
+				System.out.print("영어 점수=> ");
+				hashmap.get(hakbun).eng = scan.nextInt();
+				System.out.print("수학 점수=> ");
+				hashmap.get(hakbun).math = scan.nextInt();
+				hashmap.get(hakbun).process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	
+	private static void studentDelete(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		if(!(hashmap.get(hakbun)==null)) {
+			hashmap.remove(hakbun);
+			System.out.println("\n성적 정보 삭제 성공!!\n");
+			return;
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+	}
+}
+
+
+$$PRACTICE(강사님)$$
+
+if(hashmap.get(obj.hakbun) !=null) 대신에 
+if(hashmap.containsKey(obj.hakbun)) 사용
+둘이 같은의미 hashmap에 해당 key값이 있는지 확인.
+
+hashmap.get(hakbun) 은 찾는과정이다. 계속 사용하면 계속 찾는과정이므로
+처음에 Sungjuk obj = hashmap.get(hakbun); 을 하고
+이후에 obj.output(); 을 사용하는게 바람직하다.
+
+
+package HashEx;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class HashExam {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		HashMap<String,Sungjuk> hashmap = new HashMap<String,Sungjuk>();
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(hashmap);
+				break;
+			case 2:
+				studentOutput(hashmap);
+				break;
+			case 3:
+				studentSearch(hashmap);
+				break;
+			case 4:
+				studentRevise(hashmap);
+				break;
+			case 5:
+				studentDelete(hashmap);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}
+
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(HashMap<String,Sungjuk> hashmap) {
+		
+		Sungjuk obj = new Sungjuk();
+		obj.input();
+		//if(hashmap.get(obj.hakbun) !=null){
+		if(hashmap.containsKey(obj.hakbun)) {
+			System.out.println("\n학번 입력 오류(중복)!!\n");
+			return;
+		}
+		obj.process();
+		hashmap.put(obj.hakbun,obj);
+		System.out.println("성적 정보 입력 성공!!");
+		System.out.println();
+		
+	}
+	
+	private static void studentOutput(HashMap<String,Sungjuk> hashmap) {
+		
+		// 1. keySet() 이용
+		Set<String> keyset = hashmap.keySet();
+		
+		if(keyset.size()==0) {  // if (hashmap.isEmpty()) 동일
+			System.out.println("출력할 성적정보가 없습니다.\n");
+			return;
+		}
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("=============================================");
+		System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+		System.out.println("=============================================");
+		Sungjuk.tot_avg =0.0;
+		for(String hakbun : keyset) {
+			Sungjuk obj = hashmap.get(hakbun);
+			Sungjuk.tot_avg += obj.avg;
+			obj.output();
+		}
+		System.out.println("=============================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",keyset.size(),Sungjuk.tot_avg/keyset.size());
+		
+		/*
+		//2. entrySet()이용
+		Set entryset = hashmap.entrySet(); // hashmap에 존재하는 키와 값의 집합을
+		
+		if(entryset.size()==0) {  // if (hashmap.isEmpty()) 동일
+			System.out.println("출력할 성적정보가 없습니다.\n");
+			return;
+		}
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("=============================================");
+		System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+		System.out.println("=============================================");
+		Sungjuk.tot_avg =0.0;
+		Iterator it_entry = entryset.iterator(); //순차적인 접근을 위해 Iterator 객체 사용
+		while(it_entry.hasNext())
+		{
+			//키와 값을 읽기 위해  Map.Entry로 캐스트 연산
+			Map.Entry e = (Map.Entry) it_entry.next();
+			// e.getValue(): 데이터 값을 읽어 옴
+			// e.getKey(): 키 값을 읽어옴
+			// e.getValue()의 리턴 타입이 Object이므로 Sungjuk으로 캐스트 연산
+			Sungjuk obj = (Sungjuk)e.getValue();
+			obj.output();
+			Sungjuk.tot_avg += obj.avg;
+		}
+		System.out.println("=============================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",entryset.size(),Sungjuk.tot_avg/entryset.size());
+		
+		
+		// 3. values() 이용
+		if(hashmap.size()==0) {
+			System.out.println("출력할 성적정보가 없습니다.\n");
+			return;
+		}
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("=============================================");
+		System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+		System.out.println("=============================================");
+		Sungjuk.tot_avg =0.0;
+		for(Sungjuk obj : hashmap.values()) { // values()는 값만 반환시킨다.
+			Sungjuk.tot_avg += obj.avg;
+			obj.output();
+		}
+		System.out.println("=============================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",hashmap.size(),Sungjuk.tot_avg/hashmap.size());
+		 */
+	}
+	
+	private static void studentSearch(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		Sungjuk obj = hashmap.get(hakbun);
+		if(!(obj==null)) {
+				System.out.println("=============================================");
+				System.out.println("  학번  이름    국어     영어    수학   총점   평균    등급");
+				System.out.println("=============================================");
+				obj.output();
+				System.out.println("=============================================");
+				return;
+		}
+		System.out.println("\n조회할 학번 입력 오류!!\n");
+		
+	}
+	
+	private static void studentRevise(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		System.out.println();
+
+		Sungjuk obj = hashmap.get(hakbun);
+		if(!(obj==null)) {
+				System.out.print("국어 점수=> ");
+				obj.kor = scan.nextInt();
+				System.out.print("영어 점수=> ");
+				obj.eng = scan.nextInt();
+				System.out.print("수학 점수=> ");
+				obj.math = scan.nextInt();
+				obj.process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	
+	private static void studentDelete(HashMap<String,Sungjuk> hashmap) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		
+		Sungjuk obj = hashmap.get(hakbun);
+		if(!(obj==null)) {
+			hashmap.remove(obj.hakbun);
+			System.out.println("\n성적 정보 삭제 성공!!\n");
+			return;
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+	}
+}
+
+
+
+14장 System 클래스 (간단하게 개념만) 
+ : 정적필드와 정적메소드로만 구성 -> 객체를 만들지 않고 사용
+ System.in 필드는 표준입력처리.
+ System.out 필드는 표준 출력.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

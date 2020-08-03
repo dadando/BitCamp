@@ -1,0 +1,917 @@
+20장 네트워크 통신 프로그래밍
+TCP/IP 프로토콜
+#TCP : Transmission Control Protocol = 전송 제어 프로토콜
+#IP : Internet Protocol
+----------------------------------------------------------------
+#OSI 7계층		ㅣTCP/IP 			  
+응용 ( Application Layer )	ㅣ응용계층 ( Application )	  
+표현 ( Presentation )	ㅣ			  
+세션 ( Session )		ㅣ			  
+----------------------------------------------------------------
+전송 ( Transmission )	ㅣ전송계층 ( Transmission )    
+----------------------------------------------------------------
+네트워크 ( Network )	ㅣ네트워크계층 ( Network )    
+----------------------------------------------------------------
+데이터링크 ( DataLink )	ㅣ맥계층 ( Mac )
+물리 ( Physical )		ㅣ
+----------------------------------------------------------------
+
+전송 => TCP : Port number
+네트워크 => IP : IP address => 경로 설정
+데이터링크=> MAC address
+
+#송수신 코드
+Ex)
+(클라이언트1)
+package SocketEx;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
+public class ClientExample1 {
+
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			//loopback address "127.0.0.1" 테스트용 IP주소
+			socket = new Socket("127.0.0.1",9000);
+			InputStream in = socket.getInputStream();
+			OutputStream out = socket.getOutputStream();
+			String str = "Hello, Server";
+			out.write(str.getBytes());
+			byte arr[] = new byte[100];
+			in.read(arr);
+			System.out.println(new String(arr));
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception e){
+				
+			}
+		}
+
+	}
+
+}
+// cmd 창에서 cd를 이용하여 경로 설정
+// 실행은 항상 bin 폴더에서 실행
+// C:\Project156\Java_Source\Practice_0407\bin>java SocketEx/ServerExample1
+// cd .. 은 상위폴더로 경로 변경.
+
+(서버1)
+package SocketEx;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerExample1 {
+
+	public static void main(String[] args) {
+		ServerSocket serverSocket = null;
+		Socket socket = null;
+		try {
+			serverSocket = new ServerSocket(9000);
+			//클라이언트에서 요청메시지가 들어오기 전까지 
+			//accept메소드는 항상 실행중이다.
+			//실행할때 클라이언트 소켓을 생성한다.
+			socket = serverSocket.accept();
+			InputStream in = socket.getInputStream();
+			OutputStream out = socket.getOutputStream();
+			byte arr[] = new byte[100];
+			in.read(arr); //클라이언트에서 받은 내용을 배열에 저장.
+			System.out.println(new String(arr));
+			String str = "Hello, Client";
+			out.write(str.getBytes());//서버에서 클라이언트로 정보 보냄
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+			try {
+				serverSocket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+}
+
+((클라이언트2))
+package SocketEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class ClientExample2 {
+
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			socket = new Socket("127.0.0.1",9000);
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			writer.println("Hello, Server");
+			writer.flush();
+			String str = reader.readLine();
+			System.out.println(str);
+					
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception e){
+				
+			}
+		}
+	}
+}
+
+((서버2))
+package SocketEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerExample2 {
+
+	public static void main(String[] args) {
+		ServerSocket serverSocket = null;
+		Socket socket = null;
+		try {
+			serverSocket = new ServerSocket(9000);
+			socket = serverSocket.accept();
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			String str = reader.readLine();
+			System.out.println(str);
+			writer.println("Hello, Client");
+			writer.flush();//송수신할때 사용하는 버퍼를 강제로 비우는 메소드
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+			try {
+				serverSocket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+}
+
+
+###일대일 채팅 프로그램 (쓰레드 이용)####
+
+package SocketEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class SenderThread extends Thread {
+	Socket socket;
+	SenderThread(Socket socket){
+		this.socket = socket;
+	}
+	public void run() {
+		try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(System.in));
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			while(true) {
+				String str = reader.readLine();
+				if(str.equals("bye"))
+					break;
+				writer.println(str);
+				writer.flush();
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+}
+
+package SocketEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ReceiverThread extends Thread {
+	Socket socket;
+	ReceiverThread(Socket socket){
+		this.socket = socket;
+	}
+	public void run() {
+		try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
+			while(true) {
+				String str = reader.readLine();
+				if(str==null)
+					break;
+				System.out.println("수신> "+str);
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}
+
+package SocketEx;
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerExample3 {
+
+	public static void main(String[] args) {
+		ServerSocket serverSocket = null;
+		Socket socket = null;
+		try {
+			serverSocket = new ServerSocket(9001);
+			socket = serverSocket.accept();
+			Thread thread1 = new SenderThread(socket);
+			Thread thread2 = new ReceiverThread(socket);
+			thread1.start(); // SenderThread의 run()메소드가 실행
+			thread2.start(); // ReceiverThread의 run()메소드가 실행
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				serverSocket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+}
+
+package SocketEx;
+
+import java.net.Socket;
+
+public class ClientExample3 {
+
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			socket = new Socket("125.0.0.1",9001);
+			Thread thread1 = new SenderThread(socket);
+			Thread thread2 = new ReceiverThread(socket);
+			thread1.start();
+			thread2.start();
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+
+##다중 채팅 프로그램##
+
+package MultiChatEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+public class SenderThread extends Thread {
+	Socket socket;
+	String name;
+	SenderThread(Socket socket,String name){
+		this.socket = socket;
+		this.name = name;
+	}
+	public void run() {
+		try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(System.in));
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			writer.println(name);
+			writer.flush();
+			while(true) {
+				String str = reader.readLine();
+				if(str.equals("bye"))
+					break;
+				writer.println(str);
+				writer.flush();
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				socket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+}
+
+
+package MultiChatEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+public class ReceiverThread extends Thread {
+	Socket socket;
+	ReceiverThread(Socket socket){
+		this.socket = socket;
+	}
+	public void run() {
+		try {
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(socket.getInputStream()));
+			while(true) {
+				String str = reader.readLine();
+				if(str==null)
+					break;
+				System.out.println("수신> "+str);
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}
+
+package MultiChatEx;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class PerClinetThread extends Thread {
+	static List<PrintWriter> list = Collections.synchronizedList(
+			new ArrayList<PrintWriter>());
+	Socket socket;
+	PrintWriter writer;
+	PerClinetThread(Socket socket){
+		this.socket = socket;
+		try {
+			writer = new PrintWriter(socket.getOutputStream());
+			list.add(writer);
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	public void run() {
+		String name = null;
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			name = reader.readLine();
+			sendAll("#"+name+"님이 들어오셨습니다.");
+			while(true) {
+				String str = reader.readLine();
+				if(str==null)
+					break;
+				sendAll(name+">"+str);
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			list.remove(writer);
+			sendAll("#"+name+"님이 나가셨습니다.");
+			try {
+				socket.close();
+			}
+			catch(Exception ignored) {
+				
+			}
+		}
+	}
+	private void sendAll(String str) {
+		for(PrintWriter writer : list) {
+			writer.println(str);
+			writer.flush();
+		}
+	}
+}
+
+package MultiChatEx;
+
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerExample4 {
+
+	public static void main(String[] args) {
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(9002);
+			while(true) {
+				Socket socket = serverSocket.accept();
+				Thread thread = new PerClinetThread(socket);
+				thread.start();
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+
+package MultiChatEx;
+
+import java.net.Socket;
+
+public class ClientExample4 {
+
+	public static void main(String[] args) {
+		if(args.length !=1) {
+			System.out.println("Usage: java ClientExample4 <user-name>");
+			return;
+		}
+		try {
+			Socket socket = new Socket("192.168.0.3",9002);
+			Thread thread1 = new SenderThread(socket,args[0]);
+			Thread thread2 = new ReceiverThread(socket);
+			thread1.start();
+			thread2.start();
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}
+
+
+###채팅프로그램###
+로그인/로그아웃 2개의 패널을 CardLayout에 배치한다.
+
+package MultiChatProgram;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class MultiChatClient implements ActionListener, Runnable {
+    private String ip;
+    private String id;
+    private Socket socket;
+    private BufferedReader inMsg = null;
+    private PrintWriter outMsg = null;
+
+    // 로그인 패널
+    private JPanel loginPanel;
+    // 로그인 버튼
+    private JButton loginButton;
+    // 대화명 라벨
+    private JLabel label1;
+    // 대화명 입력 텍스트 필드
+    private JTextField idInput;
+
+    // 로그아웃 패널 구성
+    private JPanel logoutPanel;
+    // 대화명 출력 라벨
+    private JLabel label2;
+    // 로그아웃 버튼
+    private JButton logoutButton;
+
+    // 입력 패널 구성
+    private JPanel msgPanel;
+    // 메시지 입력 텍스트 필드
+    private JTextField msgInput;
+    // 종료 버튼
+    private JButton exitButton;
+
+    // 메인 윈도우
+    private JFrame jframe;
+    // 채팅 내용 출력 창
+    private JTextArea msgOut;
+
+    // 카드 레이아웃 관련
+    private Container tab;
+    private CardLayout clayout;
+    private Thread thread;
+
+    // 상태 플래그
+    boolean status;
+
+    public MultiChatClient(String ip) {
+        this.ip = ip;
+
+        // 로그인 패널 구성
+        loginPanel = new JPanel();
+        // 레이아웃 설정
+        loginPanel.setLayout(new BorderLayout());
+        idInput = new JTextField(15);
+        loginButton = new JButton("로그인");
+        // 이벤트 리스너 등록
+        loginButton.addActionListener(this);
+        label1 = new JLabel("대화명");
+        // 패널에 위젯 구성
+        loginPanel.add(label1, BorderLayout.WEST);
+        loginPanel.add(idInput, BorderLayout.CENTER);
+        loginPanel.add(loginButton, BorderLayout.EAST);
+
+        // 로그아웃 패널 구성
+        logoutPanel = new JPanel();
+        // 레이아웃 설정
+        logoutPanel.setLayout(new BorderLayout());
+        label2 = new JLabel();
+        logoutButton = new JButton("로그아웃");
+        // 이벤트 리스너 등록
+        logoutButton.addActionListener(this);
+        // 패널에 위젯 구성
+        logoutPanel.add(label2, BorderLayout.CENTER);
+        logoutPanel.add(logoutButton, BorderLayout.EAST);
+
+        // 입력 패널 구성
+        msgPanel = new JPanel();
+        // 레이아웃 설정
+        msgPanel.setLayout(new BorderLayout());
+        msgInput = new JTextField(30);
+        // 이벤트 리스너 등록
+        msgInput.addActionListener(this);
+        exitButton = new JButton("종료");
+        exitButton.addActionListener(this);
+        // 패널에 위젯 구성
+        msgPanel.add(msgInput, BorderLayout.CENTER);
+        msgPanel.add(exitButton, BorderLayout.EAST);
+
+        // 로그인/로그아웃 패널 선택을 위한 카드 레이아웃 패널
+        tab = new JPanel();
+        clayout = new CardLayout();
+        tab.setLayout(clayout);
+        tab.add(loginPanel, "login");
+        tab.add(logoutPanel, "logout");
+
+        // 메인 프레임 구성
+        jframe = new JFrame("::멀티챗::");
+        msgOut = new JTextArea("", 10, 30);
+        // JTextArea의 내용을 수정하지 못하게 함. 즉, 출력 전용으로 사용
+        msgOut.setEditable(false);
+        // 수직 스크롤바는 항상 나타내고, 수평 스크롤바는 필요할 때만 나타나게 함
+        JScrollPane jsp = new JScrollPane(msgOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jframe.add(tab, BorderLayout.NORTH);
+        jframe.add(jsp, BorderLayout.CENTER);
+        jframe.add(msgPanel, BorderLayout.SOUTH);
+        // 로그인 패널을 우선 표시
+        clayout.show(tab, "login");
+        // 프레임 크기 자동 설정
+        jframe.pack();
+        // 프레임 크기 조정 불가 설정
+        jframe.setResizable(false);
+        // 프레임 표시
+        jframe.setVisible(true);
+
+    }
+
+    public void connectServer() {
+        try {
+            // 소켓 생성
+            socket = new Socket(ip, 8888);
+            System.out.println("[Client]Server 연결 성공!!");
+
+            // 입출력 스트림 생성
+            inMsg = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outMsg = new PrintWriter(socket.getOutputStream(), true);
+
+            // 서버에 로그인 메시지 전달
+            outMsg.println(id+"/"+"login");
+
+            // 메시지 수신을 위한 스레드 생성
+            thread = new Thread(this);
+            thread.start();
+        } catch(Exception e) {
+            // e.printStackTrace();
+            System.out.println("[MultiChatClient]connectServer() Exception 발생!!");
+        }
+    }
+
+    // 이벤트 처리
+    public void actionPerformed(ActionEvent arg0) {
+        Object obj = arg0.getSource();
+
+        // 종료 버튼 처리
+        if(obj == exitButton) {
+            System.exit(0);
+        } else if(obj == loginButton) {
+            id = idInput.getText();
+
+            label2.setText("대화명 : " + id);
+            clayout.show(tab, "logout");
+            connectServer();
+        } else if(obj == logoutButton) {
+            // 로그아웃 메시지 전송
+            outMsg.println(id + "/" + "logout");
+            // 대화 창 클리어
+            msgOut.setText("");
+            // 로그인 패널로 전환
+            clayout.show(tab, "login");
+            outMsg.close();
+            try {
+                inMsg.close();
+                socket.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+
+            status = false;
+        } else if(obj == msgInput) {
+            // 메시지 전송
+            outMsg.println(id + "/" + msgInput.getText());
+            // 입력 창 클리어
+            msgInput.setText("");
+        }
+    }
+
+    public void run() {
+        // 수신 메시지를 처리하는 변수
+        String msg;
+        String[] rmsg;
+
+        status = true;
+
+        while(status) {
+            try {
+                // 메시지 수신과 파싱
+                msg = inMsg.readLine();
+                rmsg = msg.split("/");
+
+                // JTextArea에 수신된 메시지 추가
+                msgOut.append(rmsg[0] + ">"+rmsg[1] + "\n");
+
+                // 커서를 현재 대화 메시지에 표시
+                msgOut.setCaretPosition(msgOut.getDocument().getLength());
+            } catch(IOException e) {
+                // e.printStackTrace();
+                status = false;
+            }
+        }
+
+        System.out.println("[MultiChatClient]" + thread.getName() + "종료됨");
+    }
+
+    public static void main(String[] args) {
+        MultiChatClient mcc = new MultiChatClient("192.168.0.22");
+    }
+}
+
+package MultiChatProgram;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class MultiChatServer {
+
+	// 서버 소켓과 클라이언트 연결 소켓 
+	private ServerSocket ss = null;
+	private Socket s = null;
+	
+	// 연결된 클라이언트 스레드를 관리하는 ArrayList
+	ArrayList <ChatThread> chatlist = new ArrayList <ChatThread>();
+	
+	// 멀티챗 메인 프로그램부
+	public void start() {
+		try {
+			// 서버 소켓 생성
+			ss = new ServerSocket(8888);
+			System.out.println("server start");
+			
+			// 무한루프를 돌면서 클라이언트 연결을 기다림
+			while(true) {
+				s = ss.accept();				
+				// 연결된 클라이언트에서 스레드 클래스 생성
+				ChatThread chat = new ChatThread();
+				// 클라이언트 리스트 추가
+				chatlist.add(chat);
+				// 스레드 시작
+				chat.start();
+			}
+		} catch(Exception e) {
+			// System.out.println(e);
+			System.out.println("[MultiChatServer]start() Exception 발생!!");
+		}   
+	} 
+	
+	public static void main(String[] args) {
+		MultiChatServer server = new MultiChatServer();
+		server.start();
+	}
+	
+	// 연결된 모든 클라이언트에 메시지 중계
+	void msgSendAll(String msg) {
+		for(ChatThread ct : chatlist) {
+			ct.outMsg.println(msg);
+		}
+	}
+
+	// 각 클라이언트 관리를 위한 스레드 클래스
+	class ChatThread extends Thread {
+		
+		// 수신 메시지와 파싱 메시지 처리하는 변수 선언
+		String msg;
+		String[] rmsg;
+		
+		// 입출력 스트림 생성
+		private BufferedReader inMsg = null;
+		private PrintWriter outMsg = null;
+
+		public void run() {
+		
+			boolean status = true;
+			System.out.println("##ChatThread start...");
+			try {
+				// 입출력 스트림 생성
+				inMsg = new BufferedReader(new InputStreamReader(s.getInputStream()));
+				outMsg = new PrintWriter(s.getOutputStream(), true);
+				//true로 설정하면 write하고 flush()메소드 기능을 대신 수행한다.
+				
+				// 상태정보가 true면 루프를 돌면서 사용자한테서 수신된 메시지 처리
+				while(status) {
+					// 수신된 메시지를 msg 변수에 저장
+					msg = inMsg.readLine();
+					// '/' 구분자를 기준으로 메시지를 문자열 배열로 파싱
+					rmsg = msg.split("/");
+					
+					// 파싱된 문자열 배열의 두번째 요소값에 따라 처리
+					// 로그아웃 메시지일 때
+					if(rmsg[1].equals("logout")) {
+						chatlist.remove(this);
+						msgSendAll("server/" + rmsg[0] + "님이 종료했습니다.");
+						// 해당 클라이언트 스레드 종료로 인해 status를 false로 설정
+						status = false;
+					}
+					// 로그인 메시지일 때
+					else if(rmsg[1].equals("login")) {
+						msgSendAll("server/"+rmsg[0]+"님이 로그인했습니다.");
+					}
+					// 그 밖의 일반 메시지일 때
+					else {
+						msgSendAll(msg);
+					}
+				} // while 종료
+				// 루프를 벗어나면 클라이언트 연결이 종료되므로 스레드 인터럽트됨
+				this.interrupt();
+				System.out.println("##"+this.getName()+"stop!!");
+			} catch(IOException e) {
+				chatlist.remove(this);
+				// e.printStackTrace();
+				System.out.println("[ChatThread]run() IOException 발생!!");
+			}
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

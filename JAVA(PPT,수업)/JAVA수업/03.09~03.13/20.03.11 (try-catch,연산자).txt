@@ -1,0 +1,422 @@
+###메소드 호출문
+ex)
+class LuxuryHelloJava { 
+    public static void main(String args[]) { 
+        printCharacter('*', 30);   ------메소드 호출문 
+        System.out.println("Hello, Java"); 
+        printCharacter('-', 30);   ------메소드 호출문
+    } 
+    static void printCharacter(char ch, int num) { 
+        for (int cnt = 0; cnt < num; cnt++)  
+            System.out.print(ch); 
+        System.out.println(); 
+    } 
+}
+==printCharacter('*',30);
+--> '*'은 printCharacter메소드의 ch에 대입, 30은 num
+
+##main 메소드의 파라미터
+ex)
+ParamExample1.java
+
+class ParamExample1 { 
+
+	public static void main(String args[]) { 
+    
+		for (String str : args) 
+            System.out.println(str); 
+        System.out.println("args.length=" + args.length); 
+    
+	} 
+}
+
+
+###try문 : 익셉션(오류) 처리에 사용되는 명령문
+try
+   try블록
+catch (익셉션타입 익셉션변수)
+   catch블록
+finally
+   finally블록
+---finally는 상황에 따라 생략가능, 모든 블록은 중괄호로 둘러싸여 있어야 한다.
+
+ex1)
+SmartExample.java
+
+class SmartExample {    
+     public static void main(String args[]) {        
+	
+	int a = 3, b = 0;         
+	int result;         
+	try {            
+	    result = a / b;            
+	    System.out.println(result);         
+	}         
+	catch (java.lang.ArithmeticException e) {             
+	    System.out.println("잘못된 연산입니다." + e.getMessage());
+					      // 예외 처리된 내용을 볼 수 있다.  
+	}         
+	finally {      // finally는 생략이 가능하다.
+	    System.out.println("Done.");         
+	}     
+     } 
+}
+
+ex2)
+TryExample.java
+
+public class TryExample {
+
+    public static void main(String args[]) { 
+        int divisor[] = { 5, 4, 3, 2, 1, 0 }; 
+        for (int cnt = 0; cnt < 10; cnt++) { 
+            try {             
+                int share = 100 / divisor[cnt]; 
+                System.out.println(share); 
+            } 
+            catch (java.lang.ArithmeticException e) { 
+                System.out.println("잘못된 연산입니다." + e.getMessage()); 
+            } 
+            catch (java.lang.ArrayIndexOutOfBoundsException e) { 
+                System.out.println("잘못된 인덱스입니다." + e.getMessage()); 
+            } 
+        } 
+        System.out.println("Done."); 
+    }
+}
+
+#############
+catch(java.lang.Exception e) {
+    System.out.println("예외발생: " + e.getMessage());
+    }
+--->> 예외가 발생하는 타입을 모를때 사용하면 좋다. 
+부모클래스에 속하기 때문에.
+#자식클래스의 익셉션과 같이 쓸 경우
+  자식클래스를 먼저기술한뒤에
+  부모클래스 익셉션을 기술해야 에러가 발생하지 않는다.
+
+###연습문제(메소드호출)####
+
+import java.util.Scanner;
+
+public class MunJaeYamm {
+	
+	static int i,j,min,max;
+	static int cnt =0,hap=0;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner in = new Scanner(System.in);
+		int num1 = print01(in.nextInt());
+		int num2 = print02(in.nextInt());
+		primenumber(num1,num2);
+		System.out.println("총 갯수 = "+cnt);
+		System.out.println("총 합 = "+hap);
+	}
+	
+	static int print01(int num1) {
+		
+		System.out.print("첫번째 숫자 입력=> "+num1);
+		System.out.println();
+		
+		return num1;
+	}
+	
+	static int print02(int num2) {
+		
+		System.out.print("두번째 숫자 입력=> "+num2);
+		System.out.println();
+		
+		return num2;
+	}
+	
+	static int primenumber(int num1,int num2) {
+		
+		if(num1<num2) {
+			min = num1;
+			max = num2;
+		}else {
+			min = num2;
+			max = num1;
+		}
+		for(i=min;i<max;i++) {
+			for(j=2;j<i;j++) {
+				if(i%j==0) {
+					break;
+				}
+			}
+			if(i==j) {
+				System.out.printf("%5d",i);
+				cnt++;
+				if(cnt%10==0) { 
+					System.out.println();
+				}
+				hap+=i;
+			}
+		}
+		if(cnt%10!=0) {
+			System.out.println();
+		}
+		return i;
+	}
+
+}
+
+##강사님 코드##
+Push.java
+
+import java.util.Scanner;
+
+public class Push {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		int val[];
+		int res_val[];
+		
+		val = input();
+		
+		res_val = process(val[0],val[1]);
+		
+		if(res_val[0]%10!=0) 
+			System.out.println();
+		System.out.println("총 소수의 갯수= " + res_val[0]);
+		System.out.println("총 소수의 합= " + res_val[1]);
+			
+	}
+	
+	static int[] input() {
+		int num1,num2;
+		int input_val[] = new int[2];
+		
+		Scanner in = new Scanner(System.in);
+		
+		System.out.print("첫번째 숫자 입력=> ");
+		num1 = in.nextInt();
+		System.out.print("두번째 숫자 입력=> ");
+		num2 = in.nextInt();
+		
+		if(num1<num2) {
+			input_val[0] = num1;
+			input_val[1] = num2;
+		}else {
+			input_val[0] = num2;
+			input_val[1] = num1;
+		}
+		
+		return input_val;
+	}
+	
+	static int[] process(int min, int max) {
+		int process_val[] = new int[2];
+		int i,j;
+		
+		for(i=min;i<=max; i++) {
+			for(j=2;j<i;j++) {
+				
+				if(i%j==0) //소수가 아닌경우
+					break;
+			}
+			if(i==j) { //소수의 경우
+				System.out.printf("%5d",i); // 소수출력
+				process_val[0]++;//소수갯수 카운트
+				if(process_val[0]%10==0)// 한줄에 10개씩 출력
+					System.out.println();
+				process_val[1]+=i;//소수의 총합
+			}
+		}
+		return process_val;
+		
+	}
+}
+
+###
+#소수점과 아라비아 숫자로 구성된 리터럴은 double 타입
+ ex) 12.025  12.  0.25
+#지수표기도 double 타입
+ ex) 12e100 0.25E-20
+#뒤에 'L'이나 'l' 을 붙이면 long타입
+ ex) 120L  024l  0x30A1L
+#뒤에 'F' 나 'f'를 붙이면 float타입
+ ex) 12.025F 12.f 12e10F  12F(소수점이 없어도 float타입)
+#문자 char타입
+ ' ' 작은따옴표를 사용
+#문자열 String 타입
+ " " 큰 따옴표를 사용,컴파일 할때 자동으로 문자열로 인식
+ 특수문자에는 고유기능이 존재한다.
+#boolean타입
+ true or false
+
+############4장 연산자#####################
+타입이 다른 것끼리 연산을 하면 자동으로 큰 타입으로 변환된다.
+
+#수치 비교 연산자
+ : 결과는 true or false 가 나온다.
+
+#논리 연산자 (엄밀히 말하면 비트연산자)
+
+논리연산자와 관계연산자가 같이 있으면 관계연산자 우선.
+
+#조건논리연산자
+>> 피연산자는 모두 불리언 타입이어야 한다.
+*주의*
+ &&연산자의 경우 앞의 피연산자가 false이면 뒤에 연산자는 수행하지 않는다.
+ \\연산자의 경우 앞의  피연산자가 true이면 뒤에 연산자는 수행하지 않는다.
+
+ex)
+class LuxuryHelloJava { 
+    public static void main(String args[]) { 
+        int num1 = 0, num2 = 0; 
+        if (++num1 > 0 || ++num2 > 0) 
+            System.out.println("num1이 0보다 크거나 num2가 0보다 큽니다."); 
+        System.out.println("num1 = " + num1); 
+        System.out.println("num2 = " + num2); // ||연산자 앞의 조건이 참이라서 연산자 뒤에는 수행하지않는다.
+        				          // 즉, ++num2가 수행되지않아 num2는 그대로 0이다.
+	    }
+}
+
+#조건연산자
+max = a < b ? a : b;
+a<b가 참이면 a 값, 거짓이면 b값이 max에 대입됨
+ex) 
+
+class LuxuryHelloJava { 
+    public static void main(String args[]) { 
+        int a = 20, b = 30, max; 
+        max = a > b ? a : b; 
+        System.out.println(max);
+    }
+}
+====>> a>b가 거짓이므로 max에 b값인 30이 대입된다. 출력: 30
+
+
+쉬프트 연산자
+<< : 부호비트 참여x
+>> : 부호비트 참여x
+>>> : 부호비트도 참여를 하기때문에 부호가 바뀐다.
+ex)
+				*연산 쉬프트*
+		      좌측(<<) 2bit		우측(>>) 2bit	      논리쉬프트(>>>) : 단순한 데이터 이동
++10 : 0000 1010	      0010 1000 : +40   	0000 0010 : +2     0000 0010 (빈자리는 무조건0으로채움)
+-10 : 1111 0110         1101 1000 : -40	1111 1101 : -3     0011 1101 (빈자리는 무조건0)
+==> 음수를 우측쉬프트할 경우에는 빈자리에 1을 채운다.
+
+
+예제) 성적처리 코드 에서 입력,출력 두개의 메소드를 만들기.
+HomewWorkEx01
+
+import java.util.Scanner;
+
+public class HomeWorkEx01 {
+	
+	static int MAX = 100;
+	public static void main(String[] args) {
+				
+		String num[] = new String[MAX];
+		String name[] = new String[MAX];
+		int kor[] = new int[MAX];
+		int eng[] = new int[MAX];
+		int math[] = new int[MAX];
+		int tot[] = new int[MAX];
+		double avg[] = new double[MAX];
+		String score[] = new String[MAX];
+		
+		double avg_totavg[] = new double[1];
+		int cnt;
+		
+		cnt = userinput(num,name,kor,eng,math,tot,avg,score,avg_totavg);
+		
+		//System.out.println(cnt);
+		result(num,name,kor,eng,math,tot,avg,score,avg_totavg,cnt);
+	}
+
+	static int userinput(String num[],String name[],int kor[],int eng[]
+			,int math[],int tot[],double avg[],String score[],double avg_totavg[]
+					) {
+		Scanner scan = new Scanner(System.in);
+		int cnt = 0;
+		String grade = null;
+		double totavg=0;
+		int i;
+		for(i=0;i<MAX;i++) {
+			
+			System.out.printf("%d번째 학생",i+1);
+			System.out.print("\n\t학번 입력=> ");
+			num[i] = scan.next();
+			if(num[i].equals("exit"))
+				break;
+			System.out.print("\t이름 입력=> ");
+			name[i] = scan.next();
+			System.out.print("\t국어 점수=> ");
+			kor[i] = scan.nextInt();
+			System.out.print("\t영어 점수=> ");
+			eng[i] = scan.nextInt(); // 영어
+			System.out.print("\t수학 점수=> ");
+			math[i] = scan.nextInt(); // 수학
+			
+			tot[i] = kor[i]+eng[i]+math[i]; // 개인 총점
+			avg[i] = tot[i]/3.;
+			
+			switch((int)(avg[i]/10)) {
+			case 10:
+			case 9:
+					
+				grade = "수";
+				break;
+			case 8:
+				grade = "우";
+				break;
+							
+			case 7:
+				grade = "미";
+				break;
+			case 6:
+				grade = "양";
+				break;
+			case 5:
+			case 4:
+			case 3:
+			case 2:
+			case 1:
+			case 0:
+				grade = "가";
+				break;
+			}
+			score[i] = grade;
+			cnt++;
+			totavg += avg[i]; // 평균들의 총합
+			
+			//System.out.println(cnt);
+		}
+		avg_totavg[0] = totavg/cnt;
+		
+		return cnt;
+		
+	}
+	
+	static void result(String num[],String name[],int kor[],int eng[]
+			,int math[],int tot[],double avg[],String score[],double avg_totavg[]
+					,int cnt) {
+		// TODO Auto-generated method stub
+		int i;
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		for(i=0;i<cnt;i++) {
+			
+			System.out.printf("%4s\t%3s\t%3d\t%3d\t%3d\t%3d\t%6.2f\t%2s\n"
+					,num[i],name[i],kor[i],eng[i],math[i],tot[i],avg[i],score[i]);
+			
+		}
+		
+		System.out.println("===========================================================");
+		System.out.printf("\t\t학생수: %d    전체 평균: %6.2f",cnt,avg_totavg[0]);
+	
+	}
+}
+
+
+

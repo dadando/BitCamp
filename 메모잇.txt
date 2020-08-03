@@ -1,0 +1,39 @@
+\\192.168.0.22
+#HTML공부할 수 있는 사이트
+https://www.w3schools.com/
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+----------JSP--------------
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<JSP 한글문제>
+request.setCharacterEncoding("utf-8");
+
+----------Spring----------
+사이트: https://spring.io/
+다운로드: https://download.springsource.com/release/STS/3.9.12.RELEASE/dist/e4.15/spring-tool-suite-3.9.12.RELEASE-e4.15.0-win32-x86_64.zip
+
+프로젝트 만들때: 
+Spring Legacy Project->
+Spring MVC Project 로 만들어야 된다.
+이름: com.spring.hellospring 으로 만든다.
+<Spring한글문제>
+해당 JSP파일 맨앞줄에
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+추가
+web.xml에서 Korean Filter추가
+
+--------MyBatis----------
+https://mybatis.org/mybatis-3/ko/index.html
+
+Selenium
+브라켓 에디터(monokai/
+부트스트랩/
+포토샵: pixlr
+깃허브 다운로드 사이트:
+https://gitforwindows.org/
+프로그래머스 : 코딩테스트
+unsplash.com : 이미지 사이트
+pixabay.com : 이미지 사이트
+kakao developers : 카카오 API
+https://www.iamport.kr/ : 결제관련
+https://color.adobe.com/ : 색상휠

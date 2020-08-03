@@ -1,0 +1,977 @@
+#새 프로젝트 만들기
+
+1) File -> New -> Project
+2)자동으로 Java가 선택되어 있다
+3)Next -> Next
+4)적절한 이름설정
+5) 이후 Finish
+
+#프로그램(자바)소스 코드 만들기
+
+1) Second프로젝트를 열고 src디렉토리 확인
+2) src 디렉토리를 우클릭
+3) New -> java 선택
+4) 이름입력
+5) 엔터치면 기본적인 자바 포맷생성됨
+6) psvm을 입력후 엔터치면 프로그램을 작성할 준비가 완료
+
+## 1. 제어문 while ##
+
+public class Second {
+    public static void main(String[] args) {
+        int num = 1;
+
+        // while: ~하는 동안
+        // 그러므로 while은 반복문이 될 수도 있다.
+        // while 문을 작성하는 방법
+        // 1) while 을 적고 괄호를 열고 닫는다.
+        // 2) 괄호안에 조건문을 적는다.
+        // 3) 괄호 옆에 중괄호를 열고 닫는다.
+        // 4) 중괄호 안에서 조건이 만족되면 수행할 작업을 적어넣는다.
+
+        // while 문은 조건이 만족되지 않으면 멈춘다.
+        // 만약 조건이 만족되지 않으면 while문의 중괄호 끝까지 전부 건너뛴다.
+        while(num < 10) {
+            // 전위 연산자, 후위 연산자
+            // 전위 연산자는 동작 전에 먼저 값을 처리함
+            // 후위 연산자는 동작 후에 값을 처리함
+            // 전위 연산자를 만드는 방법
+            // 변수 앞에 ++ 혹은 -- 를 붙인다.
+            // 후위 연산자는 뒤에 ++ 혹은 -- 를 붙인다.
+            System.out.println(num++);
+
+            // while 문의 끝은 중괄호가 닫히는 부분이다.
+            // while 문의 긑에 도달하면 다시 while의 조건을 검사하러 올라간다.
+        }
+
+    }
+}
+
+결과: 1 2 3 4 5 6 7 8 9 (후위 연산자)
+       2 3 4 5 6 7 8 9 10 (전위 연산자)
+
+## 2. while + if ##
+
+public class Second {
+    public static void main(String[] args) {
+      int num = 1;
+
+      while(num++ < 10) {
+          // == 양측의 값이 같은지 여부(비교)
+          // 즉 홀수를 판정하겠다는 의미
+          if(num % 2 == 1){
+              System.out.println(num);
+          }
+      }
+    }
+}
+
+결과 : 3 5 7 9
+
+#퀴즈# 위 코드는 결과 값이 3 5 7 9 가나온다. 1이 포함되게 코드를 변경
+
+public class Second {
+    public static void main(String[] args) {
+      int num = 1;
+
+      while(num < 10) {
+          // == 양측의 값이 같은지 여부(비교)
+          // 즉 홀수를 판정하겠다는 의미
+          if(num % 2 == 1){
+              System.out.println(num);
+          }
+
+          num++;
+      }
+    }
+}
+
+결과 : 1 3 5 7 9
+
+
+## 3. boolean ##
+
+public class Second {
+    public static void main(String[] args) {
+        // boolean 의 유래는 불 대수에서 왔다.
+        // 참과 거짓만 존재하는 자료형에 해당한다.
+        // 참 == 1, 거짓 == 0
+        boolean isTrue;
+        int num1 =3, num2 =7;
+
+        // != 는 같지 않은지 검사하는 것.
+        isTrue = num1 != num2;
+        System.out.println(isTrue);
+
+        isTrue = num1 <= num2;
+        System.out.println(isTrue);
+
+        isTrue = num1 >= num2;
+        System.out.println(isTrue);
+
+        // && 는 관계 연산자라고 한다.
+        // 관계 연산자는 두 개의 관계에 관련된 연산자로
+        // 조건을 결합시킬 수도 있고 분리시킬 수도 있다.
+        // && 는 관계 연산자 AND
+        // ||는 관계 연산자 OR
+        // ! 는 관계 연산자 NOT
+
+        // 그럼 비트 연산자와 관계 연산자의 차이는?
+        // 비트 연산자는 숫자(정수)에만 적용 되는 것
+        // 관계 연산자는 조건이면 모무 적용 가능
+        isTrue = (num1 != num2) && (num1 <= num2);
+        System.out.println(isTrue);
+
+        isTrue = (num1 != num2) && (num1 >= num2);
+        System.out.println(isTrue);
+
+        isTrue = (num1 != num2) || (num1 <= num2);
+        System.out.println(isTrue);
+
+        isTrue = (num1 != num2) || (num1 >= num2);
+        System.out.println(isTrue);
+
+        isTrue = !(num1 >= num2); // 거짓의 거짓은 참.
+        System.out.println(isTrue);
+
+    }
+}
+
+결과: true true false true false true true true
+
+
+## 4. AND 와 OR의 특성 ##
+
+public class Second {
+    public static void main(String[] args) {
+        int num1 = 3, num2 =7;
+        // AND 와 OR의 특성
+
+        // num1 = 4 (X)
+        // AND 연산은 하나라도 거짓이면 싹다 거짓인 특성
+        // 그러므로 거짓이 있으면 뒤의 조건은 보지도 않는다.
+        if ((num1 > num2) && (num1++ >1)) {
+            num2++;
+        }
+
+        // num2 = 6 (X)
+        // OR 연산은 하나라도 참이면 싹다 참인 특성
+        // 그러므로 참이 있으면 뒤의 조건은 보지도 않는다.
+        if ((num1 <= num2)||(num2-- > num1)){
+            ;
+        }
+        System.out.println("num1 = " + num1);
+        System.out.println("num2 = " + num2);
+    }
+}
+
+결과: num1 = 3
+       num2 = 7
+
+##Quiz##
+1~ 20 까지의 숫자 중 2의 배수와 3의 배수를 찾는 프로그램을 작성하시오.
+
+public class Second {
+    public static void main(String[] args) {
+        int num =1 ;
+        while(num++<20){
+            if ((num%2==0)||(num%3==0)){
+                System.out.println(num);
+            }
+
+        }
+    }
+}
+
+결과 : 2 3 4 6 8 9 10 12 14 15 16 18 20
+
+## Quiz 2와 3의 공배수##
+public class Second {
+    public static void main(String[] args) {
+        int num =1 ;
+        while(num++<20){
+            if ((num%2==0)&&(num%3==0)){
+                System.out.println(num);
+            }
+
+        }
+    }
+}
+
+결과 : 6 12 18
+
+
+##Quiz else if 이용 ##
+
+public class Second {
+    public static void main(String[] args) {
+        int num =1 ;
+        while(num++<20){
+           if (num % 2==0){
+               System.out.println(num);
+           }else if(num % 3==0){
+               // if 문 이후에 else가 오는 것은 현재 알고 있다.
+               // 그러나 조건을 여러개 두고 싶을 때 어떻게 해야 할까?
+               // else if를 하면 된다.
+
+               // 만약 위의 if 가 만족되면 else if는 그냥 건너뛴다.
+               System.out.println(num);
+           }
+        }
+    }
+}
+결과: 2 3 4 6 8 9 10 12 14 15 16 18 20
+
+## 5. switch ##
+
+import java.util.Scanner;
+
+public class Second {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int score;
+
+
+        score = scan.nextInt();
+
+        // 스위치는 각각의 케이스별로 정밀 제어가 가능
+        // 장점: 각각의 케이스 제어가 가능하다는 점
+        // 단점: 단순 작업일 경우 많아지는 코드량
+
+        // 주의 할점: switch는 break를 하지 않으면 멈추지 않고 계속된다.
+        // 그러니 반드시 break를 써야한다.
+        switch (score / 10){
+            case 10:
+                System.out.println("A+");
+                break;
+            case 9:
+                System.out.println("A");
+                break;
+            case 8:
+                System.out.println("B+");
+                break;
+            case 7:
+                System.out.println("C");
+                break;
+            case 6:
+                System.out.println("D");
+                break;
+            case 5:
+            case 4:
+            case 3:
+            case 2:
+            case 1:
+            case 0:
+                System.out.println("FFF");
+                break;
+            
+            // default 는 case에서 처리하지 못하는 구간의 값을 입력한 경우에 동작한다.
+            // 숫자를 과도하게 높이거나 혹은 숫자가 아닌 값을 넣으면 오동작을 하는 것을 볼 수 있다.
+            // 이 부분은 Exception(try - catch)부분에서 예외처리 할 수 있다.
+            default:
+                System.out.println("이상한 점수 입력");
+                break;
+        }
+    }
+}
+
+##Quiz##
+1 ~ 100 까지의 숫자가 있다. 2의 배수를 찾아서 모두 더해보자!
+단, 3 혹은 4의 배수는 덧셈에서 제외한다.
+
+(나의 답)
+public class Second {
+    public static void main(String[] args) {
+        int num =1, sum =0 ;
+
+        while(num<=100){
+
+            if((num%2==0)&&(num%3!=0)&&(num%4!=0)){
+                sum = sum + num;
+            }
+            num ++;
+
+        }
+        System.out.println("sum = " + sum);
+    }
+}
+
+결과: 866
+(나의답2)
+
+public class Second {
+    public static void main(String[] args) {
+        int num = 1, sum = 0;
+
+        while (num<=100){
+            if (num%2==0){
+                sum +=num;
+            }
+            if (num%6==0){
+                sum -= num;
+            }
+            if (num%4==0){
+                sum -=num;
+            }
+            if (num%12==0){
+                sum +=num;
+            }
+            num++;
+        }
+        System.out.println("sum = " + sum);
+    }
+}
+결과: 866
+
+(솔루션)
+
+public class Second {
+    public static void main(String[] args) {
+        int num =1, sum =0 ;
+
+        while(num<=100){
+            if ((num%3==0)||(num%4==0)){
+                ;
+            }else if(num%2==0){
+                sum = sum+num;
+            }
+            num ++;
+        }
+        System.out.println("sum = " + sum);
+    }
+}
+결과: 866
+
+##Quiz2##
+4~10까지의 숫자가 있다. 3의 배수는 빼고 3을 나눈 나머지가 1인 값은 더한다.
+3을 나눈 나머지가 2인 값은 곱한다. 최종결과는 얼마일까?
+
+
+(스위치사용)
+public class Second {
+    public static void main(String[] args) {
+        int num = 4, sum =0;
+
+        while (num<=10){
+            switch (num%3){
+	        // &= AND
+	        // |=  OR
+	        // ^= XOR
+	        // >>= 과 <<= 이 가능
+                    // 나눗셈: /=
+	        // 나머지: %=
+                case 0:
+                    // sum -= num;
+                    sum = sum - num;
+                    break;
+                case 1:
+                    // sum += num;
+                    sum = sum + num;
+                    break;
+                case 2:
+                    // sum *= num;
+                    sum = sum * num;
+                    break;
+            }
+            num++;
+        }
+        System.out.println("sum = " + sum);
+    }
+}
+결과: 169
+
+(if사용)
+public class Second {
+    public static void main(String[] args) {
+        int num = 4, sum =0;
+
+        while (num<=10){
+            if (num%3==0){
+                sum -=num;
+            }
+            if (num%3==1){
+                sum += num;
+            }
+            if (num%3==2){
+                sum *=num;
+            }
+            num++;
+        }
+        System.out.println("sum = " + sum);
+    }
+}
+결과: 169
+
+##6. AND NOT##
+
+public class Second {
+    public static void main(String[] args) {
+        // &~: AND NOT
+        // Math.pow(멱급수) - 특정수의 n 제곱 지원
+        // Math.pow(2,10) == 2^10 = 1024
+        System.out.println(Math.pow(2,10));
+
+        int num1 = 8923, num2= 1029 , num3= 20;
+        final int FIX = 15;
+        final int FIX2 = 1023;
+
+        System.out.println(num1 &~(FIX));
+        System.out.println(num2 &~(FIX));
+        System.out.println(num3 &~(FIX));
+
+        System.out.println(num1 &~(FIX2));
+        System.out.println(num2 &~(FIX2));
+        System.out.println(num3 &~(FIX2));
+
+        int num4 =88 , num5 = 60, num6 = 47;
+
+        System.out.println(num4 &~(FIX));
+        System.out.println(num5 &~(FIX));
+        System.out.println(num6 &~(FIX));
+
+        // AND NOT 의 특징
+        // 특정한 숫자 단위의 정렬을 수행
+        // NOT 에 오는 숫자 +1 한 값만큼 정렬됨
+        // FIX 가 15 이므로 16 배수 단위로 정렬됨
+        
+        // 47 = 0010 1111
+        // FIX = 0000 1111 (15)
+        // ~FIX = 1111 0000
+        // AND  = 0010 0000 (32)
+        
+        // 60 = 0011 1100
+        // AND = 0011 0000  (48)
+        
+        // 결론: ~FIX 에 오는 값에 확정적인 0이 몇개인지에 
+        // 따라서 특정한 숫자의 배수 단위 정렬이 가능하다.
+        // ~FIX 의 경우엔 확정 0이 4개라 16의 배수가 된다.
+        // 2의 승수 단위로 동작하면 완벽하게 동작
+        // 다른 수에 한해서는 동작하지 않음.
+    }
+}
+
+
+##7. FOR##
+
+public class Second {
+    public static void main(String[] args) {
+        /* for 문의 작성법
+        * 1) for 를 적고 괄호를 열고 닫는다.
+        * 2) 괄호 옆에 중괄호를 열고 닫는다.
+        * 3) for 문의 괄호안은 아래와 같이 구성된다.
+        *    초기화; 조건; 증감부
+        *    초기화는 for 문 진입시 최초 한번만 동작
+        *    조건은 if, while, for 가 모두 동일
+        *    증감부는 for 문의 중괄호 부분이 모두 실행 완료되면 동작
+        *  주의사항: 증감 이후에 조건을 비교하게됨
+        * 4) 조건이 만족되면 동작할 코드를 중괄호에 생성
+        */
+        int i;
+
+        for(i=0; i < 10; i++){
+            System.out.println(i);
+        }
+
+    }
+}
+
+##Quiz1##
+for문을 사용해서 문제를 풀어보세요.
+1~ 20까지 7의 배수를 찾아서 곱한 결과를 출력하시오.
+
+public class Second {
+    public static void main(String[] args) {
+
+        int i;
+        int mul = 1;
+
+        for(i=1; i <= 20; i++){
+            if (i%7 == 0){
+                mul *= i;
+            }
+        }
+        System.out.println(mul);
+    }
+}
+
+결과: 98
+
+##Quiz2##
+for문을 5회 돌도록 구성한다.
+숫자 3을 매회 2비트씩 좌측으로 쉬프트한다.
+해당 숫자를 16의 배수 단위로 정렬하시오.
+
+
+public class Second {
+    public static void main(String[] args) {
+        int num=3;
+        final int FIX =15;
+
+        for(int i = 1;i<=5;i++){
+            num <<=2;    //*4
+            System.out.println(num &~(FIX));
+
+            // 1) 3*4 =12
+            // 2) 12 &~ (15) = 0
+            // 3) 12*4 =48 (16의 배수)
+            // 4) 3)이후 num &~ (FIX) = 같은 결과
+
+        }
+    }
+}
+
+결과: 0 48 192 768 3072
+
+
+##8.배열##
+
+public class Second {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};  //Java문법
+        // int arr2[3] = {1,2,3}; << C, C++문법
+        // int 는 4byte 정수
+        // int[] 는 4byte 정수가 여러개 있다.
+        // int[3] <<< C는 이게 안됨 (포인터 때문)
+        // Java 는 이러한 표현이 가능하므로
+        // 위와 같은 방식으로 배열을 선언한다.
+
+
+        // 변수의 정의를 상기하자.
+        // 데이터를 저장할 수 있는 공간
+        // 그러므로 배열은 데이터 여러개를 저장할 수 있다.
+
+        /* 배열을 선언하는 방법
+            1) 배열의 데이터 타입(int)을 적는다.
+            2) 대괄호를 열고 닫는다.
+            3) 배열의 이름을 적는다.
+            4) 필요하다면 값을 할당한다.
+               값을 할당할 때는 중괄호를 열고 닫는다.
+               그리고 값을 적는다.(구분자는 , 를 사용한다)
+         */
+        for (int i=0; i<5; i++){
+            // printf 는 print format의 약자다.
+            // format 은 서식으로 즉 형식을 갖춘 문자열을 의미한다.
+            // %d 는 정수형을 의미한다.
+            // arr[%d] 의 %d는 i를 받으며
+            // 뒤 쪽의 %d는 arr[i] 를 받는다.
+            System.out.printf("arr[%d] = %d\n",i, arr[i]);
+        }
+        // 자바의 인덱스(색인) 는 0부터 시작한다.
+        // 인덱스(색인) 단어가 익숙치 않다면 순번이라 생각해도 무방하다.
+        // 즉 가장 마지막은 개수 -1 이다.
+        // 시작은 무조건 0 이다.
+    }
+}
+
+##9. 배열2##
+
+public class Second {
+    public static void main(String[] args) {
+        // 최소 stack, Heap 에 대해 알아야 한다.
+        // 사실 자바에서 스택은 거의 사용되지 않으나 
+        // 경우에 따라서 스택이 활용될 수도 있기에 
+        // 둘의 차이점에 대해 알아둘 필요가 있다. 
+        // 우선 new를 사용하는 녀석들은 전부다 Heap에 배치된다.
+        
+        // 그 외에는 stack 이나 Data라 생각하면 된다. 
+        // 그러나 Data는 잊도록 한다.
+        
+        // Heap 은 객체(object)가 배치되는 메모리다.
+        // 그러므로 class를 생성해도 여기에 배치된다.
+        
+        // new를 기반으로 배열을 할당하는 방법
+        // 1) new를 적고
+        // 2) 데이터 타입을 적는다.
+        // 3) 대괄호를 연다.
+        // 4) 대괄호 안에 개수를 적는다.
+        
+        // 중괄호 방식을 쓰는이유
+        // 장점: 속도가 빠르다.
+        // 단점: 유연한 대처가 안된다.
+        
+        // new 방식을 쓰는이유
+        // 장점: 유연한 대처가 가능하다.
+        // 단점: 속도가 느리다.
+        
+        // 결론: 서비스는 new
+        //       성능이 필요한 연산은 new를 쓰지말자!
+        int[] arr = new int[10];
+        final int CON =2 ;
+        final int FIX =1 ;
+
+        for (int i=0; i<10; i++){
+            arr[i] = CON << (i+FIX);
+            System.out.printf("arr[%d] = %d\n",i,arr[i]);
+        }
+
+    }
+}
+
+##Quiz##
+1~100까지의 숫자중 
+2의 배수의 합을 첫 번째 배열에 배치한다.
+3으로 나눈 나머지가 1인 숫자들의 합을 두 번째 배열에 배치한다.
+4로 나눠 나머지가 2인 숫자들의 합을 세번째 배열에 배치한다.
+49의 배수의 곱을 네 번째 배열에 배치한다.
+
+
+public class Second {
+    public static void main(String[] args) {
+        final int MAX_ARR =4;
+        int[] arr = new int[MAX_ARR];
+        int i;
+        arr[3] =1 ;
+
+        for (i =1;i<=100; i++){
+            if (i%2==0){
+                arr[0] += i;
+            }
+            if (i%3==1){
+                arr[1] +=i;
+            }
+            if (i%4==2){
+                arr[2] += i;
+            }
+            if (i%49==0){
+                arr[3] *= i;
+            }
+        }
+
+        for(i=0;i<4; i++){
+            System.out.printf("arr[%d] = %d\n" ,i,arr[i]);
+        }
+    }
+}
+
+
+##연습문제##
+
+초급1)
+while문을 사용하여 1~100 까지의 숫자를 출력해보자.
+
+public class Second {
+    public static void main(String[] args) {
+        int i=1;
+
+        while (i<=100){
+            System.out.println(i++);
+        }
+    }
+}
+##continue##
+
+public class Third {
+    public static void main(String[] args) {
+        int num =1 ;
+
+        while(1<101){
+            if (num==33){
+                //continue는 해당 조건을 skip
+                //num이 33인 경우는 제외한다.
+                continue;
+            }
+            System.out.println(num++);
+        }
+
+    }
+}
+초급2)
+for문을 사용하여 33~77까지의 숫자를 출력해보자
+
+public class Second {
+    public static void main(String[] args) {
+        int i ;
+        for (i=33; i<=77;i++){
+            System.out.println(i);
+        }
+    }
+}
+초급3)
+사용자로 부터 아무 값이나 2개를 입력받아 출력해보자
+(nextInt-정수형, nextFloat - float형 , nextDouble -double형)
+
+import java.util.Scanner;
+
+public class Second{
+    public static void main(String[] args) {
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("첫 번째: "+ scan.nextInt());
+        System.out.println("두 번째: "+ scan.nextInt());
+
+    }
+}
+
+##float형 과 double형 사용##
+import java.util.Scanner;
+
+public class Third {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        float num1;
+        double num2;
+
+        System.out.println("float 타입 입력: ");
+        //float형은 nextFloat()을 사용
+        num1 = scan.nextFloat();
+
+        System.out.println("double 타입 입력: ");
+        //double형은 nextDouble()을 사용
+        num2 = scan.nextDouble();
+
+        // java 는 현재 float과 double 모두
+        // format 문자열을 사용할 경우 %f를 사용한다.
+        System.out.printf("num1 = %f, num2=%f\n", num1, num2);
+        System.out.println("num1 = " +num1);
+        System.out.println("num2 = " +num2);
+
+    }
+}
+
+초급4)
+5~12의 범위를 가지는 난수를 생성해서 출력해주세요.
+
+import java.util.Random;
+
+public class Second {
+    public static void main(String[] args) {
+        Random rand = new Random();
+
+        System.out.println(rand.nextInt(8)+5);
+    }
+}
+##난수 테스트하는 방법##
+import java.util.Random;
+
+public class Third {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        //난수 확인하는 방법
+        //조건이 없는 루프 == 무한 루프(반복)
+        //for(내부)
+        //내부 == 초기화; 조건; 증감
+        //초기화할 것도 없고 조건도 없다.
+        for(;;){
+            System.out.println(rand.nextInt(8)+5);
+        }
+        
+    }
+}
+##byte를 이용한 overflow와 underflow##
+import java.util.Random;
+
+public class Third {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        byte i =1;
+        // byte는 말 그대로 1바이트 타입이다.
+        // 즉 bit가 8개있고 그러므로 2^8 = 256개를 표현한다.
+        // -128 ~ +127 를 가진다.
+        // 이와 같은 방식으로 음수 양수를 표현한다. 
+        // 그러다보니 표현할 수 없는 크기의 수치가 오면 
+        // -128 ~127에 따라서 맨 처음부터 다시 시작한다.
+        // 값이 양수로 높아져서 -가 되는 현상은 overflow 라고 하며 
+        // 값이 음수로 낮아져서 +가 되는 현상은 underflow라 한다.
+        for(;;i++){
+            //System.out.println(rand.nextInt(8)+5);
+            System.out.println(i);
+        }
+
+    }
+}
+
+초급5)
+4번에서 만든 난수값을 가지고 대소 비교를 진행해주세요.
+
+import java.util.Random;
+
+public class Second{
+    public static void main(String[] args) {
+
+        Random rand = new Random();
+        int num1 = rand.nextInt(8)+5;
+        int num2 = rand.nextInt(8)+5;
+
+        if (num1>num2){
+            System.out.println("num1이 num2보다 크다.\n" + "num1의 값: " + num1
+                    + "\nnum2의 값: "+ num2);
+        }
+        if (num1<num2){
+            System.out.println("num1이 num2보다 작다.\n" + "num1의 값: " + num1
+                    + "\nnum2의 값: "+ num2);
+        }
+        if (num1==num2){
+            System.out.println("num1과 num2가 같다.\n" + "num1의 값: " + num1
+                    + "\nnum2의 값: "+ num2);
+        }
+    }
+}
+##while을 사용한 무한루프##
+import java.util.Random;
+
+public class Third {
+    public static void main(String[] args) {
+        Random rand = new Random();
+
+        int num1, num2;
+        //while로 무한 루프를 만들땐 조건에 참이라는 true를 명시해주면 된다.
+        while(true) {
+            num1 = rand.nextInt(8)+5;
+            num2 = rand.nextInt(8)+5;
+
+            if (num1 > num2) {
+                System.out.println("num1>num2");
+            } else if (num1 < num2) {
+                System.out.println("num1<num2");
+            } else {
+                System.out.println("num1 == num2");
+            }
+        }
+    }
+}
+초급6)
+new로 배열을 만들어서 33~50까지 저장하고 출력해보자.
+
+public class Second{
+    public static void main(String[] args) {
+        int[] arr = new int[18];
+        int i;
+        final int FIX = 33;
+
+        for(i=0 ; i<=17; i++){
+            arr[i] = i + FIX;
+            System.out.printf("arr[%d] = %d\n" , i ,arr[i]);
+
+        }
+    }
+}
+
+중급7)
+난수범위 7~33까지를 사용하도록 한다.
+사용자로부터 최대 몇 개의 난수를 사용할 것인지 입력 받는다.
+이를 기반으로 배열을 생성하고 배열에 난수값들을 할당하도록 한다.
+(물론 마지막엔 할당한 난수값을 출력하도록 한다)
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Second{
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        Random rand = new Random();
+
+        final int MAX = 27;
+        int[] arr = new int[MAX];
+        int i,num ;
+        num = rand.nextInt(scan.nextInt())+7;
+
+        for (i=0; i<num; i++){
+            arr[i] = rand.nextInt(27)+7;
+            System.out.printf("arr[%d] = %d\n" , i, arr[i]);
+        }
+
+        System.out.println("난수의 값: " + num);
+
+    }
+}
+중급8)
+난수의 범위3~10 을 사용하여 난수를 할당하고 여기서 제일 많이 발생한 난수를 찾아서 출력하시오.
+(빈도수를 구할 필요는 없음)
+
+GG
+
+중급9)
+컴퓨터랑 주사위 게임을 진행하여 이기면 승리!, 지면 패배! 가 뜨게 만드시오.
+규칙: 서로 주사위 2개를 굴린다.
+(프로그램 실행하면 알아서 굴러가게 한다.)
+내가 굴린 주사위 눈의 개수와 컴퓨터가 굴린게 같으면 승리
+같지않으면 컴퓨터의 승리
+
+import java.util.Random;
+
+public class Second{
+    public static void main(String[] args) {
+        Random rand = new Random();
+        int dice1 = rand.nextInt(6)+1;
+        int dice2 = rand.nextInt(6)+1;
+        int dice3 = rand.nextInt(6)+1;
+        int dice4 = rand.nextInt(6)+1;
+        int com = dice1 + dice2;
+        int me = dice3+ dice4;
+        if(me>com){
+            System.out.println("나의 승리!," + "나의 주사위 합: " + me +
+                    ", 컴퓨터의 주사위 합: " + com);
+        }
+        if(me<=com){
+            System.out.println("컴퓨터의 승리!," + "나의 주사위 합: " + me +
+                    ", 컴퓨터의 주사위 합:" + com);
+        }
+    }
+}
+
+고급10)
+배열에 아래와 같은 값들이 할당되어 있다.
+13,    12,   235,   2350,   2350,   123,   348,   102,  2350,   2350,
+2350, 235, 898,   3489,    920,    2350,  2350, 127,  1004,   859,
+5000, 5000, 5000, 3467,  783,   5000,  12893, 234, 983, 5000,
+304673, 3245893, 124892, 1249803, 2390
+여기서 제일 빈도수가 높은 숫자 2개를 추출하고
+각각 몇번씩 반복되었는지도 함께 출력하시오.
+
+
+GG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

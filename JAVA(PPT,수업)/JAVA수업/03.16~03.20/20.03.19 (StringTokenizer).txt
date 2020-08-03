@@ -1,0 +1,593 @@
+9장 기초적인 자바 클래스들
+
+String str = "Hello, Java";
+컴파일 후에 문자열 리터럴은 String 객체가 된다.
+
+str.replace("C","하드웨어")
+ : 문자열에 있는"C"를 "하드웨어"로 바꾸는 메소드 호출
+str.concat("입문")
+ : 문자열 뒤에 "입문"을 붙이는 메소드 호출
+
+문자열 조작에 적합한 클래스: StringBuilder클래스, StringBuffer클래스
+작은 단위 문자열을 추출하는 클래스: StringTokenizer클래스
+package StringEx;
+
+public class StringExample1 {
+
+	public static void main(String[] args) {
+		// TODO "자바 커피"는 총 5개의 문자로 구성.
+		String str = "자바 커피";
+		int len = str.length();
+		for(int cnt=0;cnt<len;cnt++) {
+			char ch = str.charAt(cnt);
+			System.out.println(ch);
+		}
+	}
+}
+package StringEx;
+
+public class StringExample2 {
+
+	public static void main(String[] args) {
+		// 자바라는 같은 객체가 만들어지므로 같음이 나온다.
+		String str1 = "자바";
+		String str2 = "자바";
+		if(str1 == str2)
+			System.out.println("같음");
+		else
+			System.out.println("다름");
+	}
+}
+package StringEx;
+
+public class StringExample3 {
+
+	public static void main(String[] args) {
+		// 주소가 다르기 때문에 다름이 나온다.
+		String str1 = new String("자바");
+		String str2 = new String("자바");
+		if(str1 == str2)
+			System.out.println("같음");
+		else
+			System.out.println("다름");
+	}
+}
+
+#문자열 추출 substring 메소드
+: 부분 문자열(substring)을 추출
+첫번째 문자의 위치는 0.
+입력한 파라미터부터 시작. 2개입력시 시작과 끝(바로전부분까지만 나타난다).
+package StringEx;
+
+public class StringExample6 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String str = "뇌를 자극하는 자바";
+		System.out.println(str.substring(3));
+		System.out.println(str.substring(3,7));
+	}
+
+}
+(출력)
+자극하는 자바
+자극하는
+
+#문자열 조작 메소드
+package StringEx;
+
+public class StringExample7 {
+
+	public static void main(String[] args) {
+		// TODO 문자열 조작 메소드
+		String str1 = "    Let it be.   ";
+		String str2 = str1.trim(); // 문자열 앞뒤 제거
+		System.out.println(str2);
+		System.out.println(str2.concat(" Speaking words of wisdom")); //문자열 뒤에 연결
+		System.out.println(str2.toUpperCase());	//모든 소문자를 대문자로 교체
+		System.out.println(str2.toLowerCase()); //모든 대문자를 소문자로 교체
+		System.out.println(str2.replace('e', 'a')); //문자열에 포함된 'e'를 모두 'a'로 교체
+		System.out.println(str1);
+		System.out.println(str2);
+		
+	}
+
+}
+(출력)
+Let it be.
+Let it be. Speaking words of wisdom
+LET IT BE.
+let it be.
+Lat it ba.
+    Let it be.   
+Let it be.
+
+#StringBuilder클래스
+: 기본적으로 크기가 16인 버퍼생성
+sb1 = new StringBuilder("Hello"); //크기 21
+sb2 = new StringBuilder(100); //크기 100
+sb3 = new StringBuilder(); //크기 16
+
+package StringEx;
+
+public class StringBUilderExample1 {
+
+	public static void main(String[] args) {
+		StringBuilder sb = new StringBuilder("역사를 하노라고 맨땅을 파다가 ");
+		System.out.println(sb);
+		System.out.println(sb.append("커다란 고인돌을 끄집어 내어놓고 보니")); 
+					//문자열을 이어붙임
+		System.out.println(sb.insert(26, "하나 ")); // 26위치에 "하나 "를 삽입
+		System.out.println(sb.delete(21, 23)); // 21부터 23-1까지 삭제
+		System.out.println(sb.deleteCharAt(9));
+	}
+}
+(출력)
+역사를 하노라고 맨땅을 파다가 
+역사를 하노라고 맨땅을 파다가 커다란 고인돌을 끄집어 내어놓고 보니
+역사를 하노라고 맨땅을 파다가 커다란 고인돌을 하나 끄집어 내어놓고 보니
+역사를 하노라고 맨땅을 파다가 커다란 돌을 하나 끄집어 내어놓고 보니
+역사를 하노라고 땅을 파다가 커다란 돌을 하나 끄집어 내어놓고 보니
+
+(예제)
+주민번호 입력 =>
+주민번호 : 
+
+맞으면 주민번호 출력하고(o) 아니면 출력하고(x)
+
+substring으로 부분 문자열 추출
+Integer.parseInt() 을 사용하면 정수로 바꿔줌
+
+package StringEx;
+
+import java.util.Scanner;
+
+public class Example1 {
+
+	public static void main(String[] args) {
+		// TODO 주민번호 체크하는 클래스
+		Scanner scan = new Scanner(System.in);
+		StringBuilder str;
+		int num,num1;
+		int tot=0;
+		System.out.print("주민번호 입력=> ");
+		String str2 = scan.next();  // 주민번호입력을 받는 작업
+		str = new StringBuilder(str2); // 스트링빌더에 주민번호를 넣는 작업
+		str.deleteCharAt(6); // '-' 를 없애는 작업
+		for(int i=0;i<str.length()-1;i++) {
+			num = Integer.parseInt(str.substring(i,i+1)); // 문자열내 문자들을 추출해서 정수로 바꿔주는 작업
+			if(i<8) {
+				num1 = (i+2)*num; // 계산
+			}else {
+				num1 = (i-6)*num; // 계산
+			}
+			tot +=num1; // 총합
+		}
+		int num2 = tot%11; //나머지
+		int num3 = Integer.parseInt(str.substring(12)); // 마지막수 checkdigit를 추출해서 정수로 바꿔주는 작업
+		if(num2<=1) {
+			num2=1-num2;
+		}else {
+			num2=11-num2;
+		}
+		if(num3==num2) {  // checkdigit과 비교
+			System.out.println("주민번호=> "+str2+"(O)");
+		}else {
+			System.out.println("주민번호=> "+str2+"(X)");
+		}
+	}
+}
+
+#StringTokenizer 클래스
+사용하는 메소드: nextToken();
+더이상 추출할 토큰이 없으면 NoSuchElementException발생
+while(stock.hasMoreTokens()) 를 사용하면 토큰이 있는동안만 while문 실행
+
+package StringEx;
+
+import java.util.StringTokenizer;
+
+public class StringTokenizerExample1 {
+
+	public static void main(String[] args) {
+		StringTokenizer stok = new StringTokenizer("사과 배 복숭아");
+		while(stok.hasMoreTokens()) {
+			String str = stok.nextToken();
+			System.out.println(str);
+		}
+
+	}
+
+}
+(출력)
+사과
+배
+복숭아
+#구획문자 지정하기
+밑의 경우 콤마(두번째 파라미터)가 구획문자로 지정된다.
+package StringEx;
+
+import java.util.StringTokenizer;
+
+public class StringTokenizerExample1 {
+
+	public static void main(String[] args) {
+		StringTokenizer stok = new StringTokenizer("사과,배,복숭아",",");
+		while(stok.hasMoreTokens()) {
+			String str = stok.nextToken();
+			System.out.println(str);
+		}
+
+	}
+
+}
+(출력)
+사과
+배
+복숭아
+# | 도 토큰분해 기준이 된다.
+package StringEx;
+
+import java.util.StringTokenizer;
+
+public class StringTokenizerExample1 {
+
+	public static void main(String[] args) {
+		StringTokenizer stok = new StringTokenizer("사과|배|복숭아",",|");
+		while(stok.hasMoreTokens()) {
+			String str = stok.nextToken();
+			System.out.println(str);
+		}
+
+	}
+
+}
+#세번째 파라미터에 true를 넣어주면 구획문자도 토큰으로 분류된다.
+ex) StringTokenizer("사과=10|초콜렛=3|샴페인=1","=|",true);
+
+
+ex) 수식입력=> 10+20
+10+20=30
+
+package StringEx;
+
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class Example2 {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		int num = 0;
+		
+		System.out.print("수식입력=> ");
+		String str = scan.next();
+		
+		StringTokenizer stok = new StringTokenizer(str,"+-/*",true);
+		num+=Integer.parseInt(stok.nextToken());
+		
+		while(stok.hasMoreTokens()) {
+			char str2 = stok.nextToken().charAt(0);
+			
+			/*if(str2=='+')
+				num+=Integer.parseInt(stok.nextToken());
+			else if(str2=='-')
+				num-=Integer.parseInt(stok.nextToken());
+			else if(str2=='/')
+				num/=Integer.parseInt(stok.nextToken());
+			else if(str2=='*')
+				num*=Integer.parseInt(stok.nextToken());*/
+			
+			switch(str2) {
+			case '+':
+				num+=Integer.parseInt(stok.nextToken());
+				break;
+			case '-':
+				num-=Integer.parseInt(stok.nextToken());
+				break;
+			case '/':
+				num/=Integer.parseInt(stok.nextToken());
+				break;
+			case '*':
+				num*=Integer.parseInt(stok.nextToken());
+				break;
+			}
+		}
+		System.out.println(str+" = "+num);
+	}
+}
+
+package StringEx;
+
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class Example2_01 {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		
+		int result;
+		String str, token_str;
+		
+	input_loop:
+		while(true) {
+			System.out.println("수식 입력=> ");
+			str = scan.next().trim();
+			
+			StringTokenizer token = new StringTokenizer(str,"+-*/",true);
+			
+			token_str = token.nextToken();
+			if(input_check(token_str)) {
+				System.out.println("수식 입력 오류!!\n");
+				continue;
+			}
+			
+			result = Integer.parseInt(token_str);
+			
+			while(token.hasMoreTokens()) {
+				token_str = token.nextToken();
+				char ch = token.toString().charAt(0);
+				
+				if(token.hasMoreTokens()) {
+					token_str = token.nextToken();
+				}else{
+					System.out.println("수식 입력 오류!!!\n");
+					continue input_loop;
+				}
+				if(input_check(token_str)) {
+					System.out.println("수식 입력 오류!!!\n");
+					continue input_loop;
+				}
+				
+				switch(ch) {
+				case '+':
+					result += Integer.parseInt(token_str);
+					break;
+				case '-':
+					result -= Integer.parseInt(token_str);
+					break;
+				case '*':
+					result *= Integer.parseInt(token_str);
+					break;
+				case '/':
+					result /= Integer.parseInt(token_str);
+					break;
+				}
+				
+			}
+			break;
+		}
+		System.out.println(str+"="+result);
+	}
+	
+	static boolean input_check(String str) {
+		char ch;
+		
+		for(int i=0;i<str.length();i++) {
+			ch = str.charAt(i);
+			
+			if(ch<'0' || ch>'9')
+				return true;
+		}
+		return false;
+	}
+}
+
+##SimpleDateFormat 클래스사용하는법
+  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 aa hh시 mm분 ss초"); 
+  String str = dateFormat.format(calendar.getTime()); 
+
+ex)
+package CalendarEx;
+
+import java.util.*; 
+import java.text.*;      // SimpleDateFormat 클래스가 속하는 패키지 
+class DateFormatExample1 { 
+    public static void main(String args[]) { 
+        GregorianCalendar calendar = new GregorianCalendar(); 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 aa hh시 mm분 ss초"); 
+        String str = dateFormat.format(calendar.getTime()); 
+        System.out.println(str); 
+    } 
+} 
+
+###특정시간대로 기준시간 바꾸는 메소드 호출###
+dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+
+#Math클래스
+: 정적메소드와 상수로 구성되있다.
+ex)
+package MathEx;
+
+public class MathExample1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 System.out.println("2의 3승은 " + Math.pow(2, 3)); 
+	     System.out.println("16의 제곱근은? " + Math.sqrt(16)); 
+	     System.out.println("4와 7 중 큰 수는? " + Math.max(4, 7)); 
+	     System.out.println("4와 7 중 작은 수는? " + Math.min(4, 7)); 
+	}
+
+}
+ex2)
+package MathEx;
+
+class MathExample2 { 
+    public static void main(String args[]) { 
+        System.out.println("sin(pi) = " + Math.sin(Math.PI)); 
+        System.out.println("cos(pi) = " + Math.cos(Math.PI)); 
+        System.out.println("tan(pi) = " + Math.tan(Math.PI)); 
+    } 
+} 
+
+#Random 클래스
+ : 난수를 발생시킨다.
+Random rand = new Random();
+파라미터를 넣어주면 매번 동일한 난수가 발생한다. (seed)
+package RandomEx;
+
+import java.util.Random;
+
+public class RandomExample1 {
+
+	public static void main(String[] args) {
+		Random rand = new Random();
+		System.out.println(rand.nextInt(100));
+		System.out.println(rand.nextInt(100));
+		System.out.println(rand.nextInt(100));
+
+	}
+
+}
+
+package RandomEx;
+
+import java.util.Random;
+
+public class RandomExample2 {
+	public static void main(String[] args) {
+		Random rand = new Random(56419L);
+		//시드를 주어 동일한 난수가 발생한다.
+		System.out.println(rand.nextInt(100));
+		System.out.println(rand.nextInt(100));
+		System.out.println(rand.nextInt(100));
+	}
+}
+
+예제) 로또 중복x
+
+package RandomEx;
+
+import java.util.Random;
+
+public class Example1 {
+
+	public static void main(String[] args) {
+		Random rand = new Random();
+		int MAX = 6;
+		int RANGE =45;
+		int i,j;
+		int[] arr = new int[MAX];
+		
+		
+		for(i=0;i<MAX;i++) {
+			arr[i] = rand.nextInt(RANGE)+1;
+			for(j=0;j<i;j++) {
+				if(arr[i]==arr[j]) {
+					i--;
+					break;
+				}
+			}
+		}
+		
+		System.out.printf("[ %d, %d, %d, %d, %d, %d ]\n",arr[0],arr[1],arr[2],arr[3],arr[4],arr[5]);
+	
+	}
+
+}
+
+++++++오름차순 정리
+package RandomEx;
+
+import java.util.Random;
+
+public class Bbbbb {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Random rand = new Random();
+		int MAX = 7;
+		int RANGE =45;
+		int i,j;
+		int[] arr = new int[MAX];
+		
+		
+		for(i=1;i<MAX;i++) {
+			arr[i] = rand.nextInt(RANGE)+1;
+			for(j=1;j<i;j++) {
+				if(arr[i]==arr[j]) {
+					i--;
+					break;
+				}
+			}
+			
+		}
+		for(i=1;i<MAX;i++) {
+			int key = arr[i];
+			for(j=i-1;arr[j]>key;j--) {
+				arr[j+1] = arr[j];
+				if(j==0) {
+					break;
+				}
+			}
+			arr[j+1] = key;
+		}
+		System.out.printf("[ %d, %d, %d, %d, %d, %d ]\n",arr[1],arr[2],arr[3],arr[4],arr[5],arr[6]);
+	}
+
+}
+
+#####next() 와 nextLine() 의 차이점#####
+next() 는 공백을 기준으로 한단어씩 입력받는다.
+nextLine() 은 문장한라인 전체를 입력받는다.
+
+nextLine() 을 쓸때 이전입력값 ( nextInt() or next() ) 에 엔터가 남아있을때 명령을 건너뛰는 오류가 발생한다.
+이럴때 nextLine()을 이전에 한번더써서 엔터를 없애서 정상적으로 명령을 실행할 수 있게 만들어줘야 한다.
+
+package Practice;
+
+import java.util.Scanner;
+
+public class NextLineError {
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("첫번째 정수입력: ");
+        int i = scanner.nextInt();
+        System.out.println(i);
+        scanner.nextLine();
+        System.out.print("첫번째 문자열입력: ");
+        String str1 = scanner.nextLine();
+        System.out.println(str1);
+        
+        System.out.print("두번째 정수입력: ");
+        int j = scanner.nextInt();
+        System.out.println(i);
+        
+        System.out.print("두번째 문자열입력: ");
+        String str2 = scanner.next();
+        System.out.println(str2);
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

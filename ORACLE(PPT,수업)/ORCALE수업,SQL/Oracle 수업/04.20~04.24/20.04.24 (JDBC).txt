@@ -1,0 +1,617 @@
+##JDBC를 이용한 프로그램의 작성방법
+JDBC드라이버를 로드한다. => DB에 연결 => DB에 데이터를 읽거나 쓴다.(반복가능)
+=> DB연결을 끊는다.
+
+#######################################
+이클립스를 통해서 오라클의 테이블을 수정하면 자동으로 커밋이 된다.(기본값으로 설정되있다)
+conn.setAutoCommit(false);
+conn.commit();
+을 사용하면 자동 커밋을 없앨 수 있다.
+롤백을 원할 때에는 finally블럭에서 
+conn.rollback();
+을 추가해서 롤백할 수 있다.
+
+#데이터베이스 연결방법
+Connection conn = DriverManager.getConnection(URL,사용자ID,패스워드);
+=>연결 실패시 NULL값 반환
+*LOOPBACK IP주소
+127.0.0.1
+*IP주소확인
+CMD창에서 ipconfig
+
+#연결 끊기
+conn.close();
+
+####Example###
+package JDBC_Connection_Ex;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class JDBCExample1 {
+
+	public static void main(String[] args) {
+		Connection conn = null;
+		try {
+			//JDBC드라이버 로드
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			//DB에 연걸
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:orcl",
+					"scott","123456");
+			//실행문
+			System.out.println("데이터베이스에 접속했습니다.");
+			//DB연결 끊기
+			conn.close();
+		}
+		catch(ClassNotFoundException cnfe) {
+			System.out.println("해당 클래스를 찾을 수 없습니다."+cnfe.getMessage());
+		}
+		catch(SQLException se) {
+			System.out.println(se.getMessage());
+		}
+	}
+}
+
+#데이터 조회
+1) Statement => createStatement() 메소드 사용
+2) PreparedStatement => sql 문 ? 사용하는거
+3) CallableStatement => 프로시저를 이용한 작업
+ex) Statement stmt = conn.createStatement();
+
+*오라클실행문을 실행하는 메소드
+executeQuery : select 문을 실행하는 메소드
+executeUpdate : insert,update,delete 문을 실행하는 메소드
+
+ex) ResultSet rs = stmt.executeQuery("select code,num from goodsinfo;");
+
+*행 단위로 값을 읽는법
+boolean existes=rs.next(); =>실행결과의 다음행 위치로 이동하는 메소드
+ : 읽을 내용이 존재하면 true가 반환, 더이상 읽을 내용이 없으면 false반환
+ex) while(rs.next()) <=false가 반환될때까지 반복
+
+*특정 컬럼의 값을 읽는법
+getInt,getString,getFloat메소드 사용
+ex) String code = rs.getString("code");
+    int price = rs.getInt("price");
+
+*ResultSet객체도 close해주어야 한다.
+rs.close(); 메소드 사용
+
+*Statement객체도 close해주어야 한다.
+stmt.close(); 메소드 사용
+
+###Example###
+**외부에서 접속시 오라클에서 커밋을 반드시 해야한다.
+package JDBC_Connection_Ex;
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class JDBCExample2 {
+
+	public static void main(String[] args) {
+//executeQuery를 사용하여 오라클의 goodsinfo테이블의 정보를 읽어오는 작업.
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			conn = DriverManager.getConnection(
+					"jdbc:oracle:thin:@127.0.0.1:1521:orcl","scott","123456");
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(
+					"select code,name,price,maker from goodsinfo");
+			System.out.println("상품코드 상품명\t\t가격 제조사");
+			System.out.println("---------------------------------------------------");
+			while(rs.next()) {
+				String code = rs.getString("code");
+				String name = rs.getString("name");
+				int price = rs.getInt("price");
+				String maker = rs.getString("maker");
+				System.out.printf("%8s %s \t%12d %s\n",code,name,price,maker);
+			}
+		}
+		catch(ClassNotFoundException cnfe) {
+			System.out.println("해당 클래스를 찾을 수 없습니다."+cnfe.getMessage());
+		}
+		catch(SQLException se) {
+			System.out.println(se.getMessage());
+		}
+		finally {
+			try {
+				rs.close();
+			}
+			catch(Exception ignored) {
+			}
+			try {
+				stmt.close();
+			}
+			catch(Exception ignored) {
+			}
+			try {
+				conn.close();
+			}
+			catch(Exception ignored) {
+			}
+		}
+	}
+}
+
+#조건을 주어 정보를 조회할 때
+executeQuery메소드에 들어가는 sql구문에 where절을 추가해 조건을 주면 된다.
+
+
+###데이터의 입력/수정/삭제
+Statement stmt = conn.createStatement(); <=Statement객체를 만든다.
+int rowNum = stmt.executeUpdate(); <=insert,update,delete문을 실행
+=> 실행이 잘되면 실행된 행의 수가 반환된다.
+
+##데이터의 입력 예제##
+/*
+create table member(
+    hakbun char(4) primary key,
+    name varchar2(10),
+    addr varchar2(10),
+    phone char(13)
+);
+*/
+
+package Statement_Ex;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class InsertExam {
+
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection con = null;
+		Statement stmt = null;
+		
+		String sql = "Insert into member (hakbun,name,addr,phone) values";
+		String hakbun,name,addr,phone;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Member 테이블에 값 추가하기...");
+			System.out.print("학번 입력: ");
+			hakbun = br.readLine();
+			System.out.print("이름 입력: ");
+			name = br.readLine();
+			System.out.print("주소 입력: ");
+			addr = br.readLine();
+			System.out.print("전화번호 입력: ");
+			phone = br.readLine();
+			
+			sql += "('" +hakbun+"', '"+name+"', '"+addr+"', '"+phone+"')";
+			System.out.println(sql);
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,"scott","123456");
+			stmt = con.createStatement();
+			int res = stmt.executeUpdate(sql);
+			if(res==1)
+				System.out.println("데이터 추가 성공!");
+		}
+		catch(Exception e) {
+			System.out.println("데이터베이스 연결 실패! = "+e.getMessage());
+		}
+		finally {
+			try {
+				if(con!=null) con.close();
+				if(stmt!=null) stmt.close();
+				if(br!=null) br.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+
+##데이터의 수정 예제##
+package Statement_Ex;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class UpdateExam {
+	
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection conn = null;
+		Statement stmt = null;
+		BufferedReader in =null;
+		
+		try {
+			in = new BufferedReader(new InputStreamReader(System.in));
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"scott","123456");
+			stmt = conn.createStatement();
+			System.out.println("Member 테이블에 값 갱신하기...");
+			System.out.print("갱신할 학번 입력 : ");
+			String new_hakbun = in.readLine();
+			System.out.print("새 주소 입력 : ");
+			String new_addr = in.readLine();
+			System.out.print("새 전화번호 입력 : ");
+			String new_phone = in.readLine();
+			String sql = "Update member set addr = '"+new_addr+"',phone='"+new_phone+
+					"' where hakbun = '"+new_hakbun+"'";
+			int row = stmt.executeUpdate(sql);
+			
+			if(row==1) {
+				System.out.println(sql);
+				System.out.println("데이터베이스 내용 갱신 성공!");
+			}
+			
+		}
+		catch(ClassNotFoundException cnfe) {
+			System.out.println("클래스를 찾을 수 없습니다."+cnfe.getMessage());
+		}
+		catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+			try {
+				stmt.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+
+}
+
+
+##데이터 삭제 예제##
+package Statement_Ex;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class DeleteExam {
+
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection conn = null;
+		Statement stmt = null;
+		BufferedReader in = null;
+		
+		try {
+			in = new BufferedReader(new InputStreamReader(System.in));
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url,"scott","123456");
+			stmt = conn.createStatement();
+			System.out.println("Member테이블 값 삭제하기...");
+			System.out.print("삭제할 학번 입력: ");
+			String del_hakbun = in.readLine();
+			String sql = "delete from member where hakbun ='"+del_hakbun+"'";
+			int row = stmt.executeUpdate(sql);
+			if(row==1) {
+				System.out.println(sql);
+				System.out.println("테이블 정보 삭제 성공!");
+				
+			}
+		}
+		catch(Exception e) {
+			System.out.println("오류 발생! : "+e.getMessage());
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+			try {
+				stmt.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+
+##########PreparedStatement
+#Insert예제
+package PreparedStatement_Ex;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class InsertExam2 {
+
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "insert into member(hakbun,name,addr,phone) "
+				+ "values(?,?,?,?)";
+		String hakbun,name,addr,phone;
+		
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			System.out.println("Member 테이블에 값 추가하기....");
+			System.out.print("학번 입력: ");
+			hakbun = br.readLine();
+			System.out.print("이릅 입력: ");
+			name = br.readLine();
+			System.out.print("주소 입력: ");
+			addr = br.readLine();
+			System.out.print("전화번호 입력: ");
+			phone = br.readLine();
+		
+			System.out.println(sql);
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,"scott","123456");
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1,  hakbun);
+			pstmt.setString(2,  name);
+			pstmt.setString(3,  addr);
+			pstmt.setString(4,  phone);
+			pstmt.executeUpdate();
+			
+			System.out.println("데이터베이스 연결 성공!!!");
+		}
+		catch(Exception e) {
+			System.out.println("데이터베이스 연결실패! = "+e.getMessage());
+		}
+		finally {
+			try {
+				if(con!=null) con.close();
+				if(pstmt!=null) pstmt.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+
+#############CallableStatement
+ : 프로시저를 이용한다.
+오라클에서 먼저 프로시저를 만든다.
+create or replace procedure call_select(
+    v_member_cursor out sys_refcursor)
+    --커서객체를 외부로 전달하기 위해서 sys_refcursor를 사용
+is
+begin
+    --커서를 생성함과 동시에 오픈함.
+    open v_member_cursor
+    for
+    select * from member order by hakbun;
+end;
+/
+
+
+##조회 예제
+package CollableStatement_Ex;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import oracle.jdbc.OracleTypes;
+
+public class SelectExam_CALL {
+
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection con = null;
+		CallableStatement cstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,"scott","123456");
+			//call : 호출할때 사용한다  그다음 프로시저 이름.
+			cstmt = con.prepareCall("{call call_select(?)}");
+			//프로시저에서 나온 결과물을 이클립스에서 전달받기 위해서 
+			//registerOutParameter을 사용.
+			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			cstmt.executeQuery();
+			//중요!! (위에 register문이랑 같이 쓰임.)
+			rs = (ResultSet)cstmt.getObject(1);
+			
+			System.out.println("hakbun\tname\taddr\tphone");
+			System.out.println("-----------------------------");
+			while(rs.next()) {
+				System.out.print(rs.getString("hakbun")+"\t");
+				System.out.print(rs.getString("name")+"\t");
+				System.out.print(rs.getString("addr")+"\t");
+				System.out.print(rs.getString("phone")+"\n");
+			}
+		}
+		catch(Exception e) {
+			System.out.println("데이터베이스 연결 실패!");
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if(con!=null) con.close();
+				if(cstmt!=null) cstmt.close();
+				if(rs!=null) rs.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+##학번 입력받아 조회
+/*일반 프로시저를 이용
+create or replace procedure call_search(
+    vhakbun in out varchar2,
+    vname out varchar2,
+    vaddr out varchar2,
+    vphone out varchar2)
+is
+begin
+    select hakbun,name,addr,phone
+    into vhakbun,vname,vaddr,vphone
+    from member
+    where hakbun = vhakbun;
+end;
+/
+*/
+
+package CollableStatement_Ex;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+
+import oracle.jdbc.OracleTypes;
+
+public class SearchExam_CALL {
+
+	public static void main(String[] args) {
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+		Connection con = null;
+		CallableStatement cstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			Class.forName(driver);
+			con = DriverManager.getConnection(url,"scott","123456");
+			System.out.print("조회할 학번 입력=> ");
+			String hakbun = br.readLine().toUpperCase();
+			
+			cstmt = con.prepareCall("{call call_search(?,?,?,?)}");
+			cstmt.setString(1, hakbun);
+			cstmt.registerOutParameter(1, OracleTypes.VARCHAR);
+			cstmt.registerOutParameter(2, OracleTypes.VARCHAR);
+			cstmt.registerOutParameter(3, OracleTypes.VARCHAR);
+			cstmt.registerOutParameter(4, OracleTypes.VARCHAR);
+			
+			cstmt.executeQuery();
+			
+			System.out.println();
+			System.out.println("hakbun\tname\taddr\tphone");
+			System.out.println("------------------------------------------");
+			System.out.print(cstmt.getString(1) +"\t");
+			System.out.print(cstmt.getString(2) +"\t");
+			System.out.print(cstmt.getString(3) +"\t");
+			System.out.print(cstmt.getString(4) +"\n");
+		}
+		catch(Exception e) {
+			System.out.println("오류 발생!! "+e.getMessage());
+		}
+		finally {
+			try {
+				if(con!=null) con.close();
+				if(cstmt!=null) cstmt.close();
+				if(rs!=null) rs.close();
+			}
+			catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+
+	}
+}
+
+
+
+###오라클
+--JDBC프로그래밍
+create table goodsinfo(
+    code char(5) primary key,
+    name varchar2(30) not null,
+    price number(8) not null,
+    maker varchar2(20)
+    );
+insert into goodsinfo(code,name,price,maker)
+    values('10001','디지털TV',350000,'LG');
+insert into goodsinfo(code,name,price,maker)
+    values('10002','DVD플레이어',250000,'LG');
+insert into goodsinfo(code,name,price,maker)
+    values('10003','디지털카메라',210000,'삼성');
+insert into goodsinfo(code,name,price,maker)
+    values('10004','전자사전',180000,'아이리버');
+insert into goodsinfo(code,name,price,maker)
+    values('10005','벽걸이에어컨',400000,'삼성');
+
+select * from goodsinfo;
+
+commit;
+
+create table member(
+    hakbun char(4) primary key,
+    name varchar2(10),
+    addr varchar2(10),
+    phone char(13)
+);
+commit;
+select * from member;
+desc member;
+commit;
+rollback;
+update member set name = '맥주스',addr='강남구' where hakbun='A004';
+
+create or replace procedure call_select(
+    v_member_cursor out sys_refcursor)
+is
+begin
+    open v_member_cursor
+    for
+    select * from member order by hakbun;
+end;
+/
+
+create or replace procedure call_search(
+    vhakbun in out varchar2,
+    vname out varchar2,
+    vaddr out varchar2,
+    vphone out varchar2)
+is
+begin
+    select hakbun,name,addr,phone
+    into vhakbun,vname,vaddr,vphone
+    from member
+    where hakbun = vhakbun;
+end;
+/
+select * from user_procedures where object_name = 'CALL_SEARCH';
+

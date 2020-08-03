@@ -1,0 +1,57 @@
+#14장 Model2로 만드는 게시판 프로젝트
+
+#MVC : Model, View, Controller
+View : 화면 출력 부분 (디자인)
+Model : 데이터베이스와 연동하는 등의 로직 부분
+Controller : 두 부분을 적절하게 연결시켜주는 역할 수행
+
+#데이터 빈 (DataBean)
+ : TO(Transfer Object) 나 VO(Value Object) 
+ : get/set 메소드 만들어준다.
+
+#DAO (Data Access Object)
+ : 실제로 데이터 베이스와 연동하여 레코드의 추가,수정,삭제 작업이 이루어지는 클래스
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

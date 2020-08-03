@@ -1,0 +1,673 @@
+#####익셉션 #####
+checked Exception 은 에러가 발생한다. : throws 필요
+ex) Exception, IOException,,,,,,,,,
+unchecked Exception 은 에러가 발생하지는 않는다.
+ex) RuntimeException, ArithmeticException,,,,,,,,,
+본문
+public class Exception_Ex01 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Account obj = new Account("777-777-77777777","최대박",10);
+		try {        // 익셉션 메소드를 호출
+			int amount = obj.withdraw(100000000);
+			System.out.println("인출액: " + amount);
+			
+		}catch(Exception e) {   
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
+
+	}
+
+}
+클래스
+
+public class Account {
+
+	String accountNo;
+	String ownerName;
+	int balance;
+	Account(String accountNo, String ownerName, int balance){
+		this.accountNo = accountNo;
+		this.ownerName = ownerName;
+		this.balance = balance;
+	}
+	void deposit(int amount) {
+		balance+=amount;
+	}
+	int withdraw(int amount) throws Exception {  // 인위적으로 익셉션을 만드는 메소드
+		if(balance<amount)
+			throw new Exception("잔액이 부족합니다.");
+		balance -= amount;
+		return amount;
+	}
+}
+
+###메소드 오버로딩###
+: 메소드와 메소드 호출문의 파라미터 수, 타입, 순서가 맞아야 함 
+: 이런 특성을 이용하면 한 클래스 안에 똑같은 이름의 메소드 여러 개를 선언(메소드 오버로딩)할 수 있음 
+
+본문
+public class MethodExample_Ex01 {
+	public static void main(String[] args) {
+		PhysicalInfo obj;
+		obj = new PhysicalInfo("혜리",10,132.0f,35.0f);
+		printPhysicalInfo(obj);
+		obj.update(11, 145.0f, 45.0f);
+		printPhysicalInfo(obj);
+		obj.update(12, 157.0f);
+		printPhysicalInfo(obj);
+		obj.update(13);
+		printPhysicalInfo(obj);
+	}	
+	static void printPhysicalInfo(PhysicalInfo obj) {
+		System.out.println("이름: "+obj.name);
+		System.out.println("나이: "+obj.age);
+		System.out.println("키: "+obj.height);
+		System.out.println("몸무게: "+obj.weight);
+		System.out.println();
+	}	
+}
+
+클래스
+public class PhysicalInfo {
+	  String name;       
+	  int age;     
+	  float height, weight;  
+	  PhysicalInfo(String name, int age, float height, float weight) {     
+		  this.name = name;        
+		  this.age = age;          
+		  this.height = height;        
+		  this.weight = weight;      
+	  }     
+	  void update(int age)  {      
+		  this.age = age;   
+	  }     
+	  void update(int age, float height)  {     
+		  this.age = age;        
+		  this.height = height;    
+	  }    
+	  void update(int age, float height, float weight)  {    
+		  this.age = age;          
+		  this.height = height;
+		  this.weight = weight;  
+	  }
+}
+
+
+###클래스의 정적 구성 요소###
+- 객체가 아니라 클래스 자체에 속하는 필드, 메소드 등의 구성 요소
+- static 키워드를 사용하여 선언 
+예) 정적 필드, 정적 메소드, 정적 초기화 블록 
+(이전에 성적처리 코드에서 cnt나 totavg를 정적필드로 사용하여 본문에서 만들지않고
+ 클래스에서 만들어 사용할 수 있다.)
+
+ 1) 객체들간에 "정보를 공유"하고 싶을때 사용
+ 2) 일반적 사용방법:  클래스명.정적필드이름
+본문
+
+public class StaticFieldExample1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Accumulator obj1 = new Accumulator();
+		Accumulator obj2 = new Accumulator();
+		obj1.accumulate(10);
+		obj2.accumulate(20);
+		System.out.println("obj1.total = "+obj1.total);
+		System.out.println("obj1.grandTotal = "+obj1.grandTotal); // Accumulator.grandTotal (일반적 사용방법)
+		System.out.println("obj2.total = "+obj2.total);
+		System.out.println("obj2.grandTotal = "+obj2.grandTotal); // Acuumulator.grandTotal (일반적 사용방법)
+	}
+}
+클래스
+
+public class Accumulator {
+	int total = 0;
+	static int grandTotal =0;
+	void accumulate(int amount) {
+		total += amount;
+		grandTotal += amount;
+	}
+}
+
+###상수필드###
+static 과 final 키워드가 모두 붙은 필드  -> 상수처럼 사용할 수 있다.
+보통 대문자로만 이름을 만든다.
+정적 메소드 내부에서 사용가능한 필드는 정적필드만 사용할 수 있다.
+
+###정적메소드###
+static 키워드가 붙은 메소드
+
+본문
+
+public class StaticFieldExample1 {
+
+	public static void main(String[] args) {
+		
+		Accumulator obj1 = new Accumulator();
+		Accumulator obj2 = new Accumulator();
+		obj1.accumulate(10);
+		obj2.accumulate(20);
+		
+		int grandTotal = Accumulator.getgrandTotal();
+		System.out.println("obj1.total = "+obj1.total);
+		System.out.println("obj2.total = "+obj2.total);
+		System.out.println("총계 = "+grandTotal);
+	}
+
+}
+클래스
+
+public class Accumulator {
+	int total = 0;
+	static int grandTotal =0;
+	void accumulate(int amount) {
+		total += amount;
+		grandTotal += amount;
+	}
+	static int getgrandTotal() {
+		return grandTotal;
+	}
+}
+
+##정적메소드들로만 구성된 기능적 클래스
+
+
+public class IntBytes {
+	static byte firstByte(int num) {
+		num = (num>>24)& 0xFF;
+		return (byte)num;
+	}
+	static byte secondByte(int num) {
+		num = (num>>16)& 0xFF;
+		return (byte)num;
+	}
+	static byte thirdByte(int num) {
+		num = (num>>8)& 0xFF;
+		return (byte)num;
+	}
+	static byte fourthByte(int num) {
+		num = num & 0xFF;
+		return (byte)num;
+	}
+}
+
+1. 입력
+2. 출력
+3. 조회
+4. 수정
+5. 삭제
+6. 종료
+
+입력하면 "성적정보 입력 성공!!"
+학번 중복입력하면 "학번 입력 오류(중복)!!" 하고 잘못입력한것은 저장x 
+조회-> 조회할 학번 입력=> 그 학번만 출력
+수정-> 수정할 학번 입력=> 국어,영어,수학 "성적정보 수정 성공!!"
+삭제-> 삭제할 학번 입력=> "성적정보 삭제 성공!!"
+(삭제를 하면 그뒤 배열의 정보를 삭제된 배열에 채워넣어야된다.)
+
+클래스
+import java.util.Scanner;
+
+public class Sungjuk02 {
+	String num;
+	String name;
+	int kor;
+	int eng;
+	int math;
+	int tot;
+	double avg;
+	String grade;
+	
+	static int cnt = 0;
+	static double tot_avg = 0.0;
+	
+	Sungjuk02(){
+		
+	}
+	Sungjuk02(String num){
+		this.num=num;
+	}
+	
+	
+	void input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print(" 학번 입력=> ");
+		num = scan.next();
+		System.out.print(" 이름 입력=> ");
+		name = scan.next();
+		System.out.print(" 국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print(" 영어 점수=> ");
+		eng = scan.nextInt(); // 영어
+		System.out.print(" 수학 점수=> ");
+		math = scan.nextInt(); // 수학
+		
+		
+	}
+	
+	double process() {
+		
+		tot = kor + eng + math;
+		avg = tot/3.;
+		grade = null;
+		tot_avg+=avg;
+		
+		switch((int)(avg/10)) {
+		case 10:
+		case 9:
+				
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+						
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		case 5:
+		case 4:
+		case 3:
+		case 2:
+		case 1:
+		case 0:
+			grade = "가";
+			break;
+		}
+		return avg;
+	}
+	
+	void output() {
+		System.out.printf("%4s\t%3s\t%3d\t%3d\t%3d\t%3d\t%6.2f\t%2s\n"
+					,num,name,kor,eng,math,tot,avg,grade);
+	}
+	static double getTotal_avg() {
+		return tot_avg / cnt;
+		
+	}
+	
+}
+본문
+import java.util.Scanner;
+
+public class ResultSungjuk02 {
+	static int MAX = 100;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Sungjuk02 pyo[] = new Sungjuk02[MAX];
+		
+		int menu;
+		
+		Scanner scan = new Scanner(System.in);
+		
+		
+		while(true) {
+			printMenu();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			
+			if(menu==6) {
+				System.out.println("The End...");
+				break;
+			}
+			
+			switch (menu) {
+				case 1:
+					studentinput(pyo);
+					break;
+				case 2:
+					studentoutput(pyo);
+					break;
+				case 3:
+					studentsearch(pyo);
+					break;
+				case 4: 
+					studentrevise(pyo);
+					break;
+				case 5: 
+					studentdelete(pyo);
+					break;
+				default:
+			}
+		}	
+	}
+	
+	static void printMenu() {
+		System.out.println("*** 성적관리***");
+		System.out.println("1. 성적정보 입력");
+		System.out.println("2. 성적정보 출력");
+		System.out.println("3. 성적정보 조회");
+		System.out.println("4. 성적정보 수정");
+		System.out.println("5. 성적정보 삭제");
+		System.out.println("6. 프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentinput(Sungjuk02[] pyo) {
+		pyo[Sungjuk02.cnt] = new Sungjuk02();
+		pyo[Sungjuk02.cnt].input();
+		for(int j=0;j<=Sungjuk02.cnt;j++) {
+			if((pyo[Sungjuk02.cnt].num).equals(pyo[j].num)&&j!=Sungjuk02.cnt) {
+				System.out.println("학번입력 중복 오류!!\n");
+				return;
+			}
+		}
+		pyo[Sungjuk02.cnt].process();
+		System.out.println();
+		System.out.println("성적정보 입력 성공!!\n");
+		Sungjuk02.cnt++;
+	}
+		
+	
+	static void studentoutput(Sungjuk02[] pyo) {
+		int i;
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		for(i=0;i<Sungjuk02.cnt;i++) {
+			
+			pyo[i].output();
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",Sungjuk02.cnt,Sungjuk02.getTotal_avg());
+	
+	}
+	static void studentsearch(Sungjuk02[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int j=0;j<Sungjuk02.cnt;j++) {
+			if(pyo[j].num.equals(hakbun)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				pyo[j].output();
+				System.out.println("===========================================================\n");
+				return;
+			}
+		}
+		System.out.println("\n조회할 학번 입력 오류!!\n");
+	}
+	static void studentrevise(Sungjuk02[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int j=0;j<Sungjuk02.cnt;j++) {
+			if(pyo[j].num.equals(hakbun)) {
+				pyo[j].tot_avg-=pyo[j].avg;
+				pyo[j].input();
+				System.out.println();
+				pyo[j].process();
+				System.out.println("\n성적정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류!!\n");
+	}
+	static void studentdelete(Sungjuk02[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int j=0;j<Sungjuk02.cnt;j++) {
+			if(pyo[j].num.equals(hakbun)) {
+				for(int k=j;k<Sungjuk02.cnt-1;k++) {
+//조건식에 -1을 하는이유는 마지막 인덱스(100번째인덱스)를 
+//삭제할때 범위밖 100번인덱스를 불러오는 오류가 발생하므로...
+//마지막 인덱스는 삭제하지못하고 카운트를 -1하면서 출력에서 삭제된것처럼 보이게한다.
+					pyo[k].tot_avg-=pyo[k].avg;
+					pyo[k]=pyo[k+1];
+				}
+				Sungjuk02.cnt--;
+				System.out.println("\n성적정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력 오류!!\n");
+			
+	}
+}
+
+
+
+
+
+기존 상품 클래스를 이용하여
+
+*** 상품관리***
+1. 상품정보 입력
+2. 상품정보 출력
+3. 상품정보 조회
+4. 상품정보 수정   수정할때 수량 단가만 수정
+5. 상품정보 삭제
+6. 프로그램 종료
+
+(본문)
+import java.util.Scanner;
+
+public class Products03 {
+	
+	static int MAX = 100;
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ProductPyo pyo[] = new ProductPyo[MAX];
+		int menu;
+		
+		Scanner scan = new Scanner(System.in);
+		
+		while(true) {
+			printMenu();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			
+			if(menu==6) {
+				System.out.println("The End...");
+				break;
+			}
+			
+			switch (menu) {
+				case 1:
+					productInput(pyo);
+					break;
+				case 2:
+					productOutput(pyo);
+					break;
+				case 3:
+					productSearch(pyo);
+					break;
+				case 4: 
+					productRevise(pyo);
+					break;
+				case 5: 
+					productDelete(pyo);
+					break;
+				default:
+			}
+		}	
+	}
+	static void printMenu() {
+		System.out.println("*** 상품관리***");
+		System.out.println("1. 상품정보 입력");
+		System.out.println("2. 상품정보 출력");
+		System.out.println("3. 상품정보 조회");
+		System.out.println("4. 상품정보 수정");
+		System.out.println("5. 상품정보 삭제");
+		System.out.println("6. 프로그램 종료");
+		System.out.println();
+	}
+	
+	static void productInput(ProductPyo[] pyo) {
+		pyo[ProductPyo.cnt] = new ProductPyo();
+		pyo[ProductPyo.cnt].input();
+		for(int j=0;j<=ProductPyo.cnt;j++) {
+			if((pyo[ProductPyo.cnt].code).equals(pyo[j].code)&&j!=ProductPyo.cnt) {
+				System.out.println("코드입력 중복 오류!!\n");
+				return;
+			}
+		}
+		pyo[ProductPyo.cnt].process();
+		System.out.println();
+		System.out.println("상품정보 입력 성공!!\n");
+		ProductPyo.cnt++;
+	}
+	
+	static void productOutput(ProductPyo[] pyo) {
+		int i;
+		System.out.println("\t\t    *** 상품 실적 ***");
+		System.out.println("============================================================");
+		System.out.println("   상품코드\t상품명\t수량\t단가\t금액\t\t평가");
+		System.out.println("============================================================");
+		for(i=0;i<ProductPyo.cnt;i++) {
+			pyo[i].output();
+		}
+		System.out.println("============================================================");
+	}
+	
+	static void productSearch(ProductPyo[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		System.out.println();
+		for(int j=0;j<ProductPyo.cnt;j++) {
+			if(pyo[j].code.equals(code02)) {
+				System.out.println("===========================================================");
+				System.out.println("   상품코드\t상품명\t수량\t단가\t금액\t\t평가");
+				System.out.println("===========================================================");
+				pyo[j].output();
+				System.out.println("===========================================================\n");
+				return;
+			}
+		}
+		System.out.println("\n조회할 코드 입력 오류!!\n");
+	}
+
+	static void productRevise(ProductPyo[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		System.out.println();
+		for(int j=0;j<ProductPyo.cnt;j++) {
+			if(pyo[j].code.equals(code02)) {
+				
+				pyo[j].input();
+				System.out.println();
+				pyo[j].process();
+				System.out.println("\n상품정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 코드 입력 오류!!\n");
+	}
+	
+	static void productDelete(ProductPyo[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		System.out.println();
+		for(int j=0;j<ProductPyo.cnt;j++) {
+			if(pyo[j].code.equals(code02)) {
+				for(int k=j;k<ProductPyo.cnt-1;k++) { 
+					
+					pyo[k]=pyo[k+1];
+				}
+				ProductPyo.cnt--;
+				System.out.println("\n상품정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 코드 입력 오류!!\n");
+			
+	
+	}
+}
+
+(클래스)	
+
+import java.util.Scanner;
+
+public class ProductPyo {
+	String code;
+	String name;
+	int su;
+	int price;
+	String grade;
+	int amount;
+	static int total_price;
+	static int cnt = 0;
+	
+	
+	ProductPyo(){
+		
+	}
+	void input() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("상품 코드 입력=> ");
+		code = scan.next();
+		System.out.print("상품명 입력=> ");
+		name = scan.next();
+		System.out.print("수량 입력=> ");
+		su = scan.nextInt();
+		System.out.print("단가 입력=> ");
+		price = scan.nextInt();
+		
+	}
+	void process() {
+		amount = su * price;
+		
+		switch(su/10) {
+		case 10:
+			grade = "우수";
+			break;
+		case 9:
+		case 8:
+		case 7:
+			grade = "보통";
+			break;
+		case 6:
+		case 5:
+		case 4:
+		case 3:
+		case 2:
+		case 1:
+		case 0:
+			grade = "분발";
+			break;
+		default:
+			grade = "우수";
+		}
+	
+	}
+	void output() {
+		System.out.printf("  %4s\t\t%4s\t %d\t%d\t%8d\t%2s\n",code,name,su,price,amount,grade);
+	}
+	static int print_total_price() {
+		return total_price;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

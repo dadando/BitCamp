@@ -1,0 +1,87 @@
+###10장 파일 입출력에 사용되는 자바 클래스들
+
+#FileReader클래스
+익셉션 선언에 주의.
+파일을 오픈해서 안의 문자들을 하나씩 읽는다.
+
+Ex)
+package FileEx;
+
+import java.io.*;
+
+public class ReaderExample1 {
+
+	public static void main(String[] args) {
+		FileReader reader = null;
+		try {
+			reader = new FileReader("poem.txt");
+			while(true) {
+				int data = reader.read();
+				if(data==-1)
+					break;
+				char ch = (char)data;
+				System.out.print(ch);
+			}
+		}
+		catch(FileNotFoundException fnfe) {
+			System.out.println("파일이 존재하지 않습니다.");
+		}
+		catch(IOException ioe) {
+			System.out.println("파일을 읽을 수 없습니다.");
+		}
+		finally {
+			try {
+				reader.close();
+			}
+			catch(Exception e) {
+				
+			}
+		}
+	}
+}
+
+#FileWriter클래스
+FireReader와 동일
+파일을 오픈해서 파일안에 원하는 문자들을 하나씩 입력한다.
+
+InputStreamReader(부모클래스) ->FileReader (자식클래스)
+
+
+#Wrapper클래스
+프리미티브타입을 레퍼런스타입으로 바꿔준다.
+그대로 연산할때 자동 언박싱되어 프리미티브타입으로 인식된다.
+
+#HashMap 클래스
+HashMap<String,Sungjuk> hashmap = new HashMap<String,Sungjuk>();
+* Set<String> keyset = hashmap.keySet(); // key값 얻기
+* Set<Map.Entry<String,Sungjuk>> entreyset = map.entrySet(); // 키와 데이터 얻기.
+  Iterator<Map.Entry<String,Sungjuk>> entryIterator = entryset.iterator();
+
+
+#'...' 을 사용하면 다 받는 의미.
+Ex)
+package Hash_Map_Ex_01;
+
+public class TestParam {
+
+	public static void main(String[] args) {
+		printInt(3,4,5,6);
+		printString("MBC","KBS","SBS");
+		
+	}
+	static void printInt(int... arr) {
+		for(int i=0;i<arr.length;i++) {
+			System.out.println(arr[i]);
+		}
+	}
+	static void printString(String... arr) {
+		for(int i=0;i<arr.length;i++) {
+			System.out.println(arr[i]);
+		}
+	}
+}
+
+
+
+
+

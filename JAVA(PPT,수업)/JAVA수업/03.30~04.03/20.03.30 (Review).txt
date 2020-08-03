@@ -1,0 +1,115 @@
+5장 객체와 클래스
+
+(패키지 구분을 잘해야 한다.) => 접근제한자. public, protected, default, private 
+패키지가 다를 경우 클래스,필드,메소드 앞에 public을 써야된다. 종속관계일 경우 protected까지 가능.
+
+Getter와 Setter.
+파일 마우스 오른버튼 -> source -> generate를 통해 생성가능.
+Getter는 값을 읽어올때 
+Setter는 값을 변경할때 사용한다.
+
+(클래스)
+package Mbc;
+
+public class GoodsStock {
+	//private을 통해 값에 직접 접근하는 것은 막고
+	//getter,setter를 통해 값을 불러오는것은 가능하게 한다.
+	private String goodsCode;
+	private int stockNum;
+	public GoodsStock() {
+	}
+	public void addStock(int amount) {
+		stockNum += amount;
+	}
+	public int subtractStock(int amount) {
+		if(stockNum<amount)
+			return 0;
+		stockNum-=amount;
+		return amount;
+	}
+	public String getGoodsCode() {
+		return goodsCode;
+	}
+	public void setGoodsCode(String goodsCode) {
+		this.goodsCode = goodsCode;
+	}
+	public int getStockNum() {
+		return stockNum;
+	}
+	public void setStockNum(int stockNum) {
+		this.stockNum = stockNum;
+	}
+}
+
+(본문)
+package GoodsEx;
+
+import Mbc.GoodsStock;
+
+public class ClassExample1 {
+
+	public static void main(String[] args) {
+		GoodsStock obj;
+		obj = new GoodsStock();
+		obj.setGoodsCode("52135");
+		obj.setStockNum(200);
+		System.out.println("상품코드: "+obj.getGoodsCode());
+		System.out.println("재고수량: "+obj.getStockNum());
+		obj.addStock(1000);
+		System.out.println("상품코드: "+obj.getGoodsCode());
+		System.out.println("재고수량: "+obj.getStockNum());
+
+	}
+
+}
+
+생성자를 오버로딩해서 여러개를 만들때 디폴트 생성자는 자동으로 만들어지지 않는다.
+따라서, 디폴트 생성자도 사용여부에 상관하지 않고 만들어 주는게 좋다.
+
+#final
+클래스명 앞에 final 이 붙으면 상속을 금지한다라는 의미.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,252 @@
+--11.1제약조건 추가하기
+--ALTER TABLE사용
+--테이블 레벨 방식이다.
+--예제
+drop table emp01;
+create table emp01(empno number(4),ename varchar2(10),
+job varchar2(9),deptno number(4));
+
+alter table emp01 add constraint emp01_empno_pk primary key(empno);
+alter table emp01 add constraint emp01_deptno_fr foreign key(deptno) references dept(deptno);
+select * from user_cons_columns where table_name in('EMP01');
+select * from user_tab_columns where table_name in('EMP01');
+select * from user_constraints where table_name in('EMP01');
+
+--11.2MODIFY로 NOT NULL제약조건 추가
+alter table emp01 modify ename constraint emp01_ename_nn not null;
+
+--11.3제약조건 제거하기
+alter table emp01 drop constraint emp01_empno_pk;
+alter table emp01 drop constraint emp01_ename_nn;
+
+--연습
+drop table sungjuk;
+drop table member;
+create table member(member_id varchar(4),passwd varchar2(15),gender char(1),emai varchar2(50),
+phone char(13),addr varchar2(100));
+create table sungjuk(hakbun varchar2(6),irum varchar2(15),
+kor number(3),eng number(3),math number(3),tot number(3),avg number(5,2),
+grade char(2),member_id varchar2(4));
+select * from user_constraints where table_name in('MEMBER');
+alter table member add constraint member_id_pk primary key(member_id);
+alter table member modify passwd constraint member_passwd_nn not null;
+alter table member add constraint member_gender_ck check(gender in('M','F'));
+select * from user_constraints where table_name in('SUNGJUK');
+alter table sungjuk add constraint sungjuk_hakbun_pk primary key(hakbun);
+alter table sungjuk modify irum constraint sungjuk_irum_nn not null;
+alter table sungjuk add constraint sungjuk_kor_ck check(kor between 0 and 100);
+alter table sungjuk add constraint sungjuk_eng_ck check(eng between 0 and 100);
+alter table sungjuk add constraint sungjuk_math_ck check(math between 0 and 100);
+alter table sungjuk add constraint sungjuk_tot_ck check(tot between 0 and 300);
+alter table sungjuk add constraint sungjuk_avg_ck check(avg between 0.0 and 100.0);
+alter table sungjuk add constraint sungjuk_grade_ck check(grade in('수','우','미','양','가'));
+alter table sungjuk add constraint sungjuk_id_fk foreign key(member_id) references member(member_id);
+
+--12.제약조건의 비활성화와 CASCADE
+--제약조건을 잠시 해제.
+--CASCADE
+--예제
+drop table dept01;
+create table dept01(deptno number(2) constraint dept01_deptno_pk primary key,
+dname varchar2(14),loc varchar2(13));
+drop table emp01;
+create table emp01(empno number(4) constraint emp01_empno_pk primary key,
+ename varchar2(10) constraint emp01_enmae_nn not null,job varchar2(9),
+deptno number(4) constraint emp01_deptno_fk references dept01(deptno));
+
+--12.1제약 조건의 비활성화
+--DISABLE CONSTRAINT : 제약 조건의 일시 비활성화
+--ENABLE CONSTRAINT : 비활성화된 제약 조건을 해제하여 다시 활성화
+--예제
+alter table emp01 disable constraint emp01_deptno_fk;
+select constraint_name,constraint_type,table_name,r_constraint_name,status
+from user_constraints where table_name='EMP01';
+
+--12.2제약 조건의 활성화
+alter table emp01 enable constraint emp01_deptno_fk;
+
+--12.3CASCADE 옵션
+--부모 테이블의 제약 조건을 비활성화하면 이를 참조하고 있는 자식테이블의 제약조건까지
+--같이 비활성화시켜 주는 옵션.
+--또한 제약조건의 삭제에도 활용된다.
+alter table dept01 disable primary key; --종속성으로인해 조건 해지 불가
+alter table dept01 disable primary key cascade; --부모,자식 동시에 해지
+select constraint_name,constraint_type,table_name,r_constraint_name,status
+from user_constraints where table_name in('DEPT01','EMP01');
+alter table dept01 enable constraint dept01_deptno_pk;
+
+--14장 가상 테이블인 뷰
+--1. 뷰의 개념
+--실직절으로 데이터를 저장하고 있지 않다.
+--뷰는 이미 존재하고 있는 테이블에 제한적으로 접근하도록 한다.
+create table dept_copy as select * from dept;
+create table emp_copy as select * from emp;
+select * from dept_copy;
+select * from emp_copy;
+
+--2)뷰 정의하기
+--CREATE VIEW 
+--CREATE OR REPLACE VIEW : 뷰가 없으면 생성되고 존재하더라도 삭제하지않고 새로운 구조의 뷰로 변경
+--FORCE : 기본테이블의 존재 여부에 상관없이 뷰를 생성
+--WITH CHECK OPTION : 범위내에서만 UPDATE 또는 INSERT가 가능하다.
+--WITH READ ONLY : SELECT만 가능하게 한다.
+--scott계정은 뷰 생성권한이 없기 때문에 권한을 주어주고 생성해야한다.
+create view emp_view30 as select empno,ename,deptno from emp_copy where deptno=30;
+select * from emp_view30;
+desc emp_view30;
+
+create view emp_view20 as select empno,ename,deptno,mgr from emp_copy where deptno=20;
+select * from emp_view20;
+
+--2.뷰의 내부구조와 USER_VIEWS 데이터 딕셔너리
+--기술한 쿼리문은 TEXT 컬럼에 저장되어 있다.
+select view_name,text from user_views;
+--뷰에 행을 추가
+--삽입한 행은 기존 테이블에도 삽입되어있다.
+--뷰를 통한 행삽입은 기존 테이블의 제약조건을 따른다.
+insert into emp_view30 values(1111,'AAAA',30);
+select * from emp_view30;
+select * from emp_copy;
+alter table emp_copy add constraint emp_copy_empno_pk primary key(empno);
+alter table emp_copy modify job constraint emp_copy_job_nn not null;
+select * from user_constraints where table_name ='EMP_COPY';
+alter table emp_copy drop constraint emp_copy_job_nn; 
+
+select * from emp_copy,dept_copy where emp_copy.deptno=dept_copy.deptno;
+
+--3.뷰를 사용하는 이유
+--접근을 단순화시킬 수 있다.
+--보안에 유리하다.
+
+--4.뷰의 종류
+--단순뷰/복합뷰
+--단순뷰 : 하나의 테이블로 생성,그룹 함수 사용X,DISTINCT사용 X,DML가능
+--복합뷰 : 여러개의 테이블로 생성,그룹함수 사용O,DISTINCT사용 O,DML불가능
+--1)단순뷰
+insert into emp_view30 values(8000,'ANGEL',30);
+select * from emp_view30;
+select * from emp_copy;
+--단순뷰의 칼럼에 별칭 부여하기
+--별칭이 부여된 순간 부여된 별칭만 사용해야한다.
+create or replace view emp_view(사원번호,사원명,급여,부서번호)
+as select empno,ename,sal,deptno from emp_copy;
+select * from emp_view where 부서번호=30;
+--그룹함수를 사용한 단순뷰(별칭 필요)
+create or replace view view_sal as select deptno,sum(sal) as "SalSum",
+avg(sal) as "SalAvg" from emp_copy group by deptno order by deptno;
+select * from view_sal;
+--산술연산이 들어간경우(별칭이 필요 sal*12=>sal)
+create or replace view view_sal(empno,ename,deptno,sal) 
+as select empno,ename,deptno,sal*12 from emp_copy;
+select * from view_sal;
+
+create or replace view view_sal(empno,ename,sal)
+as select empno,ename,sal from emp_copy;
+
+--2)복합뷰
+create view emp_view_dept
+as select e.empno,e.ename,e.sal,e.deptno,d.dname,d.loc from emp E,dept D
+where e.deptno = d.deptno order by empno desc;
+select * from emp_view_dept;
+
+create or replace view sal_view(dname,max_sal,min_sal)
+as select dname,max(sal),min(sal) from emp,dept where emp.deptno=dept.deptno 
+group by dname;
+select * from sal_view;
+
+--5.뷰 삭제와 다양한 옵션
+--뷰를 삭제해도 뷰를 정의한 기존 테이블의 구조나 데이터에는 전혀 영향을 주지 않는다.
+drop view view_sal;
+select * from view_sal;
+select * from user_views;
+
+--6.뷰 생성에 사용되는 다양한 옵션
+--1)뷰 수정을 위한 OR REPLACE 옵션
+select * from user_views;
+select * from emp_view30;
+
+create or replace view emp_view30
+as select empno,ename,sal,comm,deptno
+from emp_copy where deptno=30;
+
+select * from emp_view20;
+create or replace view emp_view20(emp_no,emp_name,dept_no,manager)
+as select empno,ename,deptno,mgr from emp_copy where deptno=20;
+
+--2)기본 테이블 없이 뷰를 생성하기 위한 FORCE 옵션
+--NOFORCE옵션 : FORCE옵션과 반대로 동작, 기본테이블이 반드시 있어야 한다.
+--특별한 설정이 없으면 디폴트로 NOFORCE옵션이 지정된 것으로 간주한다.
+--디폴트로 NOFORCE옵션이 적용된경우
+create or replace view employees_view
+as select empno,ename,deptno from employees where deptno=30;
+--FORCE옵션(오류가 발생하지만 뷰는 생성됨)
+create or replace force view notable_view
+as select empno,ename,deptno from employees where deptno=30;
+
+--3)조건 컬럼 값 변경 못하게 하는 WITH CHECK OPTION (중요!)
+--생성할때 사용한 WHERE절 조건(컬럼)을 건들지 못하게 한다.
+--서브 쿼리문에 WHERE절을 추가하여 기본테이블중 특정 조건에 만족하는 행만으로
+--구성된 뷰를 생성할 수 있다.
+select * from emp_view30;
+commit;
+--WITH CHECK OPTION사용안한경우
+--이 뷰를 통해 수정이 가능하다.
+update emp_view30 set deptno=20 where sal>=1200;
+rollback;
+--WITH CHECK OPTION을 사용한경우
+--이 뷰를 통해서는 부서번호를 변경할 수 없다.
+create or replace view view_chk30
+as select empno,ename,sal,comm,deptno from emp_copy
+where deptno=30 with check option;
+update view_chk30 set deptno=20 where sal>=1200;
+select * from view_chk30;
+
+--4)뷰를 통해 기본테이블 변경 막는 WITH READ ONLY옵션
+--읽기 전용 (SELECT를 제외 DML 사용 불가능)
+--WITH READ ONLY옵션을 지정하지 않은 VIEW_CHK30 뷰
+update view_chk30 set comm=1000;
+--WITH READ ONLY옵션을 지정하여 뷰를 정의
+create or replace view view_read30
+as select empno,ename,sal,comm,deptno from emp_copy
+where deptno=30 with read only;
+select * from view_read30;
+--WITH READ ONLY옵션에 의해 select를 제외한 DML사용시 오류발생
+update view_read30 set comm=2000;
+
+--7.인라인 뷰(중요!)
+--게시판에 사용됨.(최신글 순서)
+select rownum,empno,ename,hiredate from emp;
+
+select empno,ename,hiredate from emp order by hiredate;
+select rownum,num,empno,ename,hiredate from 
+(select rownum as num,empno,ename,hiredate from emp) where num>=6 and num<=10;
+--입사일이 빠른 사람 5명만을 출력
+--새로운 뷰를 생성한 방법
+create or replace view view_hire 
+as select empno,ename,hiredate from emp order by hiredate;
+select rownum,empno,ename,hiredate from view_hire;
+select rownum,empno,ename,hiredate from view_hire where rownum<=5;
+--인라인 뷰를 사용한 방법
+--1등~5등
+select rownum,empno,ename,hiredate from
+(select empno,ename,hiredate from emp order by hiredate) where rownum<=5;
+--6등~10등
+select * from (select rownum num,empno,ename,hiredate from
+(select empno,ename,hiredate from emp order by hiredate))
+where num >=6 and num <=10;
+
+--예제(인라인뷰)
+select * from
+(select rownum ranking,empno,ename,sal from
+(select empno,ename,sal from emp order by sal desc)) where ranking<=3;
+
+--예제(인라인뷰2)
+select * from
+(select rownum ranking,empno,ename,sal from
+(select empno,ename,sal from emp order by sal desc)) where ranking between 6 and 10;
+
+--예제(뷰사용)
+create or replace view sal_top5_view
+as select empno,ename,sal from emp order by sal desc;
+select * from (select rownum ranking,empno,ename,sal from
+(select * from sal_top5_view)) where ranking between 6 and 10;

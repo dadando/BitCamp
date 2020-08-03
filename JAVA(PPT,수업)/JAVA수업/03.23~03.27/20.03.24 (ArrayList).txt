@@ -1,0 +1,713 @@
+13장 자료구조
+ : 데이터를 효율적으로 사용할 수 있도록 구조를 만들어서 저장해둔 것
+
+#ArrayList
+Ex) ArrayList<String> list = new ArrayList<String>();
+< > 안에 사용할 타입을 넣는다. 타입은 레퍼런스 타입만 가능. 프리미티브경우 Wrapper이용
+< > 안에 사용하는 타입을 생략하면 모든 타입을 사용할 수 있게 된다.(일반적으로 사용X)
+공간은 자동으로 생성해서 일반배열객체처럼 공간의 크기를 지정해줄 필요 없음
+사용하는 메소드
+  list.add(String); -> 추가
+  list.remove(String); ->삭제
+  list.get(인덱스번호); -> 인덱스번호에 있는 객체를 리턴
+ int num = list.size(); -> 리스트에 있는 데이터의 수를 리턴
+  list.add(2,"키위"); -> 인덱스2위치에 "키위"를 삽입
+  list.set(0,"오렌지"); -> 인덱스0위치에 있는 데이터를 "오렌지"로 바꾼다.
+  list.remove(1); -> 인덱스1위치의 데이터를 삭제
+ int index = list.indexOf("사과"); -> 첫번째 "사과"의 위치를 리턴
+ int index = list.lastIndexOf("사과"); -> 마지막 "사과"의 위치를 리턴
+#LinkedList
+ : 사용방법은 ArrayList와 동일
+Ex) LinkedList<String> list = new LinkedList<String>();
+메소드사용도 동일
+
+ArrayList 예시)
+package ListClassEx;
+
+import java.util.ArrayList;
+
+public class ArrayListExample1 {
+
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("포도");
+		list.add("딸기");
+		list.add("복숭아");
+		int num = list.size();
+		for(int cnt = 0;cnt<num;cnt++) {
+			String str = list.get(cnt);
+			System.out.println(str);
+		}
+	}
+}
+
+예시2)
+package ListClassEx;
+
+import java.util.ArrayList;
+
+public class ArrayListExample1 {
+
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("포도");
+		list.add("딸기");
+		list.add("복숭아");
+		list.add(2,"키위");
+		list.set(0, "오렌지");
+		list.remove(1);
+		list.remove("키위");
+		int num = list.size();
+		for(int cnt = 0;cnt<num;cnt++) {
+			String str = list.get(cnt);
+			System.out.println(str);
+		}
+	}
+}
+
+예시3)
+package ListClassEx;
+
+import java.util.ArrayList;
+
+public class ArrayListExample1 {
+
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("머루");
+		list.add("사과");
+		list.add("앵두");
+		list.add("자두");
+		list.add("사과");
+		int index1 = list.indexOf("사과");
+		int index2 = list.lastIndexOf("사과");
+		System.out.println("첫번째 사과: "+index1);
+		System.out.println("두번째 사과: "+index2);
+	}
+}
+
+연습문제) 기존성적클래스 활용
+package ListClassEx;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ArrayListSungjuk {
+
+	public static void main(String[] args) {
+		
+		Scanner scan = new Scanner(System.in);
+		
+		ArrayList<Sungjuk> pyo = new ArrayList<Sungjuk>();
+		
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(pyo);
+				break;
+			case 2:
+				studentOutput(pyo);
+				break;
+			case 3:
+				studentSearch(pyo);
+				break;
+			case 4:
+				studentRevise(pyo);
+				break;
+			case 5:
+				studentDelete(pyo);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}	
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(ArrayList<Sungjuk> pyo) {
+		pyo.add(new Sungjuk());
+		
+		pyo.get(Sungjuk.cnt).input();
+		for(int i=0;i<Sungjuk.cnt;i++) {
+			if(pyo.get(i).num.equals(pyo.get(Sungjuk.cnt).num)) {
+				System.out.println("**학번 중복 입력 오류**");
+				return;
+			}
+		}
+		pyo.get(Sungjuk.cnt).process();
+		System.out.println("성적 정보 입력 성공!!");
+		System.out.println();
+		Sungjuk.cnt++;
+	}
+	static void studentOutput(ArrayList<Sungjuk> pyo) {
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		Sungjuk.totavg =0.0;
+		for(int i = 0;i<Sungjuk.cnt;i++) {
+			Sungjuk.totavg += pyo.get(i).avg;
+			pyo.get(i).output();
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",Sungjuk.cnt,Sungjuk.totavg/Sungjuk.cnt);
+	}
+	static void studentSearch(ArrayList<Sungjuk> pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		for(int i=0;i<Sungjuk.cnt;i++) {
+			if(pyo.get(i).num.equals(hakbun)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				pyo.get(i).output();
+				System.out.println("===========================================================");
+				return;
+			}
+			System.out.println("\n조회할 학번 입력 오류!!\n");
+		}
+	}
+	static void studentRevise(ArrayList<Sungjuk> pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		for(int i = 0;i<Sungjuk.cnt;i++) {
+			if(pyo.get(i).num.equals(hakbun)) {
+				pyo.get(i).input();
+				System.out.println();
+				pyo.get(i).process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	static void studentDelete(ArrayList<Sungjuk> pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int i=0;i<Sungjuk.cnt;i++) {
+			if(pyo.get(i).num.equals(hakbun)) {
+				for(int j=i;j<Sungjuk.cnt-1;j++) {
+					pyo.set(j,pyo.get(j+1));
+				}
+				Sungjuk.cnt--;
+				System.out.println("\n성적 정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+	}
+			
+}
+
+연습문제 강사님 코드)
+package ListClassEx;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ArrayListSungjuk2 {
+
+	public static void main(String[] args) {
+Scanner scan = new Scanner(System.in);
+		
+		ArrayList<Sungjuk> list = new ArrayList<Sungjuk>();
+		
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(list);
+				break;
+			case 2:
+				studentOutput(list);
+				break;
+			case 3:
+				studentSearch(list);
+				break;
+			case 4:
+				studentRevise(list);
+				break;
+			case 5:
+				studentDelete(list);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}	
+	}
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	static void studentInput(ArrayList<Sungjuk> list) {
+		Sungjuk obj = new Sungjuk();
+		obj.input();
+		for(Sungjuk dat : list) {
+			if(obj.num.equals(dat.num)) {
+				System.out.println("\n학번 입력 오류(중복)!!\n");
+				return;
+			}
+		}
+		obj.process();
+		list.add(obj);
+		System.out.println("\n성적정보 입력 성공!!\n");
+	}
+	static void studentOutput(ArrayList<Sungjuk> list) {
+		
+		if(list.size()==0) {
+			System.out.println("출력할 성적정보가 없습니다!!\n");
+			return;
+		}
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		Sungjuk.totavg =0.0;
+		for(Sungjuk dat : list) {
+			dat.output();
+			Sungjuk.totavg+=dat.avg;
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",list.size(),Sungjuk.totavg/list.size());
+	}
+	static void studentSearch(ArrayList<Sungjuk> list) {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.println("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		
+		for(Sungjuk dat : list) {
+			if(hakbun.equals(dat.num)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				dat.output();
+				System.out.println("===========================================================");
+				return;
+			}
+		}
+		System.out.println("\n조회할 학번입력 오류!!\n");
+	}
+	static void studentRevise(ArrayList<Sungjuk> list) {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		
+		for(Sungjuk dat : list) {
+			if(dat.num.equals(hakbun)) {
+				System.out.print("국어 점수=> ");
+				dat.kor = scan.nextInt();
+				System.out.print("영어 점수=> ");
+				dat.eng = scan.nextInt();
+				System.out.print("수학 점수=> ");
+				dat.math = scan.nextInt();
+				dat.process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류!!\n");
+	}
+	static void studentDelete(ArrayList<Sungjuk> list) {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		/* for(i=0;i<list.size();i++){
+		 *   Sungjuk dat = list.get(i);
+		 *     if(hakbun.equals(list.get(i).num))
+		 *         list.remove(i);
+		 * }
+		 */
+		for(Sungjuk dat : list) {
+			if(dat.num.equals(hakbun)) {
+				list.remove(dat);
+				System.out.println("\n성적 정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력오류!!\n");
+	}
+}
+
+연습문제2) 상품정보 사용
+package ListClassEx;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Products03 {
+	
+	public static void main(String[] args) {
+		
+		ArrayList<ProductPyo> list = new ArrayList<ProductPyo>();
+		int menu;
+		
+		Scanner scan = new Scanner(System.in);
+		
+		while(true) {
+			printMenu();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			
+			if(menu==6) {
+				System.out.println("The End...");
+				break;
+			}
+			
+			switch (menu) {
+				case 1:
+					productInput(list);
+					break;
+				case 2:
+					productOutput(list);
+					break;
+				case 3:
+					productSearch(list);
+					break;
+				case 4: 
+					productRevise(list);
+					break;
+				case 5: 
+					productDelete(list);
+					break;
+				default:
+			}
+		}	
+	}
+	static void printMenu() {
+		System.out.println("*** 상품관리***");
+		System.out.println("1. 상품정보 입력");
+		System.out.println("2. 상품정보 출력");
+		System.out.println("3. 상품정보 조회");
+		System.out.println("4. 상품정보 수정");
+		System.out.println("5. 상품정보 삭제");
+		System.out.println("6. 프로그램 종료");
+		System.out.println();
+	}
+	
+	static void productInput(ArrayList<ProductPyo> list) {
+		ProductPyo obj = new ProductPyo();
+		obj.input();
+		for(ProductPyo dat : list) {
+			if(obj.code.equals(dat.code)) {
+				System.out.println("코드입력 중복 오류!!\n");
+				return;
+			}
+		}
+		obj.process();
+		list.add(obj);
+		System.out.println("상품정보 입력 성공!!\n");
+	}
+	
+	static void productOutput(ArrayList<ProductPyo> list) {
+		if(list.size()==0) {
+			System.out.println("출력할 상품정보가 없습니다.\n");
+			return;
+		}
+		
+		System.out.println("\t\t    *** 상품 실적 ***");
+		System.out.println("============================================================");
+		System.out.println("   상품코드\t상품명\t수량\t단가\t금액\t\t평가");
+		System.out.println("============================================================");
+		for(ProductPyo dat : list) {
+			dat.output();
+		}
+		System.out.println("============================================================");
+	}
+	
+	static void productSearch(ArrayList<ProductPyo> list) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		
+		for(ProductPyo dat : list) {
+			if(code02.equals(dat.code)) {
+				System.out.println("===========================================================");
+				System.out.println("   상품코드\t상품명\t수량\t단가\t금액\t\t평가");
+				System.out.println("===========================================================");
+				dat.output();
+				System.out.println("===========================================================\n");
+				return;
+			}
+		}
+		System.out.println("\n조회할 코드 입력 오류!!\n");
+	}
+
+	static void productRevise(ArrayList<ProductPyo> list) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		
+		for(ProductPyo dat : list) {
+			if(code02.equals(dat.code)) {
+				System.out.print("수량 입력=> ");
+				dat.su = scan.nextInt();
+				System.out.print("단가 입력=> ");
+				dat.price = scan.nextInt();
+				dat.process();
+				System.out.println("\n상품정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 코드 입력 오류!!\n");
+	}
+	
+	static void productDelete(ArrayList<ProductPyo> list) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("코드 입력=> ");
+		String code02 = scan.next();
+		
+		for(ProductPyo dat : list) {
+			if(code02.equals(dat.code)) {
+				list.remove(dat);
+				System.out.println("\n상품정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 코드 입력 오류!!\n");
+	
+	}
+}
+
+#LinkedList클래스
+ : 인덱스의 객체를 찾을때마다 인덱스0번째에서부터 시작한다. 즉 찾는데 시간이 오래걸린다.
+이를 ArrayList처럼 찾으려면 향상된 for문을 같이 사용하면 된다.
+ 	
+##LinkedList클래스
+ : 데이터 순차 접근을 효율적으로 하는 방법
+1)메소드호출
+ Iterator<String> iterator = list.iterator();
+2)객체에 대해 next메소드 호출
+ String str = iterator.next();
+3)NoSuchElementException을 막는법
+ iterator.hasNext() 사용.
+
+Ex)
+package LinkedListEx;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class LinkedListExample3 {
+
+	public static void main(String[] args) {
+		LinkedList<String> list = new LinkedList<String>();
+		list.add("망고");
+		list.add("파인애플");
+		list.add("바나나");
+		Iterator<String> iterator = list.iterator();
+		while(iterator.hasNext()) {
+			String str = iterator.next();
+			System.out.println(str);
+		}
+		// 향상된 for문이 위의 Iterator객체내용과 동일하게 동작한다.
+		for(String str : list) {
+			System.out.println(str);
+		}
+	}
+}
+
+##스택(stack)##
+ : 데이터를 넣은 순서의 역순으로만 꺼낼 수 있는 자료구조 ( Last In First Out )
+
+Integer obj = getLast(); -> 마지막에 넣은 값을 리턴.
+stack.addLast(레퍼런스객체); -> 데이터를 추가.
+Integer num = stack.removeLast(); -> 마지막 값을 삭제.
+
+Ex)
+package LinkedListEx;
+
+import java.util.LinkedList;
+
+public class StackExample1 {
+
+	public static void main(String[] args) {
+		LinkedList<Integer> stack = new LinkedList<Integer>();
+		stack.addLast(new Integer(12));
+		stack.addLast(new Integer(59));
+		stack.addLast(new Integer(7));
+		while(!stack.isEmpty()) {
+			Integer num = stack.removeLast();
+			System.out.println(num);
+		}
+	}
+}
+
+Ex) 결과는 같지만 내부적으로 데이터를 다루는 방식이 다름.
+package LinkedListEx;
+
+import java.util.Stack;
+
+public class StackExample1 {
+
+	public static void main(String[] args) {
+		Stack<Integer> stack = new Stack<Integer>();
+		stack.push(new Integer(12));
+		stack.push(new Integer(59));
+		stack.push(new Integer(7));
+		while(!stack.isEmpty()) {
+			Integer num = stack.pop();
+			System.out.println(num);
+		}
+	}
+}
+
+##큐(Queue)
+ : 데이터를 넣은 순서와 같은 순서로만 꺼낼 수 있는 자료구조(First In First Out)
+queue.offer(); -> 입력
+queue.poll(); -> 넣은 순서대로 리턴
+queue.peek(); -> 제일 앞 리턴. 데이터는 그대로.
+
+Ex)
+package LinkedListEx;
+
+public class Message {
+	public String command;
+	public String to;
+	
+	public Message(String command, String to) {
+		this.command = command;
+		this.to = to;
+	}
+}
+package LinkedListEx;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class QueueExample {
+
+	public static void main(String[] args) {
+		Queue<Message> messageQueue = new LinkedList<Message>();
+		
+		messageQueue.offer(new Message("sendMail","홍길동"));
+		messageQueue.offer(new Message("sendSMS","신용권"));
+		messageQueue.offer(new Message("sendKakaotalk","홍두께"));
+		
+		while(!messageQueue.isEmpty()) {
+			Message message = messageQueue.poll();
+			switch(message.command) {
+			case "sendMail":
+				System.out.println(message.to+ "님에게 메일을 보냅니다.");
+				break;
+			case "sendSMS":
+				System.out.println(message.to+ "님에게 SMS을 보냅니다.");
+				break;
+			case "sendKakaotalk":
+				System.out.println(message.to+ "님에게 카카오톡을 보냅니다.");
+				break;
+			}
+		}
+	}
+
+}
+
+
+###해쉬테이블 : HashMap 클래스 ####
+*생성방법
+ HashMap<String , Integer> hashtable = new HashMap<String , Integer>( );
+        <키의 타입 , 데이터의 타입>                             (생략하면 기본 16개, 원하는 수치 적으면된다.)
+
+*데이터 넣기
+ hashtable.put("해리", new Integer(95));
+
+*데이터 찾기
+ Integer num = hashtable.get("해리");
+
+*데이터 삭제
+ hashtable.remove("해리");
+
+#해쉬테이블 계산에는 hashCode가 사용됨
+
+Ex)
+package HashEx;
+
+public class HashCodeExample1 {
+
+	public static void main(String[] args) {
+		String obj1 = new String("헤르미온느");
+		String obj2 = new String("헤르미온느");
+		int hash1 = obj1.hashCode();
+		int hash2 = obj2.hashCode();
+		System.out.println(hash1);
+		System.out.println(hash2);
+		// 주소는 다르지만 해쉬코드는 같다.
+		// 동일한 값이 들어있으면 주소가 다르더라도 
+		// 해쉬코드가 같게 나오도록 오버라이딩이 되어있다.
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

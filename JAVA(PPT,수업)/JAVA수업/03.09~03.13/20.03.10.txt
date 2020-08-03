@@ -1,0 +1,545 @@
+Hellojava.java ->Hellojava.class -> 실행
+	(javac.exe사용)	(java.exe사용)
+인터프리터(interpreter): 주어진 소스코드를 행단위로 번역해서 
+		      별도로 저장하지않고 바로실행
+		장점: 플랫폼이 독립적이다.
+		단점: 실행할때마다 매번 번역을 해야된다. (실행속도가 느림)
+컴파일: 소스코드를 번역해서 별도로 저장
+
+키워드(keyword): 용도가 정해져 있음
+식별자(identifier): 사용자가 정함.
+
+null: 값이 없음을 의미하는 값.
+
+#로컬변수#
+클래스 = 필드 + 메소드 (일반적으로)
+
+필드: 클래스 안에 있지만 메소드 밖에 위치.
+필드에 변수를 사용하면 클래스내부 어디에서든 변수사용가능.
+필드에 선언된 변수는 따로 초기화를 하지 않으면 디폴트값으로 자동 초기화된다. 
+-정수 타입-> 0
+-reference 타입-> null 
+
+메소드 안에 사용한 변수를 (로컬변수)라칭함. 
+사용영역은 그 메소드 내부에서만.
+-로컬변수는 초기화하지않으면 에러가 뜬다.
+
+*정적(static) 메소드안에서 사용가능한 필드는 정적(static)필드만 가능하다.*
+
+###변수의 타입
+*byte: 정수.  
+자바에서는 가상머신이 int보다 작은 타입의 자료는 전부다 int형으로 변환해서 연산한다.
+ex) byte a = 10; -->> int a =10; 으로 바뀐다.
+byte를 사용하고 싶으면 (형변환)을 사용한다.
+
+final을 붙인 변수는 그 이후에 변경이 불가능하다.
+
+###배열
+-모든 요소가 같은 이름을 가진다.
+-배열을 사용할때 반드시 연속된 저장공간이 필요하다.
+
+-단점: 데이터가 큰 경우에는 메모리 부족현상이 발생할 수도 있다.
+
+배열은 객체를 생성한다.
+즉 배열은 기본적으로 디폴트값이 자동 초기화된다.
+
+public class Test {
+		
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int table[][] = { { 1, 2, 3, 4},
+			       { 5, 6, 7},
+			       { 9, 10} };
+		System.out.println(table[0][0]);
+		System.out.println(table[1][1]);
+		System.out.println(table[2][0]);
+		System.out.println(table.length); //행의 개수
+		System.out.println(table[0].length); //0행의 개수
+		System.out.println(table[1].length); //1행의 개수
+		System.out.println(table[2].length); //2행의 개수
+	}
+}
+
+###조건문
+#dangling else: 어느 if와 짝을 이룰지 애매한 else키워드.
+-여러 if가 있을때 모호한 else는 가장가까운 if와 짝을 이룬다.
+-이럴때 중괄호를 사용하여 이런경우를 피할 수 있다.
+
+###switch 조건문 예시###
+import java.util.Scanner;
+
+public class Test {
+		
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner scan = new Scanner(System.in);
+
+		System.out.print("학번 입력=> ");
+		String num = scan.next();
+		System.out.print("이름 입력=> ");
+		String name = scan.next();
+		System.out.print("국어 점수=> ");
+		int kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		int eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		int math = scan.nextInt();
+		int tot = kor+eng+math;
+		float avg = tot/3;
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		
+		switch((int)(avg/10)) {
+		case 10:
+		case 9:
+			
+			System.out.println(num+"\t"+name+"\t"+kor+"\t"+eng+"\t"+math+"\t"+tot
+					+"\t"+avg+"\t"+"수");
+			break;
+		case 8:
+			System.out.println(num+"\t"+name+"\t"+kor+"\t"+eng+"\t"+math+"\t"+tot
+					+"\t"+avg+"\t"+"우");
+			break;
+					
+		case 7:
+			System.out.println(num+"\t"+name+"\t"+kor+"\t"+eng+"\t"+math+"\t"+tot
+					+"\t"+avg+"\t"+"미");
+			break;
+		case 6:
+			System.out.println(num+"\t"+name+"\t"+kor+"\t"+eng+"\t"+math+"\t"+tot
+					+"\t"+avg+"\t"+"양");
+			break;
+		case 5:
+		case 4:
+		case 3:
+		case 2:
+		case 1:
+		case 0:
+			System.out.println(num+"\t"+name+"\t"+kor+"\t"+eng+"\t"+math+"\t"+tot
+					+"\t"+avg+"\t"+"가");
+			break;
+		}
+		System.out.println("===========================================================");
+		
+	}
+
+}
+
+
+--->>>>> switch문 안에 조건문에 해당하는 것을 grade = "수"; 이런 식으로 만들어서 출력문을 switch문 이후에
+	 만들 수 있다.
+
+import java.util.Scanner;
+
+public class Gggg {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner scan = new Scanner(System.in);
+		
+		String grade = null;
+		
+		System.out.print("학번 입력=> ");
+		String num = scan.next();
+		System.out.print("이름 입력=> ");
+		String name = scan.next();
+		System.out.print("국어 점수=> ");
+		int kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		int eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		int math = scan.nextInt();
+		int tot = kor+eng+math;
+		float avg = tot/3;
+		
+		switch((int)(avg/10)) {
+		case 10:
+		case 9:
+			
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+					
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		case 5:
+		case 4:
+		case 3:
+		case 2:
+		case 1:
+		case 0:
+			grade = "가";
+			break;
+		}
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		System.out.printf("%4s\t%3s\t%3d\t%3d\t%3d\t%3d\t%6.2f\t%2s\n"
+				, num, name, kor, eng, math, tot, avg, grade);
+		System.out.println("===========================================================");
+		
+	}
+
+}
+
+#연산시 실수를 사용하면 더 큰 타입으로 나온다.
+ex) int tot = kor+eng+math
+    avg = tot/3.  => '.' 을 붙여서 실수형으로 만든다.
+
+#printf  문자열
+ex) System.out.printf("%4s %3s %3d %3d %d %3d %6.2f %2s\n" 
+		    , num, name, kor, eng, math, tot, avg, grade)  
+		>>> 파라미터와 데이터의 갯수, 자료형이 일치해야된다.
+--- s: 문자열 의미
+    d: 정수 의미
+    f: 실수 의미
+    c: 문자 의미
+    4: 데이터가 차지하는 자릿수 의미 (4자리)
+    3: 데이터가 차지하는 자릿수 의미 (4자리)
+    6.2: 데이터의 자릿수(6자리) 실수의 자릿수(2자리)
+    ex) %6.2f  ,12345.678  일 경우 모자른 실수 부분은 반올림 처리되고
+                                        모자른 정수 부분은 시스템에서 자동으로 추가 시켜준다.
+
+###do-while 반복문
+do
+    실행부분    -> 무조건 한번은 실행.
+while(조건식);  -> 세미클론 필수
+
+##for 무한루프
+->  for( ; ; )
+
+##향상된 for문
+ for(변수타입 변수이름: 컬렉션타입)
+	실행부분
+------> 컬렉션의 갯수에 맞게 자동으로 반복실행한다.
+ex) for (int num : arr){
+	System.out.println(num);
+	}
+==>> 향상된 for문을 사용하면 더 효율적으로 데이터를 다룰 수 있다.
+
+###break문
+
+- break가 포함된 if나 switch문을 빠져나온다.
+- 중첩된 경우 break가 포함된 반복문만 빠져나온다.
+
+###중첩된 반복문을 한꺼번에 빠져나가는 방법
+#라벨을 사용
+ex)
+ loop:      <-----콜론 주의!
+    for(int cnt = 0; cnt < 100; cnt++) {
+       System.out.println(cnt);
+       if (cnt> 10)
+         break loop;
+   }
+
+ex)
+
+public class Banbok {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	oho_php:
+		for(int row = 0; row<3; row++) {
+			for(int col = 0; col<5; col++) {
+				System.out.println("(" + row + ", " + col + ")"); 
+	            if ((row == 1) && (col == 3)) 
+	                break oho_php; 
+	  
+			}
+					
+		}
+	System.out.println("Done.");
+	}
+
+}
+
+-->> break에 라벨을 붙여놔서 조건을 만족했을때 
+      이중for문을 한번에 빠져나온다. 
+
+###continue문
+- 반복문 안에서만 사용 가능
+- 반복문의 다음번 반복을 계속하는 기능
+ex)
+
+public class Banbok {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 for (int cnt = 0; cnt < 10; cnt++) { 
+	            if (cnt == 5) {
+	                continue; 
+		}
+	            System.out.println(cnt); 
+	        } 
+	        System.out.println("Done."); 
+	   
+	}
+
+}
+-----> cnt가 5일때만 건너뜀.
+
+#중첩된 반복문과 continue문
+라벨을 사용하면,
+중첩된 반복문의 바깥쪽 반복을 계속한다.
+
+문자열에서 같은지 비교할 때 '=' 을 사용하면 주소를 비교하기 때문에
+값을 비교하기 위해 equals를 사용한다.
+ex) if(arr[i].equals("exit"))
+	break;
+
+
+#Quiz#
+소수를 구하는 프로그램
+2개의 수를 입력하고
+그 2개의 수 사이에 있는
+소수들을 다 출력
+총소수의 갯수 출력
+총소수의 합 출력
+
+====1이랑 입력받은 num값 을 제외한다.
+1<i<num for문 돌려서 나머지 값 만들기?
+
+import java.util.Scanner;
+
+public class MunJaeYam {
+
+	public static void main(String[] args) {
+		// TODO PrimeNumber(소수)를 구하는 프로그램 (ㅇㅁㅇ)
+		// 1과 자기자신을 제외한 나머지 수로 나눴을때 나머지가 0이 나오지 않아야 된다.
+		// 2개의 수를 입력
+		// 한줄에 10개씩 출력
+		// 총 소수의 개수 출력
+		// 총 소수들의 총합 출력
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("첫번째 숫자 입력=> ");
+		int num = scan.nextInt();
+		System.out.print("두번째 숫자 입력=> ");
+		int num2 = scan.nextInt();
+		System.out.println();
+		int i;
+		int tot = 0;
+		int cnt = 0;
+		int min,max;
+		
+		if(num<num2) {
+			min = num;
+			max = num2;
+		}else {
+			min = num2;
+			max = num;
+		}
+		
+		oho:
+		for(i=min;i<=max;i++) {
+			
+				for(int j=2;j<i;j++) {
+					if(i%j == 0) {
+						continue oho;
+					}
+				}
+			
+			cnt++;
+			
+			System.out.print(i+"\t"); // 소수들 출력
+			
+			if(cnt%10==0) {
+			System.out.println(); // 줄바꿈 10번째에서~~~
+			}
+			
+			tot+=i;
+			
+		}
+		System.out.println();
+		System.out.println("총 갯수: "+cnt);
+		System.out.println("총합: "+tot);
+		
+	}
+
+}
+
+
+#####강사님 코드#####
+
+import java.util.Scanner;
+
+public class MunJaeYamm {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner in = new Scanner(System.in);
+		int num1, num2, min, max, cnt = 0;
+		int i,j;
+		int hap = 0;
+		
+		System.out.print("첫번째 숫자 입력=> ");
+		num1 = in.nextInt();
+		System.out.print("두번째 숫자 입력=> ");
+		num2 = in.nextInt();
+		System.out.println();
+
+		if(num1<num2) {
+			min = num1;
+			max = num2;
+		}else {
+			min = num2;
+			max = num1;
+		}
+		for(i=min;i<max;i++) {
+			for(j=2;j<i;j++) {
+				if(i%j==0) {
+					break;
+				}
+			}
+			if(i==j) {
+				System.out.printf("%5d",i);
+				cnt++;
+				if(cnt%10==0) { 
+					System.out.println();
+				}
+				hap+=i;
+			}
+		}
+		if(cnt%10!=0) {
+			System.out.println();
+		}
+		System.out.println("총 갯수 = "+cnt);
+		System.out.println("총 합 = "+hap);
+	}
+
+}
+
+
+##################숙제###################
+성적 처리 코드에서
+계속 입력하다가 exit를 입력하면 
+exit이전까지 입력했던거 싹다 출력하고
++ 학생수, 전체평균까지.
+
+(입력가능한 최대 데이터 개수는 100개)
+
+HomeWork.java
+
+import java.util.Scanner;
+
+public class HomeWork {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		Scanner scan = new Scanner(System.in);
+		int cnt = 0;
+		int i;
+		float totavg = 0;
+		float avg_totavg = 0;
+		String grade = null ;
+		//배열을 생성하고, for문을 돌리자.
+		String[][] arr = new String[100][3]; // 학번,이름을 담을 배열
+		int[][] arr2 = new int[100][4];		 // 국어,영어,수학을 담을 배열
+		double[][] arr3 = new double[100][1];	 // 평균을 담을 배열
+				
+		oho:
+		for(i=0;i<100;i++) {
+				System.out.printf("%d번째 학생",i+1);
+				System.out.print("\n\t학번 입력=> ");
+					
+				arr[i][0] = scan.next();
+				if(arr[i][0].equals("exit")) {	// 학번에 exit를 입력하면 if조건이 충족
+						
+					break;
+				}else if(arr[i][0].equals("수정")) {
+					if(i==0) {
+						i--;
+						continue oho;
+					}else {
+						i-=2;
+						cnt--;
+						continue oho;
+					}
+				}
+				System.out.print("\t이름 입력=> ");
+				arr[i][1] = scan.next(); // 이름
+				System.out.print("\t국어 점수=> ");
+				arr2[i][0] = scan.nextInt(); // 국어
+				System.out.print("\t영어 점수=> ");
+				arr2[i][1] = scan.nextInt(); // 영어
+				System.out.print("\t수학 점수=> ");
+				arr2[i][2] = scan.nextInt(); // 수학
+				for(int j=0;j<3;j++) {		//국영수 점수를 100점이상 잘못입력했을때 그 학생을 다시 입력.
+					if(arr2[i][j]>100) {
+						System.out.println("점수를 잘못 입력하였습니다.");
+						i--;
+						continue oho;
+					}
+				}
+				arr2[i][3] = arr2[i][0]+arr2[i][1]+arr2[i][2]; // 개인 총점
+				//System.out.println("총점: "+arr2[i][3]);
+				arr3[i][0] = arr2[i][3]/3.; // 개인 평균
+				//System.out.println("평균: "+arr3[i][0]);
+					
+				switch((int)(arr3[i][0]/10)) {
+				case 10:
+				case 9:
+						
+					grade = "수";
+					break;
+				case 8:
+					grade = "우";
+					break;
+								
+				case 7:
+					grade = "미";
+					break;
+				case 6:
+					grade = "양";
+					break;
+				case 5:
+				case 4:
+				case 3:
+				case 2:
+				case 1:
+				case 0:
+					grade = "가";
+					break;
+				}
+				arr[i][2] = grade;
+				cnt++;
+				totavg += arr3[i][0]; // 평균들의 총합
+				avg_totavg = totavg/cnt; // 평균들의 총합의 평균
+				
+		}
+				
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		for(i=0;i<cnt;i++) {  // 메모리에 저장된 배열들을 다시 불러냄.
+			System.out.printf("%4s\t%3s\t%3d\t%3d\t%3d\t%3d\t%6.2f\t%2s\n"
+				, arr[i][0], arr[i][1], arr2[i][0], arr2[i][1], arr2[i][2], arr2[i][3]
+						, arr3[i][0], arr[i][2]);
+		}
+		System.out.println("===========================================================");
+		System.out.println("\t\t학생수: "+cnt+"\t전체 평균: "+avg_totavg);
+				
+	}
+
+}
+
+
+
+
+
+
+
+
+

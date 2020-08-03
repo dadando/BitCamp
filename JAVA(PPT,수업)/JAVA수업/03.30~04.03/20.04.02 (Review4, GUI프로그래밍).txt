@@ -1,0 +1,576 @@
+##try-catch문을 사용할때
+가장 자식인 익셉션문을 먼저 기술해야 한다.
+
+파일이나 데이터를 다루는 작업에는 반드시 익셉션문장이 필요하다.
+
+##Inner클래스
+
+Ex)
+package Inner_Ex;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class MemberInner {
+	ArrayList<Member> list = new ArrayList<Member>();
+	
+	MemberInner(){
+	}
+	
+	void addMember() {
+		Member obj = new Member();
+		obj.inputData();
+		if(checkMember(obj)) {
+			System.out.println("이름 입력 오류(중복)!!");
+			return;
+		}
+		list.add(obj);
+		System.out.println();
+	}
+	void removeMember(Member obj) {
+		list.remove(obj);
+	}
+	int getMemberNum() {
+		return list.size();
+	}
+	boolean checkMember(Member obj) {
+		for(Member dat:list) {
+			if(dat.irum.equals(obj.irum)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	ArrayList<Member> getList(){
+		return list;
+	}
+	Member getMember(int index) {
+		return list.get(index);
+	}
+	void changeMember(int index) {
+		Scanner scan = new Scanner(System.in);
+		Member member = getMember(index);
+		System.out.print("성별 입력=> ");
+		member.gender = scan.next();
+		System.out.print("이메일 입력=> ");
+		member.email = scan.next();
+		System.out.print("아이디 입력=> ");
+		member.id = scan.next();
+		System.out.print("패스워드 입력=> ");
+		member.passwd = scan.next();
+	}
+	
+	class Member{
+		String irum,gender,email,id,passwd;
+		
+		Member(){
+		}
+		
+		public void inputData() {
+			Scanner scan = new Scanner(System.in);
+			System.out.print("이름 입력=> ");
+			irum = scan.next();
+			System.out.print("성별 입력=> ");
+			gender = scan.next();
+			System.out.print("이메일 입력=> ");
+			email = scan.next();
+			System.out.print("아이디 입력=> ");
+			id = scan.next();
+			System.out.print("패스워드 입력=> ");
+			passwd = scan.next();
+			System.out.println();
+		}
+		
+		public void outputData() {
+			
+			System.out.printf("%3s  %6s%10s%10s %10s\n",irum,gender,email,id,passwd);
+		}
+		
+	}
+}
+
+
+package Inner_Ex;
+
+import java.util.Scanner;
+
+public class InnerMember {
+
+	public static void main(String[] args) {
+		MemberInner in = new MemberInner();
+		int menu;
+		
+		while(true) {
+			Scanner scan = new Scanner(System.in);
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			if(menu==6) {
+				System.out.println("The end...");
+				break;
+			}
+			switch(menu) {
+			case 1:
+				memberInput(in);
+				break;
+			case 2:
+				memberOutput(in);
+				break;
+			case 3:
+				memberSearch(in);
+				break;
+			case 4:
+				memberRevise(in);
+				break;
+			case 5:
+				memberDelete(in);
+				break;
+			default:
+			}
+		}
+	}
+	static void printOut() {
+		System.out.println();
+		System.out.println("***회원 관리***");
+		System.out.println("1.회원정보 입력");
+		System.out.println("2.회원정보 출력");
+		System.out.println("3.회원정보 조회");
+		System.out.println("4.회원정보 수정");
+		System.out.println("5.회원정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	static void memberInput(MemberInner in) {
+		in.addMember();
+	}
+	static void memberOutput(MemberInner in) {
+		if(in.getMemberNum()==0) {
+			System.out.println("출력할 회원정보가 없습니다.");
+			return;
+		}
+		System.out.println("\t\t*** 회원 정보 ***");
+		System.out.println("==============================================");
+		System.out.println("이름\t성별\t이메일\t아이디\t     패스워드");
+		System.out.println("==============================================");
+		for(int i=0;i<in.getMemberNum();i++) {
+			MemberInner.Member obj = in.getMember(i);
+			obj.outputData();
+		}
+		System.out.println("==============================================");
+		System.out.printf("\t*** 총 회원수: %d ***\n",in.getMemberNum());
+		
+	}
+	
+	static void memberSearch(MemberInner in) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("조회할 이름 입력=> ");
+		String name = scan.next();
+		System.out.println();
+		
+		for(int i=0;i<in.getMemberNum();i++) {
+			if(name.equals(in.getMember(i).irum)) {
+				System.out.println("\t\t*** 회원 정보 ***");
+				System.out.println("==============================================");
+				System.out.println("이름\t성별\t이메일\t아이디\t     패스워드");
+				System.out.println("==============================================");
+				MemberInner.Member obj = in.getMember(i);
+				obj.outputData();
+				System.out.println("==============================================");
+				return;
+			}
+		}
+		System.out.println("조회할 이름 입력오류!!");
+	}
+	static void memberRevise(MemberInner in) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정할 이름 입력=> ");
+		String name = scan.next();
+		System.out.println();
+		for(int i=0;i<in.getMemberNum();i++) {
+			MemberInner.Member obj = in.getMember(i);
+			if(name.equals(obj.irum)) {
+				in.changeMember(i);
+				System.out.println("회원 정보 수정 성공!!");
+				return;
+			}
+		}
+		System.out.println("수정할 이름 입력 오류!!");
+	}
+	static void memberDelete(MemberInner in) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 이름 입력=> ");
+		String name = scan.next();
+		System.out.println();
+		for(int i=0;i<in.getMemberNum();i++) {
+			MemberInner.Member obj = in.getMember(i);
+			if(name.equals(obj.irum)) {
+				in.removeMember(obj);
+				System.out.println("회원 정보 삭제 성공!!");
+				return;
+			}
+		}
+		System.out.println("삭제할 이름 입력 오류!!");
+	}
+}
+
+
+
+19장. GUI 프로그래밍
+###윈도우를 구성하는 방법
+
+#윈도우를 구성하는 방법
+JFrame fram = new JFrame("Hello Java Program"); <----타이틀 바에 표시되는 문자열
+JLabel label = new JLabel("Hello, Java");  <-----라벨을 생성하는 식
+Cntatiner contentPane = frame.getContentPane();  <-content pane을 리턴하는 메소드
+
+#윈도우를 디스플레이하는 방법
+frame = setVisible(true);
+
+#윈도우의 위치를 지정하는 방법
+frame.setLocationt(500,400);  <-- (x,y) 좌표
+
+#프레임의 크기를 바꾸는 방법
+frame.setPrferredSize(new Dimenstion(300,200)); <--(넓이,높이)
+
+#라벨의 위치를 지정하는 방법
+JLabel label = new JLabel("Hello,Java",SwingConstantes.CENTER);
+
+#x버튼을 눌렀을 때 윈도우가 닫히도록 만드는 방법
+// 이걸 안쓰면 윈도우를 닫아도 프로그램은 종료가 안되므로 꼭 사용할 것.!
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+#텍스트 상자를 만드는 방법
+JTextField text = new JTextField();
+
+#버튼을 만드는 방법
+JButton button = new JButton("확인");
+
+#여러개의 컴포넌트를 contenPane위에 올려놓는 방법
+contentPane.add(text, BorderLayout.CENTER);
+contentPane.add(button, BorderLayout.EAST);
+contentPane.add(label, BorderLayout.SOUTH);
+
+#버튼이벤트의 처리방법
+String str = text.getText();  <---텍스트 상자의 텍스트를 가져오는 메소드
+
+#라벨에 텍스트를 표시
+label.setText(str);
+
+#버튼을 눌렀을 때 해야할 일을 기술하는 방법
+ActionListener listener = new ConfirmButtonActionListener(text,label);
+button.addActionListener(listener);
+<---- 객체를 만들어서 버튼에 등록
+((ConfirmButtonActionListener클래스))
+package GUI_Ex;
+
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ConfirmButtonActionListener implements ActionListener {
+	JTextField text;
+	JLabel label;
+	ConfirmButtonActionListener(JTextField text,JLabel label){
+		this.text = text;
+		this.label = label;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String name = text.getText();
+		label.setText("Hello, " +name);
+
+	}
+
+}
+
+#대표레이아웃(5가지)#
+1. border layout
+2. card layout
+3. grid layout
+4. flow layout
+5. box layout
+
+#Border Layout#
+
+package GUI_Ex;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class WindowExample4_1 {
+
+	public static void main(String[] args) {
+		// TODO BorderLayout사용
+		JFrame frame = new JFrame("Cafe Program");
+		frame.setLocation(500,400);
+		Container contentpane = frame.getContentPane();
+		contentpane.add(new JButton("얼룩말"), BorderLayout.NORTH);
+		contentpane.add(new JButton("사자"), BorderLayout.EAST);
+		contentpane.add(new JButton("코끼리"), BorderLayout.WEST);
+		contentpane.add(new JButton("코뿔소"), BorderLayout.CENTER);
+		contentpane.add(new JButton("펭귄"), BorderLayout.SOUTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+#Grid Layout#
+
+package GUI_Ex;
+
+import java.awt.Container;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class WindowExample3 {
+
+	public static void main(String[] args) {
+		// TODO grid layout 사용
+		JFrame frame = new JFrame("Zoo Program");
+		frame.setLocation(500,400);
+		Container contentpane = frame.getContentPane();
+		GridLayout layout = new GridLayout(3,2);
+		contentpane.setLayout(layout);
+		contentpane.add(new JButton("얼룩말"));
+		contentpane.add(new JButton("사자"));
+		contentpane.add(new JButton("코끼리"));
+		contentpane.add(new JButton("코뿔소"));
+		contentpane.add(new JButton("펭귄"));
+		contentpane.add(new JButton("하이애나"));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+
+#Flow Layout#
+
+package GUI_Ex;
+
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class WindowExample4 {
+
+	public static void main(String[] args) {
+		// TODO flow layout 사용
+		JFrame frame = new JFrame("Fruit Basket Program");
+		frame.setLocation(500,400);
+		Container contentpane = frame.getContentPane();
+		FlowLayout layout = new FlowLayout();
+		contentpane.setLayout(layout);
+		contentpane.add(new JButton("사과"));
+		contentpane.add(new JButton("파인애플"));
+		contentpane.add(new JButton("오렌지"));
+		contentpane.add(new JButton("포도"));
+		contentpane.add(new JButton("레몬"));
+		contentpane.add(new JButton("복숭아"));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+
+#Box Layout#
+
+package GUI_Ex;
+
+import java.awt.Container;
+import javax.swing.BoxLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class WindowExample5 {
+
+	public static void main(String[] args) {
+		// TODO box layout 사용
+		JFrame frame = new JFrame("Cafe Program");
+		frame.setLocation(500,400);
+		Container contentpane = frame.getContentPane();
+		BoxLayout layout = new BoxLayout(contentpane,BoxLayout.X_AXIS);
+		contentpane.setLayout(layout);
+		contentpane.add(new JButton("자바"));
+		contentpane.add(new JButton("에스프레소"));
+		contentpane.add(new JButton("카푸치노"));
+		contentpane.add(new JButton("블루마운틴"));
+		contentpane.add(new JButton("콜럼비아"));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+++++각 버튼 크기 조절+++
+
+package GUI_Ex;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class WindowExample4_1 {
+
+	public static void main(String[] args) {
+		// TODO BorderLayout사용
+		JFrame frame = new JFrame("Zoo Program");
+		frame.setLocation(500,400);
+		frame.setPreferredSize(new Dimension(360,300));
+		Container contentpane = frame.getContentPane();
+		JButton text1 = new JButton("얼룩말");
+		text1.setPreferredSize(new Dimension(200,50));
+		JButton text2 = new JButton("사자");
+		text2.setPreferredSize(new Dimension(80,200));
+		JButton text3 = new JButton("코끼리");
+		text3.setPreferredSize(new Dimension(80,200));
+		JButton text4 = new JButton("코뿔소");
+		JButton text5 = new JButton("펭귄");
+		text5.setPreferredSize(new Dimension(200,50));
+		contentpane.add(text1, BorderLayout.NORTH);
+		contentpane.add(text2, BorderLayout.EAST);
+		contentpane.add(text3, BorderLayout.WEST);
+		contentpane.add(text4, BorderLayout.CENTER);
+		contentpane.add(text5, BorderLayout.SOUTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+
+1. 프레임을 만든다.
+1-1. 프레임 크기를 설정
+1-2. 프레임 생성 위치 설정
+2. 프레임에 종속된 contentpane리턴
+3. 필요한 컴포넌트 생성
+ 3-1) 텍스트창 생성
+ 3-2) 버튼 생성
+ 3-3) 라벨 생성
+4. x버튼 눌렀을 때 프로그램종료
+5. 프로그램을 적절한 크기로 만들기
+6. 프레임을 디스플레이.
+
+Ex)
+package GUI_Ex;
+
+import java.awt.*;
+import javax.swing.*;
+
+
+public class WindowExample2_01 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Hello Program");
+		frame.setPreferredSize(new Dimension(300,80));
+		frame.setLocation(500, 500);
+		Container contentpane = frame.getContentPane();
+		JTextField text = new JTextField();
+		JButton button = new JButton("확인이요");
+		JLabel label = new JLabel("Hello");
+		contentpane.add(text,BorderLayout.CENTER);
+		contentpane.add(button,BorderLayout.EAST);
+		contentpane.add(label,BorderLayout.SOUTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+}
+
+##입력한 텍스트문자를 버튼을 눌러서 라벨이 텍스트문자를 리턴.
+Ex)
+package GUI_Ex;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class ConfirmButtonActionListener_01 implements ActionListener {
+	JTextField text;
+	JLabel label;
+	ConfirmButtonActionListener_01(JTextField text,JLabel label){
+		this.text = text;
+		this.label = label;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		String str = text.getText();
+		label.setText(str);
+	}
+
+}
+
+package GUI_Ex;
+
+import java.awt.*;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+
+public class WindowExample2_01 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("Hello Program");
+		frame.setPreferredSize(new Dimension(300,80));
+		frame.setLocation(500, 500);
+		Container contentpane = frame.getContentPane();
+		JTextField text = new JTextField();
+		JButton button = new JButton("확인");
+		JLabel label = new JLabel();
+		contentpane.add(text,BorderLayout.CENTER);
+		contentpane.add(button,BorderLayout.EAST);
+		contentpane.add(label,BorderLayout.SOUTH);
+		ActionListener obj = new ConfirmButtonActionListener_01(text,label);
+		button.addActionListener(obj);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+}
+
+#레이아웃 설정방법
+레이아웃 layout = new 레이아웃(파라미터);
+contentpane.setLayout(layout);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

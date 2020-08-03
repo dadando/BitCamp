@@ -1,0 +1,59 @@
+9장 테이블 구조 생성,변경 및 삭제하는 DDL
+
+1.테이블 구조 정의 하는 CREATE TABLE
+DDL : Data Definition Language
+
+*CHAR(size) : 고정 길이 문자 데이터
+*VARCHAR2(size) : 가변 길이 문자 데이터. 최대길이 2000Bytes.
+*NUMBER : 최고 40자리까지의 숫자를 저장가능.
+*NUMBER(w) : w자리까지의 수치로 최대 38자리까지 가능.
+*NUMBER(w,d) : w는 전체길이, d는 소수점 이하 자릿수. 소수점은 자릿수에 포함안됨.
+*DATE : 날짜 데이터
+*LONG : 가변 길이의 문자형 데이터 타입
+*LOB : 가변 길이 바이너리 데이터를 저장 가능. 이미지문서, 실행파일 저장 가능.
+*ROWID : 새로운 데이터가 추가될때 ROWID가 뷰어 되어있다.
+*BFILE
+*TIMESTAMP : DATE형의 확장된 상태
+*INTERVAL YEAR TO MONTH
+*INTERBAL DAY TO SECOND
+
+(1) LOB (Large OBject)
+ : 구조화 되지 않은 대용량의 텍스트나 멀티미디어 데이터를 저장하기 위한 데이터형.
+(2) ROWID
+ : 테이블에서 행의 위치를 지정하는 논리적인 주소값.
+ex) select ROWID, empno,ename from emp;
+(3) 날짜(년/월)
+ex) create table SAM02( year01 interval year(3) to month);
+    insert into SAM02 values(interval '36' month(3)); 
+    select year01,sysdate,sysdate+year01 from sam02;
+(4) 날짜(시간)
+ex) create table sam03(day01 interval day(3) to second);
+    insert into sam03 values(interval '100' day(3));
+    select day01,sysdate,sysdate + day01 from sam03;
+
+*Primary Key (기본키)
+1. NOT NULL : null 값이면 안된다.
+2. UNIQUE : 중복되는 값이 있으면 안된다.
+ : emp 테이블에서는 empno 가 기본키로 설정되어 있다.
+
+#테이블 생성,행 삽입
+테이블 삭제 : drop table 테이블명;
+테이블 내 행 전체 삭제 : delete 테이블명;
+ex) create table emp01(empno number(4),ename varchar2(20),sal number(7,2));
+     create table dept01(deptno number(2),dname varchar2(14),loc varchar2(13));
+ex) 동일한 내용과 구조를 갖는 테이블을 만들고 싶을 때 주로 사용하는 기법
+ : create table emp02 as select * from emp;
+ex) 일부 컬럼만 복사하는 기법
+ : create table emp03 as select empno, ename from emp;
+ex) create table emp04 as select empno,ename,sal from emp;
+ : emp테이블의 사원번호,이름,급여 컬럼을 복사
+ex) create table emp05 as select * from emp where deptno =10;
+ : emp테이블의 원하는 특정 행(deptno=10)만 복사할 수 있다.
+ex) create table emp06 as select * from emp where 1=0;
+ : emp테이블의 구조만 복사하고 데이터는 복사안함. 1=0은 항상 거짓 을 이용함.
+
+#테이블 생성 예제
+ : create table sungjuk(hakbun varchar2(6), name varchar2(6), kor number(3), eng number(3), math number(3), tot number(3), avg number(5,2), grade varchar2(4));
+  desc sungjuk;
+  select * from sungjuk;
+

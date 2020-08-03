@@ -1,0 +1,55 @@
+#ajax기법(Asynchronous JavaScript and XML)
+ : 비동기적인 자바스크립트와 XML
+
+###설정###
+#pom.xml
+기존 pom.xml 편집후 <dependecies>태그 안에
+<!-- Jackson JSON Mapper springframework 3.X.X에 사용
+<dependency>
+	<groupId>org.codehaus.jackson</groupId>
+	<artifactId>jackson-mapper-asl</artifactId>
+	<version>1.9.13</version>
+</dependency>
+-->
+<!-- Jackson JSON Mapper시작 -->
+<!-- Jackson-core springframework 5.X.X에 사용 -->
+<dependency>
+	<groupId>com.fasterxml.jackson.core</groupId>
+	<artifactId>jackson-databind</artifactId>
+	<version>2.9.6</version>		
+</dependency>     
+<!-- Jackson JSON Mapper 끝 -->
+
+를 추가
+나머지 xml은 이전 Mybatis설정과 동일
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

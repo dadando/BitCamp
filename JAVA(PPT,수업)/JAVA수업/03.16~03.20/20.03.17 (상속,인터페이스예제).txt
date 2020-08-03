@@ -1,0 +1,326 @@
+#NullPointerException
+ : 변수가 참조하는 객체가 없을 때 발생하는 예외.
+Ex) String str = null;
+    System.out.println("총 문자수 : "+str.length()); //  NullPointerException 발생
+
+    String str = null;
+    str = new String();   //객체 생성
+    System.out.println("총 문자수 : "+str.length());  //오류없음.
+
+##인터페이스의 상수필드
+인터페이스에서는 객체생성이 안되지만
+상수필드정의는 가능하다.
+Ex) final static int MAXIMUM = 100;  (기본형)
+final , static 을 생략해도 자동으로 붙는다.
+
+인터페이스에서 필드를 생성해서 정의를 하면 나중에 유지보수할때 
+그 필드의 역할을 상기시키기 편하다.
+
+익셉션을 발생하는 추상메소드에서 클래스에 익셉션을 사용할 때 인터페이스에도
+throws Exception을 써줘야된다.
+
+#인터페이스는 다중상속이 가능하다.
+Ex)
+public interface Movable {
+	void moveTo(int x, int y);
+	void moveBy(int xOffset, int yOffset);
+}
+
+public interface Transformable extends Movable{
+	void resize(int width, int height);
+
+}
+-->>인터페이스를 상속받는 클래스는 모든 메소드를 오버라이딩해야된다. 
+즉, 위의 경우 3개를 오버라이딩해야된다.
+
+
+
+
+((((연습))))
+(클래스)
+import java.util.Scanner;
+
+public class Sungjuk {
+	String num, name;
+	int kor, eng, math;
+	int tot;
+	double avg;
+	String grade;
+	
+	static double totavg;
+	static int cnt = 0;
+	
+	Sungjuk(){
+		
+	}
+	
+	void input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		num = scan.next();
+		System.out.print("이름 입력=> ");
+		name = scan.next();
+		System.out.print("국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		math = scan.nextInt();
+		System.out.println();
+		
+	}
+	void process() {
+		tot = kor+eng+math;
+		avg = tot/3.;
+		
+		switch((int)avg/10) {
+		case 10:
+		case 9:
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		default:
+			grade = "가";
+				
+		}
+	}
+	void output() {
+		System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",num,name,kor,eng,math,tot,avg,grade);
+	}
+	
+}
+(본문)
+import java.util.Scanner;
+
+public class SungjukPyo {
+	
+	static int MAX = 100;
+	
+	public static void main(String[] args) {
+		
+		Scanner scan = new Scanner(System.in);
+		
+		Sungjuk pyo[] = new Sungjuk[MAX];
+		
+		int menu;
+		
+		oho:
+		while(true) {
+			printOut();
+			System.out.print("메뉴 선택=> ");
+			menu = scan.nextInt();
+			System.out.println();
+			switch(menu) {
+			case 1:
+				studentInput(pyo);
+				break;
+			case 2:
+				studentOutput(pyo);
+				break;
+			case 3:
+				studentSearch(pyo);
+				break;
+			case 4:
+				studentRevise(pyo);
+				break;
+			case 5:
+				studentDelete(pyo);
+				break;
+			case 6:
+				System.out.println("***THE END***");
+				break oho;
+			}		
+		}	
+	}
+	
+	static void printOut() {
+		System.out.println("***메뉴 선택***");
+		System.out.println("1.학생정보 입력");
+		System.out.println("2.학생정보 출력");
+		System.out.println("3.학생정보 조회");
+		System.out.println("4.학생정보 수정");
+		System.out.println("5.학생정보 삭제");
+		System.out.println("6.프로그램 종료");
+		System.out.println();
+	}
+	
+	static void studentInput(Sungjuk[] pyo) {
+		pyo[Sungjuk.cnt] = new Sungjuk();
+		pyo[Sungjuk.cnt].input();
+		for(int j=0;j<Sungjuk.cnt;j++) {
+			if(pyo[j].num.equals(pyo[Sungjuk.cnt].num)) {
+				System.out.println("**학번 중복 입력 오류**");
+				return;
+			}
+		}
+		pyo[Sungjuk.cnt].process();
+		System.out.println("성적 정보 입력 성공!!");
+		System.out.println();
+		Sungjuk.cnt++;
+	}
+	
+	private static void studentOutput(Sungjuk[] pyo) {
+		
+		System.out.println("\t\t    *** 성적표 ***");
+		System.out.println("===========================================================");
+		System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+		System.out.println("===========================================================");
+		Sungjuk.totavg =0.0;
+		for(int i = 0;i<Sungjuk.cnt;i++) {
+			Sungjuk.totavg += pyo[i].avg;
+			pyo[i].output();
+			
+		}
+		System.out.println("===========================================================");
+		System.out.printf("\t학생수:%d   전체 평균: %6.2f\n\n",Sungjuk.cnt,Sungjuk.totavg/Sungjuk.cnt);
+		
+	}
+	
+	private static void studentSearch(Sungjuk[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("조회할 학번 입력=> ");
+		String hakbun = scan.next();
+		for(int i=0;i<Sungjuk.cnt;i++) {
+			if(pyo[i].num.equals(hakbun)) {
+				System.out.println("===========================================================");
+				System.out.println("  학번\t이름\t국어\t영어\t수학\t총점\t평균\t등급");
+				System.out.println("===========================================================");
+				pyo[i].output();
+				System.out.println("===========================================================");
+				return;
+			}
+			System.out.println("\n조회할 학번 입력 오류!!\n");
+		}
+	}
+	
+	private static void studentRevise(Sungjuk[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("수정할 학번 입력 => ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int i = 0;i<Sungjuk.cnt;i++) {
+			if(pyo[i].num.equals(hakbun)) {
+				pyo[i].input();
+				System.out.println();
+				pyo[i].process();
+				System.out.println("\n성적 정보 수정 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n수정할 학번 입력 오류\n");
+	}
+	private static void studentDelete(Sungjuk[] pyo) {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("삭제할 학번 입력=> ");
+		String hakbun = scan.next();
+		System.out.println();
+		for(int i=0;i<Sungjuk.cnt;i++) {
+			if(pyo[i].num.equals(hakbun)) {
+				for(int j=i;j<Sungjuk.cnt-1;j++) {
+					pyo[j] = pyo[j+1];
+				}
+				Sungjuk.cnt--;
+				System.out.println("\n성적 정보 삭제 성공!!\n");
+				return;
+			}
+		}
+		System.out.println("\n삭제할 학번 입력 오류\n");
+		
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

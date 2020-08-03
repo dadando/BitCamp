@@ -1,0 +1,67 @@
+#13장 커스텀 태그와 JSTL(JSP Standart Tag Library)
+#커스텀 태그
+ : 개발자가 직접 정의할 수 있는 태그
+
+#JSTL
+ : 자주 사용되는 기능들을 모아놓은 커스텀 태그
+
+#el_test.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	session.setAttribute("test","Session Test");
+%>
+<html>
+<head>
+	<title>EL 내장객체 사용 예제</title>
+</head>
+<body>
+	<form action="el_test2.jsp" method="post">
+	<table border=1 align=center>
+		<tr><td>이름:</td><td><input type="text" name="name" value="홍길동"></td>
+		<tr><td colspan=2 align=center><input type="submit" value="입력"></td></tr>
+	</table>
+	</form>
+</body>
+</html>
+
+#el_test2.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("utf-8");
+%>
+<html>
+<head>
+	<title>EL 내장객체 사용 예제</title>
+</head>
+<body>
+	<h3>${sessionScope.test }</h3>
+	<h3>${sessionScope['test']}</h3>
+	<h3>${param.name }</h3>
+</body>
+</html>
+
+#el_operation.jsp (연산자 예제)
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>EL 연산자 사용 예제</title>
+</head>
+<body>
+	<h3>\${5+7 }=${5+7 }</h3>
+	<h3>\${8-3 }=${8-3  }</h3>
+	<h3>\${6*3 }=${6*3 }</h3>
+	<h3>\${9/3 }=${9/3 }</h3>
+	<h3>\${10%3 }=${10%3 }</h3>
+	<h3>\${10==9 }=${10==9 }</h3>
+	<h3>\${5!=7 }=${5!=7 }</h3>
+	<h3>\${7<8 }=${7<8 }</h3>
+	<h3>\${8>8 }=${8>8 }</h3>
+	<h3>\${15<=9 }=${15<=9 }</h3>
+	<h3>\${7>=2 }=${7>=2 }</h3>
+	<h3>\${5+3==8?8:10 }=${5+3==8?8:10 }</h3>
+</body>
+</html>
+

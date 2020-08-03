@@ -1,0 +1,150 @@
+#12장
+
+#ResultSet / ResultSetMetaData
+ResultSet예제)
+#resultSetTest.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
+<%
+	Connection conn = null;
+	String sql="select empno,ename from emp";
+	
+	try{
+		Context init = new InitialContext();
+		DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next()){
+			out.println("<h3>"+rs.getInt(1)+","+rs.getString(2)+"</h3>");
+			//out.println("<h3>"+rs.getInt(empno)+","+rs.getString(ename)+"</h3>");
+		}
+		rs.close();
+	}catch(Exception e){
+		out.println("<h3>데이터 가져오기를 실패하였습니다.</h3>");
+		e.printStackTrace();
+	}
+%>
+
+ResultSetMetaData예제)
+#resultSetMetaDataTest.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
+<%
+	Connection conn=null;
+	String sql = "select * from emp";
+	
+	try{
+		Context init = new InitialContext();
+		DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		ResultSetMetaData rsmd = rs.getMetaData();
+		
+		out.println("컬럼 수 : "+rsmd.getColumnCount()+"<br>");
+		
+		for(int i=1;i<=rsmd.getColumnCount();i++){
+			out.println(i+"번째 컬럼의 이름: "+rsmd.getColumnName(i)+"<br>");
+			out.println(i+"번째 컬럼의 타입 이름: "+rsmd.getColumnTypeName(i)+"<br>");
+			
+		}
+	}
+	catch(Exception e){
+		e.printStackTrace();
+	}
+%>
+
+#커서 이동 관련 메소드
+TYPE_SCROLL_SENSITIVE : 커서 이동을 자유롭게 하고 업데이트 내용을 반영한다.
+CONCUR_UPDATABLE : 데이터 변경이 가능하도록 한다.
+
+#resultSetCursorTest.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ page import="javax.sql.*" %>
+<%@ page import="javax.naming.*" %>
+<%
+	Connection conn = null;
+	String sql = "select * from emp";
+	
+	try{
+		Context init = new InitialContext();
+		DataSource ds = (DataSource)init.lookup("java:comp/env/jdbc/OracleDB");
+		conn = ds.getConnection();
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,
+														ResultSet.CONCUR_UPDATABLE);
+		ResultSet rs = pstmt.executeQuery();
+		
+		rs.last();
+		out.println(rs.getInt(1)+","+rs.getString(2)+"<br>");
+		rs.first();
+		out.println(rs.getInt(1)+","+rs.getString(2)+"<br>");
+		rs.absolute(3);
+		out.println(rs.getInt(1)+","+rs.getString(2)+"<br>");
+		
+	}catch(Exception e){
+		out.println("<h3>데이터 가져오기에 실패하였습니다.</h3>");
+		e.printStackTrace();
+	}
+%>
+
+
+#회원 관리 시스템 설계하기
+loginForm.jsp
+joinForm.jsp
+loginProcess.jsp
+joinProcess.jsp
+main.jsp
+member_list.jsp
+member_info.jsp
+member_delete.jsp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

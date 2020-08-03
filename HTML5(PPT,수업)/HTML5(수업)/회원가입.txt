@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>회원 가입</title>
+	<style>
+		#table1{
+			width: 70%;
+			align: center;
+			text-align: left;
+		}
+	</style>
+	<script type="text/javascript">
+		
+		function check_id(){
+			var str = document.form1.id.value;
+			var str1 = "";
+			if(document.form1.id.value==str1){
+				alert("아이디를 입력하세요!");
+				document.form1.id.focus();
+				return false;
+			}else if(!(str.length >= 6 && str.length <= 10)){
+				alert("최소6자리~최대10자리를 입력해주세요!");
+				document.form1.id.focus();
+				return false;
+			}else{
+				for(var i=0;i<str.length;i++){
+					var ch = str.substring(i,i+1);
+					if(!((ch >= "0" && ch<="9")||(ch >= "a" && ch <= "z"))){
+						alert("아이디 입력(특수문자)오류!!");
+						document.form1.id.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		function check_pw(){
+			var str = document.form1.pw.value;
+			var str1 = "";
+			if(document.form1.pw.value==str1){
+				alert("패스워드를 입력하세요!");
+				document.form1.pw.focus();
+				return false;
+			}else if(!(str.length >= 6 && str.length <= 10)){
+				alert("최소6자리~최대10자리를 입력해주세요!")
+				document.form1.pw.focus();
+				return false;
+			}else{
+				for(var i=0;i<str.length;i++){
+					var ch = str.substring(i,i+1);
+					if(!((ch >= "0" && ch<="9")||(ch >= "a" && ch <= "z"))){
+						alert("패스워드 입력(특수문자)오류!!");
+						document.form1.pw.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		function check_pw2(){
+			if(document.form1.pw.value != document.form1.pw_check.value){
+				alert("패스워드가 일치하지 않습니다.!!");
+				document.form1.pw_check.focus();
+				return false;
+			}
+			return true;
+		}
+		
+		function check_jumin(){
+			var str = document.form1.ju1.value;
+			if (str == "")
+			{
+				alert("주민번호(앞자리)를 입력하세요!!!");
+				document.form1.ju1.focus();
+				return false;
+			}else if(str.length!=6){
+				alert("생년월일을 확인해주세요.");
+				return false;
+			}
+			return true;
+		}
+		
+		function check_jumin2(){
+			var str1 = document.form1.ju1.value;
+			var str2 = document.form1.ju2.value;
+			var chk_list = "";
+			
+			if(document.form1.ju2.value == ""){
+				alert("주민번호(뒷자리)를 입력하세요!!!");
+				document.form1.ju2.focus();
+				return false;
+			}else{
+				if (str2.length != 7){
+					alert("주민번호 확인(7자리)!!!");
+					document.form1.ju2.focus();
+					return false;
+				}else{
+					str = str1 + str2;
+					var w = 2, hap = 0, chk;
+					
+					for (i=0; i<str.length-1; i++){
+						ch = str.substring(i, i+1);
+						
+						if (!(ch >= "0" && ch <= "9")){
+							alert("특수문자,일반문자가 포함, 다시 입력!!!");
+							document.form1.ju1.focus();
+							return false;
+						}else{
+							hap += parseInt(ch) * w;
+							w++;
+							if (w == 10)
+								w = 2;
+						}
+					}
+					chk = 11 - (hap % 11);
+					if (chk == 10)
+						chk = 0;
+					else if (chk == 11)
+						chk = 1;
+					
+					if (chk != parseInt(
+						str.substring(str.length-1, str.length))){
+						alert("주민번호 오류, 다시 입력!!!");
+						document.form1.ju1.value="";
+						document.form1.ju2.value="";
+						document.form1.ju1.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		// 주민번호까지 완료...
+		function check_gender(){
+			if(!(document.form1.gender[0].checked||document.form1.gender[1].checked)){
+				alert("성별을 체크해주세요.");
+				return false;
+			}
+			return true;
+		}
+		function check_tel1(){
+			if(document.form1.tel1.value.length!=3){
+				alert("전화번호 입력오류!(3자리)");
+				document.form1.tel1.focus();
+				return false;
+			}else{
+				var str=document.form1.tel1.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel1.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_tel2(){
+			if(document.form1.tel2.value.length!=4){
+				alert("전화번호 입력오류!(4자리)");
+				document.form1.tel2.focus();
+				return false;
+			}else{
+				var str=document.form1.tel2.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel2.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_tel3(){
+			if(document.form1.tel3.value.length!=4){
+				alert("전화번호 입력오류!(4자리)");
+				document.form1.tel3.focus();
+				return false;
+			}else{
+				var str=document.form1.tel3.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel3.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_email(){
+			if(document.form1.email.value.length==0){
+				alert("이메일을 입력하세요!");
+				document.form1.email.focus();
+				return false;
+			}
+			return true;
+		}
+		function check_domain(){
+			if(document.form1.email_domain.value==""){
+				alert("메일 도메인을 선택해주세요");
+				return false;
+			}
+			return true;
+		}
+		function check_hobby(){
+			if((document.form1.hobby[0].checked==false)&&
+				(document.form1.hobby[1].checked==false)&&
+				(document.form1.hobby[2].checked==false)&&
+				(document.form1.hobby[3].checked==false)&&
+				(document.form1.hobby[4].checked==false)){
+				alert("취미를 선택해주세요.");
+				return false;
+			}
+			return true;
+		}
+		function check_textarea(){
+			if(document.form1.text_area.value==""){
+				alert("자기소개항목을 입력하세요");
+				document.form1.text_area.focus();
+				return false;
+			}
+			return true;
+		}
+		function check(){
+			if(check_id()==false){
+				return false;
+			}
+			else if(!check_pw()){
+				return false;
+			}
+			else if(!check_pw2()){
+				return false;
+			}
+			else if(!check_jumin()){
+				return false;
+			}
+			else if(!check_jumin2()){
+				return false;
+			}
+			else if(!check_gender()){
+				return false;	
+			}
+			else if(!check_tel1()){
+				return false;
+			}
+			else if(!check_tel2()){
+				return false;	
+			}
+			else if(!check_tel3()){
+				return false;
+			}
+			else if(!check_email()){
+				return false;
+			}
+			else if(!check_domain()){
+				return false;
+			}
+			else if(!check_hobby()){
+				return false;
+			}
+			else if(!check_textarea()){
+				return false;
+			}else{
+			//취미 값 저장
+			var str="";
+			for(var i=0;i<5;i++){
+				if(document.form1.hobby[i].checked==true){
+					str+=document.form1.hobby[i].value+" ";
+				}
+			}
+			//알림창 출력
+			alert("아이디: "+document.form1.id.value+
+					"\n비밀번호: "+document.form1.pw.value+
+					"\n생년월일: "+document.form1.ju1.value+
+					"\n성별: "+document.form1.gender.value+
+					"\n전화번호: "+document.form1.tel1.value+" - "+document.form1.tel2.value+" - "+document.form1.tel3.value+
+					"\n이메일: "+document.form1.email.value+"@"+document.form1.email_domain.value+
+					"\n취미: "+str+
+					"\n자기소개: "+document.form1.text_area.value);
+			document.form1.submit();
+			}
+			return true;
+		}
+	</script>
+</head>
+<body>
+<form name="form1" method="post">
+	<table border="1" id="table1" align="center">
+		<tr>
+			<th>&nbsp;아이디</th>
+			<td>&nbsp;<input type="text" name="id" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_id();" /></td>
+		</tr>
+		<tr>
+			<th>&nbsp;비밀번호</th>
+			<td>&nbsp;<input type="password" name="pw" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_pw();"/></td>
+		</tr>
+		<tr>
+			<th>&nbsp;비밀번호 확인</th>
+			<td>&nbsp;<input type="password" name="pw_check" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_pw2();"/></td>
+		</tr>
+		<tr>
+			<th>&nbsp;주민번호</th>
+			<td>&nbsp;
+				<input type="text" name="ju1" size="6" maxlength="6" onchange="check_jumin();"/> - 
+				<input type="password" name="ju2" size="7" maxlength="7" onchange="check_jumin2();"/>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;성별</th>
+			<td>&nbsp;
+				<input type="radio" name="gender" value="남자" /> 남자&nbsp;&nbsp;
+				<input type="radio" name="gender" value="여자" /> 여자
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;전화번호</th>
+			<td>&nbsp;
+				<input type="text" name="tel1" size="3" maxlength="3" onchange="check_tel1();" /> - 
+				<input type="text" name="tel2" size="4" maxlength="4" onchange="check_tel2();" /> - 
+				<input type="text" name="tel3" size="4" maxlength="4" onchange="check_tel3();" />
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;이메일</th>
+			<td>&nbsp;
+				<input type="text" name="email" size="10" maxlength="10" onchange="check_email();"/> @ 
+				<select name="email_domain">
+					<option value=""> 메일주소선택 </option>
+					<option>naver.com</option>
+					<option>daum.net</option>
+					<option>google.com</option>
+					<option>gmail.com</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;취미</th>
+			<td>&nbsp;
+				<input type="checkbox" name="hobby" value="등산" />등산 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="독서" />독서 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="스키" />스키 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="음악" />음악 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="영화" />영화 &nbsp;&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;자기소개</th>
+			<td>&nbsp;
+				<textarea name="text_area" rows="15" cols="60"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="button" name="check_btn" onclick="return check();" value="입력" />&nbsp;&nbsp;
+				<input type="button" name="cancel_btn" value="취소" />
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>

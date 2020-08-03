@@ -1,0 +1,75 @@
+#RequestModel.java
+
+*MultipartFile클래스 (중요.)
+ : 파일업로드에 사용하는 클래스.
+
+*String 경로에서 백슬래쉬를 2개씩 써주어야 백슬래쉬 한개로 인식한다.
+> C:\\Project156\\upload\\ => C:\Project156\upload\
+
+*replaceAll() 메소드: 치환
+> replaceAll("-","") : 모든 - 를 빈문자열로 치환.
+
+*transferTo() 메소드: 파일업로드를 위한 메소드
+> transferTo(new File(uploadPath+storedFileName)); : 괄호안의 경로로 파일을 업로드.
+
+*downlink 문자열 만들 때 공백문자가 들어가지 않도록 주의
+
+##################어노테이션
+@Controller : 흐름을 제어하는 역할. url을 통해 작업을 수행한 뒤 view로 연결해준다.
+@Service : 해당 클래스가 Serviece라는 것을 알리는 역할.
+@Repository : 해당 클래스가 DAO라는것을 알리며 인터페이스를 구현해서 필요 메소드를 
+	       오버라이드 하여 정의.
+@Autowired : 만들어진 하나의 Bean객체를 보유하고있으며 그걸 공유하게 해준다.
+
+스프링빈객체는 그냥 일반 자바객체라고 생각하면 된다.
+빈객체를 생성하고 Autowired어노테이션을 이용하여 따로 객체생성없이 만들어진 빈객체를 이용하여 메소드호출할 수 있다.
+EX)
+@Autowired(required=false) 
+private MemberDAO memberDAO=null;
+=>memberDAO라는 Bean객체를 생성하고 그 Bean객체를 공유(@Autowired)한다.
+위의 Bean객체를 이용하여
+memberDAO.getMemberlist() 처럼 메소드를 호출하여 사용할 수 있다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

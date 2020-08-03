@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="product_detail.css"> <!-- 상세페이지 스타일시트 참조 (by.HONG)-->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>All-tion</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <!-- 모든 페이지 공통 영역 by 하나  -->
+    <!-- 광고 배너 및 헤더 -->
+    <div class="ad__banner">
+        <a href="#" class="ad__banner--link">
+            <img src="img/header/adEx.png" class="ad__banner--img">
+            <button class="ad__banner--closeBtn"></button>
+        </a>
+    </div>
+    <div class="header">
+        <div class="upper_header">
+            <div class="upper_header--nav">
+                <p>
+                    <a href="">고객 센터</a>
+                </p>
+                <ul>
+                    <li>
+                        <a href="#">로그인</a>
+                    </li>
+                    <li>
+                        <a href="#">회원 가입</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="lower_header">
+            <div class="lower_header--nav">
+                <h1 class="logo">
+                    <a href="#">ALL-TION</a>
+                </h1>
+                <div class="category">
+                    <a class="category--drop">
+                        <img src="./img/header/category_tab.png">
+                    </a>
+                </div>
+                <div class="search">
+                    <select class="search--select">
+                        <option value="">전체</option>
+                        <option value="패션">패션</option>
+                        <option value="뷰티">뷰티</option>
+                        <option value="출산/유아동">출산/유아동</option>
+                        <option value="전자기기">전자기기</option>
+                        <option value="가전제품">가전제품</option>
+                        <option value="가구/인테리어">가구/인테리어</option>
+                        <option value="반려동물/취미">반려동물/취미</option>
+                        <option value="도서/음반/문구">도서/음반/문구</option>
+                        <option value="티켓/쿠폰">티켓/쿠폰</option>
+                        <option value="스포츠">스포츠</option>
+                        <option value="공구/산업용품">공구/산업용품</option>
+                        <option value="기타잡화">기타잡화</option>
+                    </select>
+                    <input type="text" placeholder="찾으시는 상품을 입력해 주세요" class="search__input">
+                </div>
+                <ul class="member_info">
+                    <li>
+                        <a href="#">
+                            <span class="material-icons">perm_identity</span>
+                            <span>마이 페이지</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="material-icons">turned_in_not</span>
+                            <span>찜 목록</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="material-icons">access_time</span>
+                            <span>참여 경매</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- !! 메인 페이지 내용(지워서 사용함) !! start -->
+    <!--  !! 여기에 내용 넣기 !!  by.Hong  -->
+
+    <div align="center">
+        <div class="main_body_title" align="left">
+            <ul>
+                <li style="font-size:30px">
+                    제목제목제목제목제목
+                </li>
+            </ul>
+        </div>
+
+        <div class="main_body" align="left">
+            <!-- 페이지 맨위로 가는 버튼
+            <div id="quickTop" style="position:fixed;z-index:999;bottom:15px;right:15px;padding:0 20px;">
+                <a href="#" style="width:40px;height:40px;background-color:gray;color:white;">&nbsp;&nbsp;△&nbsp;&nbsp;<br>TOP</a>
+            </div>
+            -->
+            <div class="product_summary">
+                <!-- 경매의 대략적인 정보-->
+                <div class="summary_slideshow" align="center">
+                    <div class="slideshow-container">
+
+                        <div class="mySlides fade">
+                            <img class="target1" src="./img/product/1.jpg" data-zoom="2">
+                        </div>
+
+                        <div class="mySlides fade">
+                            <img class="target2" src="./img/product/2.jpg" data-zoom="2">
+                        </div>
+                        <div class="mySlides fade">
+                            <img class="target3" src="./img/product/product_ex.png" data-zoom="2">
+                        </div>
+                        <div class="mySlides fade">
+                            <img class="target4" src="./img/product/3.jpg" data-zoom="2">
+                        </div>
+                        <div class="mySlides fade">
+                            <img class="target5" src="./img/product/4.jpg" data-zoom="2">
+                        </div>
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                    </div>
+                    <br>
+
+                    <div class="dot_group">
+                        <span class="dot" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                        <span class="dot" onclick="currentSlide(4)"></span>
+                        <span class="dot" onclick="currentSlide(5)"></span>
+
+                    </div>
+
+
+                </div>
+
+                <div class="summary_information">
+                    <div class="summary_info_nowPrice">
+                        <ul>
+                            <li>
+                                <label for="now_price">현재가</label>
+                                <p style="color:cornflowerblue">30,000원</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="summary_info">
+                        <ul>
+
+                            <li>
+                                <label for="id">판매자</label>
+                                <p>꾸엥꾸꾸엥 님</p>
+                            </li>
+                            <li>
+                                <label for="boarddate">경매기간</label>
+                                <p>2020/06/23 00:00:01 ~ 2020/06/24 23:59:59</p>
+                            </li>
+                            <li>
+                                <label for="start_price">시작가</label>
+                                <p>15,000원</p>
+                            </li>
+                            <li>
+                                <label for="end_price">즉시 구매가</label>
+                                <p>35,000원</p>
+                            </li>
+
+
+                            <li>
+                                <label for="boarddate">최고 응찰자</label>
+                                <p><br></p>
+                            </li>
+                            <li>
+                                <label for="boarddate">판매자 등급</label>
+                                <p>플레티넘</p>
+                            </li>
+                            <li>
+                                <label for="boarddate">거래방법</label>
+                                <p>직거래 / 택배</p>
+                            </li>
+
+                            <li>
+                                <label for="boarddate">남은시간</label>
+                                <p>20:19:49</p>
+                            </li>
+                            <li>
+                                <label for="boarddate">응찰단위</label>
+                                <p>1,000원</p>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="btns" align="center">
+                        <button type="button" id="bid_btn" onclick="bidInsert()">응찰하기</button>
+                        <button type="button" id="bid_btn2">즉시구매</button>
+                        <button type="button" id="bid_btn3">문의하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail_page_nav">
+                <span>
+                    <a type="button" id="bid_list_btn">응찰자 리스트</a>
+                </span>
+                <span>
+                    <a type="button" id="product_information_btn">상품 정보</a>
+                </span>
+                <span>
+                    <a type="button" id="information_detail_btn">상품 설명</a>
+                </span>
+                <span style="border-right: 1px solid black">
+                    <a type="button" id="seller_detail_btn">판매자 정보</a>
+                </span>
+            </div>
+
+            <div class="bid_list" align="center">
+                <!-- 응찰자 리스트 -->
+                <div class="bid_list_column">
+                    <div class="bid_list_no">응찰 번호</div>
+                    <div class="bid_price">응찰 가격</div>
+                    <div class="bidder_id">응찰자</div>
+                    <div class="bid_time">응찰 시간</div>
+                </div>
+                <div class="bidder">
+                    <div class="bid_list_no">응찰 번호</div>
+                    <div class="bid_price" style="color:dodgerblue">응찰 가격</div>
+                    <div class="bidder_id" style="color:#F9A825">응찰자</div>
+                    <div class="bid_time" style="color:orangered">응찰 시간</div>
+                </div>
+                <div class="bidder">
+                    <div class="bid_list_no">응찰 번호</div>
+                    <div class="bid_price" style="color:dodgerblue">응찰 가격</div>
+                    <div class="bidder_id" style="color:#F9A825">응찰자</div>
+                    <div class="bid_time" style="color:orangered">응찰 시간</div>
+                </div>
+                <div class="bidder">
+                    <div class="bid_list_no">응찰 번호</div>
+                    <div class="bid_price" style="color:dodgerblue">응찰 가격</div>
+                    <div class="bidder_id" style="color:#F9A825">응찰자</div>
+                    <div class="bid_time" style="color:orangered">응찰 시간</div>
+                </div>
+                <div class="bidder">
+                    <div class="bid_list_no">응찰 번호</div>
+                    <div class="bid_price" style="color:dodgerblue">응찰 가격</div>
+                    <div class="bidder_id" style="color:#F9A825">응찰자</div>
+                    <div class="bid_time" style="color:orangered">응찰 시간</div>
+                </div>
+            </div>
+
+
+            <div class="product_information" style="display: none;">
+                <!-- 경매의 상세 정보 -->
+                <div class="img_1">
+                    <span class="dot1"></span>
+                    <span>사진첨부1</span>
+                    <div align="center">
+                        <img src="./img/product/1.jpg" align="center"></div>
+                </div>
+                <div class="img_2">
+                    <span class="dot1"></span>
+                    <span>사진첨부2</span>
+                    <div align="center">
+                        <img src="./img/product/2.jpg" align="center">
+                    </div>
+                </div>
+                <div class="img_3">
+                    <span class="dot1"></span>
+                    <span>사진첨부3</span>
+                    <div align="center">
+                        <img src="./img/product/product_ex.png" align="center">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="information_detail" style="display: none;">
+                <span class="dot1"></span>
+                <span>제품 설명</span>
+                <p>
+                    가나다라마바사아자차카타파하<br>
+                    가나다라마바사아자차카타파하<br>
+                    가나다라마바사아자차카타파하<br>
+                    가나다라마바사아자차카타파하<br>
+                    가나다라마바사아자차카타파하<br>
+                    가나다라마바사아자차카타파하<br>
+                </p>
+            </div>
+            <div class="seller_detail" style="display: none;">
+                <span class="dot1"></span>
+                <span>판매자 정보</span>
+                <ul>
+                    <li>
+                        <label for="id">판매자 아이디</label>
+                        아푸아푸아푸
+                    </li>
+                    <li>
+                        <label for="grade">판매자 등급</label>
+                        플레티넘
+                    </li>
+                    <li>
+                        <label for="info1">정보1</label>
+                        정보정보정보
+                    </li>
+                    <li>
+                        <label for="info1">정보2</label>
+                        정보정보정보
+                    </li>
+                    <li>
+                        <label for="info1">정보3</label>
+                        정보정보정보
+                    </li>
+
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- !! 메인 페이지 내용(지워서 사용함) !! end -->
+
+    <!-- 푸터 영역 -->
+    <div class="footer" style="margin-top: 100px;">
+        <div class="upper_footer">
+            <ul class="upper_footer--list">
+                <li>
+                    <a href="#">
+                        올션소개
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        채용정보
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        공지사항
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        이용약관
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        개인정보처리방침
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        전자금융거래약관
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        제휴서비스
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="lower_footer">
+
+        </div>
+    </div>
+
+    <!--  스크립트 영역  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        
+        var check = false;
+        
+        $(function() {
+            // 광고 없애기
+            $(".ad__banner--closeBtn").click(function() {
+                $(".ad__banner").hide();
+            })
+
+            // 헤더 고정
+            var header = $('.lower_header');
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 0) {
+                    header.addClass('sticky');
+                } else {
+                    header.removeClass('sticky');
+                }
+            })
+
+            // 카테고리 누를 때마다 이동
+            $("ul.deadline-items__category a").click(function() {
+                //                
+                //                var activeTab = $(this).attr('id');
+                //                
+                //				$('ul.deadline-items__category a').removeClass('active');
+                //				$('.menu-box').removeClass('active');
+                //				$(this).prop('checked', true);
+                //				$('div#' + activeTab).addClass('active');
+            })
+        });
+
+        //여기부터 이미지 슬라이드. by.HONG
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+
+        }
+
+        function showSlides(n) {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+
+
+            if (n > slides.length) {
+                slideIndex = 1
+            }
+            if (n < 1) {
+                slideIndex = slides.length
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+
+
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+            mag(slideIndex);
+        }
+
+        //여기까지 이미지 슬라이드.
+        
+        //여기부터 이미지 돋보기기능. by.HONG
+        
+        
+        function mag(i) {
+            var target = $('.target' + i);
+            var zoom = target.data('zoom');
+
+            $(".mySlides")
+                .on('mousemove', magnify)
+                .prepend("<div class='magnifier'></div>")
+                .children('.magnifier').css({
+                    "background": "url('" + target.attr("src") + "') no-repeat",
+                    "background-size": target.width() * zoom + "px " + target.height() * zoom + "px"
+                });
+
+            var magnifier = $('.magnifier');
+
+            function magnify(e) {
+
+                // 마우스 위치에서 .magnify의 위치를 차감해 컨테이너에 대한 마우스 좌표를 얻는다.
+                var mouseX = e.pageX - $(this).offset().left;
+                var mouseY = e.pageY - $(this).offset().top;
+
+                // 컨테이너 밖으로 마우스가 벗어나면 돋보기를 없앤다.
+                if (mouseX < $(this).width() && mouseY < $(this).height() && mouseX > 0 && mouseY > 0) {
+                    magnifier.fadeIn(100);
+                } else {
+                    magnifier.fadeOut(100);
+                }
+
+                //돋보기가 존재할 때
+                if (magnifier.is(":visible")) {
+
+                    // 마우스 좌표 확대될 이미지 좌표를 일치시킨다.
+                    var rx = -(mouseX * zoom - magnifier.width() / 2);
+                    var ry = -(mouseY * zoom - magnifier.height() / 2);
+
+                    //돋보기를 마우스 위치에 따라 움직인다.
+                    //돋보기의 width, height 절반을 마우스 좌표에서 차감해 마우스와 돋보기 위치를 일치시킨다.
+                    var px = mouseX - magnifier.width() / 2;
+                    var py = mouseY - magnifier.height() / 2;
+
+                    //적용
+                    magnifier.css({
+                        left: px,
+                        top: py,
+                        backgroundPosition: rx + "px " + ry + "px"
+                    });
+
+
+                }
+            }
+        };
+        //여기까지 이미지 돋보기기능
+        
+        $(function() {
+            $("#bid_list_btn").click(function() {
+                $(".bid_list").toggle();
+                $(".product_information").hide();
+                $(".information_detail").hide();
+                $(".seller_detail").hide();
+            });
+
+            $("#product_information_btn").click(function() {
+                $(".product_information").toggle();
+                $(".bid_list").hide();
+                $(".information_detail").hide();
+                $(".seller_detail").hide();
+            });
+            
+            $("#information_detail_btn").click(function() {
+                $(".information_detail").toggle();
+                $(".bid_list").hide();
+                $(".product_information").hide();
+                $(".seller_detail").hide();
+            });
+            
+            $("#seller_detail_btn").click(function() {
+                $(".seller_detail").toggle();
+                $(".bid_list").hide();
+                $(".information_detail").hide();
+                $(".product_information").hide();
+            });
+        });
+        
+    </script>
+</body>
+
+</html>

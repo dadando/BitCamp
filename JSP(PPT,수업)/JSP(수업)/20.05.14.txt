@@ -1,0 +1,282 @@
+#1장 JSP 입문
+
+#간단한 JSP문
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@page import="java.util.Calendar" %>
+<html>
+<head>
+	<%
+	Calendar c= Calendar.getInstance();
+	int hour = c.get(Calendar.HOUR_OF_DAY);
+	int minute = c.get(Calendar.MINUTE);
+	int second = c.get(Calendar.SECOND);
+	%>
+<meta charset="UTF-8">
+<title>현재 시각</title>
+</head>
+<body>
+현재 시간은 <%=hour %>시<%=minute %>분<%=second %>초 입니다.
+</body>
+</html>
+
+<% %> => scriptlet.  내부에 자바코드를 작성하면 된다.
+
+C:\Project156\Jsp_Source\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\Practice_JSP\org\apache\jsp\Practice0514
+<--경로 알아둘것. JSP에서 사용한 자바소스코드를 자동생성해서 저장됨.
+
+#3장 Servlet의 핵심 사항들
+
+#클라이언트에서 전송되는 요청 처리
+
+#요청이 GET방식으로 전송되어 올경우
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>로그인</h1>
+	<form action="login" method="get">
+	아이디: <input type="text" name="id"/><br>
+	비밀번호: <input type="text" name="password"/><br>
+	<input type="submit" value="로그인"/>
+	</form>
+</body>
+</html>
+
+=> url에 전송된 값들이 표시된다.
+
+@WebServlet  : 어노테이션
+ 위 언어표시가 나오면 해당 서블릿클래스 파일을 실행하라는 의미를 지닌다.
+
+#POST방식 (method="post")
+
+
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("id");
+		String passwd = request.getParameter("passwd");
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("아이디="+id+"<br>");
+		out.println("비밀번호="+passwd+"<br>");
+	}
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("id");
+		String passwd = request.getParameter("passwd");
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("아이디(post)="+id+"<br>");
+		out.println("비밀번호(post)="+passwd+"<br>");
+	}
+
+
+#한글문제 해결하는법
+(Get방식에서)
+server.xml 에서 63번째줄 <Connector 맨뒷줄에 URIEncoding="utf-8" 을 추가한다.
+
+(Post방식에서)
+servlet클래스에서 doPost() 메소드 첫번째 문장에 request.setCharacterEncoding("utf-8"); 을 추가한다.
+
+
+#하나의 파라미터 이름으로 여러 개의 파라미터 값 처리하기
+=> Dog 예제.
+
+
+#간단한 세션 예제
+#HttpSession 인터페이스 사용
+(setName)
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	HttpSession session = request.getSession();
+	session.setAttribute("name", "오정원");
+	response.setContentType("text/html;charset=utf-8");
+	PrintWriter out = response.getWriter();
+	out.println("<h1>이름저장</h1>");
+}
+
+(getName)
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	HttpSession session = request.getSession();
+	String name=(String)session.getAttribute("name");
+	response.setContentType("text/html;charset=utf-8");
+	PrintWriter out = response.getWriter();
+	out.println("<h1>name="+name+"</h1>");
+}
+
+
+#4장 JSP 기본요소
+
+#공간을 나눠서 파일을 출력
+includeTest.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%@ include file="header.jsp" %>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>includeTest.jsp파일입니다.</h1>
+	<%@include file="footer.jsp" %>
+</body>
+</html>
+
+header.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<h3>header.jsp파일의 내용이 들어가는 곳입니다.</h3>
+<hr>
+
+footer.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<hr>
+<h3>footer.jsp 파일의 내용이 들어가는 곳입니다.</h3>
+
+=>3개의 공간으로 위에서 부터 header파일, includeTest파일, footer파일 순으로 출력된다.
+
+
+#taglib지시어
+ : 표준 태그 라이브러리나 커스텀 태그 등을 사용할때 접두사를 지정하기 위해 사용
+
+예제1)
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<h1><%=getStr() %></h1>
+<%!
+private String getStr(){
+	str+="테스트입니다.";
+	return str;
+}
+private String str="선언문 ";
+%>
+
+예제2)
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%!
+public int sum(){
+	int total=0;
+	for(int i=1;i<=100;i++){
+		total+=i;
+	}
+	return total;
+}
+%>
+<%
+String str="1부터 100까지의 합";
+%>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<h2><%=str %>은<b><%=sum() %></b>입니다.</h2>
+	<br>
+	<h2><%=str %>에 3을 곱하면 <b><%=sum()*3 %></b>이 됩니다.</h2>
+	<br>
+	<h2><%=str %>을 1000으로 나누면 <b><%=sum()/1000. %></b>가 됩니다.</h2>
+</body>
+</html>
+
+
+#5장 내장객체와 액션태그
+#내장객체의 개요
+ request : 클라이언트의 HTTP요청 정보를 저장한 객체
+ response : HTTP 요청에 대한 응답 정보를 저장한 객체
+ session : 클라이언트의 세션정보를 저장한 객체
+ pageContext  
+ out  
+ application : 하나의 객체에 하나의 어플리케이션
+ config 
+ page
+ exception
+
+#request 객체
+getParameterNames() : 요처엥 포함된 모든 파라미터 이름을 리턴한다.
+
+예제)
+#requestTest1_Form.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Request Test</title>
+</head>
+<body>
+	<h1>Request 예제입니다.</h1>
+	<form action="requestTest1.jsp" method="post">
+	<table border="1" width="400">
+		<tr>
+			<td>이름</td>
+			<td><input type="text" name="name"></td>
+		</tr>
+		<tr>
+			<td>성별</td>
+			<td>
+				남<input type="radio" name="gender" value="male">
+				여<input type="radio" name="gender" value="female">
+			</td>
+		</tr>
+		<tr>
+			<td>취미</td>
+			<td>
+				독서<input type="checkbox" name="hobby" value="독서">
+				게임<input type="checkbox" name="hobby" value="게임">
+				TV시청<input type="checkbox" name="hobby" value="TV시청">
+				축구<input type="checkbox" name="hobby" value="축구">
+				기타<input type="checkbox" name="hobby" value="기타">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit" value="전송"></td>
+		</tr>
+	</table>
+	</form>
+</body>
+</html>
+
+#requestTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%  request.setCharacterEncoding("utf-8");%>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Request예제입니다.</h1>
+	<table border="1" width="400">
+		<tr>
+			<td>이름</td>
+			<td><%=request.getParameter("name") %></td>
+		</tr>
+		<tr>
+			<td>성별</td>
+			<td>
+				<%if(request.getParameter("gender").equals("male")){%> 남자
+				<%}else{%>여자<%}%>
+			</td>
+		</tr>
+		<tr>
+			<td>취미</td>
+			<td>
+				<%
+				String[] hobby=request.getParameterValues("hobby");
+				for(int i=0;i<hobby.length;i++){
+				%>
+				<%=hobby[i] %>&nbsp;&nbsp;
+				<%} %>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
+
+

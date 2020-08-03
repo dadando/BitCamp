@@ -1,0 +1,453 @@
+#onfocus - 포커스를 얻었을때 이벤트가 발생합니다.
+#onblur - 포커스를 잃었을때 이벤트가 발생합니다.
+#onchange - 교체(체인지)시 이벤트가 발생합니다.
+#onsubmit - 폼보낼시 이벤트가 발생합니다.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		function trans(){
+			var txt;
+			txt=document.form1.id.value;
+			txt=txt.toUpperCase();
+			document.form1.id.value=txt;
+		}
+	</script>
+</head>
+<body>
+	<form name="form1">
+		string객체 예제<br/>
+		ID를 입력후 다음 양식으로 커서를 옮기면 입력한 ID를 대문자로 변경합니다.<br/><br/>
+		ID : <input type="text" name="id" onblur="trans();"/><br/><br/>
+		Email : <input type="text" name="email"/>
+	</form>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		function check(){
+			var email,id,n;
+			email=document.form1.email.value;
+			n=email.indexOf("@");
+			if(n>0){
+				document.form1.id.value=email.substr(0,n);
+			}else{
+				alert("정확한 Email주소를 입력하세요.")
+			}
+		}
+	</script>
+</head>
+<body>
+	<form name="form1">
+		string객체 예제<br/>
+		Email을 체크합니다.<br/><br/>
+		Email : <input type="text" name="email" onblur="check();"/><br><br>
+		ID : <input type="text" name="id">
+	</form>
+</body>
+</html>
+=>이메일에서 @위치를 찾아서 n에 저장. 0번째 부터 n위치까지 값을 찾아서 ID에 입력.
+
+console.log("n="+n);
+: 원하는 값이 나오는지 점검할때 사용. 관리자 모드에서 Console에 로그가 나타난다.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		function check(){
+			if(confirm("submit2로 이동합니다.")){
+				//document.form1.submit();
+				return true;
+			}else{
+				return false;
+			}
+		}
+	</script>
+</head>
+<body>
+	<form name="form1" action="submit2.html" onsubmit="return check();">
+		Form객체 예제<br />
+		submit를 확인하면 submit2.html로 이동합니다.<br /><br />
+		<input type="submit" value="확인" />
+	</form>
+</body>
+</html>
+
+=> 알림창에서 확인을 누르면 설정해놓은 문서로 넘어가고, 취소를 누르면 현재 창에 머무른다.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		function check(){
+			if(confirm("submit2로 이동합니다.")){
+				document.form1.submit();
+				//return true;
+			}else{
+				return false;
+			}
+		}
+	</script>
+</head>
+<body>
+	<form name="form1" action="submit2.html">
+		Form객체 예제<br />
+		submit를 확인하면 submit2.html로 이동합니다.<br /><br />
+		<input type="button" onclick="check();" value="확인" />
+	</form>
+</body>
+</html>
+
+==>버튼을 생성하고 onclick으로 이벤트를 실행시킨다.
+==>버튼은 서버를 전송하는 기능이 없어서 submit이라는 메소드가 꼭 필요하다.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		function select(){
+			alert(document.form1.fruit.options[
+				document.form1.fruit.selectedIndex].value+"를 선택하셨습니다.");
+		}
+	</script>
+</head>
+<body>
+	<form name="form1">
+		Select 객체 예제<br>
+		과일 선택이 변경되면 선택된 과일을 경고창에 출력한다.<br><br>
+		과일<select name="fruit" onchange="select();">
+			<option value="">과일을 선택하세요</option>
+			<option value="사과">사과</option>
+			<option value="딸기">딸기</option>
+			<option value="복숭아">복숭아</option>
+		</select>
+	</form>
+</body>
+</html>
+
+=>onchange 를 이용하여 이벤트(변경)이 발생시 메소드 호출해서 실행.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript">
+		var seoul = new Array("강남구","서초구","종로구","중구","노원구");
+		var kyunggi = new Array("수원시","성남시","고양시","안성시","용인시");
+		function select_city(form1){
+			if(form1.city.selectedIndex == 1){
+				for(var i=0;i<5;i++){
+					form1.gu.options[i+1].text = seoul[i];
+				}
+			}else if(form1.city.selectedIndex==2){
+				for(var i=0;i<5;i++){
+					form1.gu.options[i+1].text = kyunggi[i];
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<form name="form1">
+		select객체 예제<br>
+		지역을 선택하세요.<br><br>
+		시.도 <select name="city" onchange="select_city(this.form);">
+			<option> 지역을 선택하세요.</option>
+			<option>서울</option>
+			<option>경기</option>
+		</select>
+		&nbsp;&nbsp;&nbsp;
+		시.구 <select name="gu">
+			<option>선택하세요</option>
+			<option></option>
+			<option></option>
+			<option></option>
+			<option></option>
+			<option></option>
+		</select>
+	</form>
+</body>
+</html>
+
+=> 첫번째 항목에서 선택받은 값에 따라 두번째 선택항목을 조건에 맞게 받는다.
+=> 서울 선택시 서울배열에 있는 항목을 두번째 선택항목에 추가.
+=> 경기 선택시 경기배열에 있는 항목을 두번째 선택항목에 추가.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+<script>
+function jumin_check() {
+	var chk_list = "";
+	if (document.input_form.ju1.value == "")
+	{
+		alert("주민번호(앞자리)를 입력하세요!!!");
+		document.input_form.ju1.focus();
+		return false;
+	} 
+	else if (document.input_form.ju2.value == "")
+	{
+		alert("주민번호(뒷자리)를 입력하세요!!!");
+		document.input_form.ju2.focus();
+		return false;
+	} 
+	else
+	{
+		var str1 = document.input_form.ju1.value;
+		var str2 = document.input_form.ju2.value;
+		if (str1.length != 6)
+		{
+			alert("주민번호 확인(생년월일 6자리)!!!");
+			document.input_form.ju1.focus();
+			return false;
+		}
+		else if (str2.length != 7)
+		{
+			alert("주민번호 확인(7자리)!!!");
+			document.input_form.ju2.focus();
+			return false;
+		}
+		else
+		{
+			str = str1 + str2;
+			var w = 2, hap = 0, chk;
+			for (i=0; i<str.length-1; i++)
+			{
+				ch = str.substring(i, i+1);
+				if (!(ch >= "0" && ch <= "9"))
+				{
+					alert("특수문자,일반문자가 포함, 다시 입력!!!");
+					document.input_form.ju1.focus();
+					return false;
+				}
+				else
+				{
+					hap += parseInt(ch) * w;
+					w++;
+					if (w == 10)
+						w = 2;
+				}
+			}
+			chk = 11 - (hap % 11);
+			if (chk == 10)
+				chk = 0;
+			else if (chk == 11)
+				chk = 1;
+			
+			if (chk != parseInt(
+				str.substring(str.length-1, str.length)))
+			{
+				alert("주민번호 오류, 다시 입력!!!");
+				document.input_form.ju1.focus();
+				return false;
+			}
+		}
+	} // 주민번호 체크 <------
+	chk_list = document.input_form.ju1.value + "-" 
+			 + document.input_form.ju2.value + "(O)";
+	alert(chk_list);
+}
+</script>
+</head>
+<body>
+<form name="input_form" action="jumin_check.jsp" method="post"> 
+<!-- method="post" : 양식 데이터를 제출할 때 사용(중요한 데이터) -->
+<!-- method="get" : 중요하지 않고 짧은 데이터를 제출할 때 사용 -->
+	<input type="text" size="6" maxlength="6" name="ju1">-
+	<input type="text" size="7" maxlength="7" name="ju2">
+	<input type="button" value="체크" onclick="jumin_check()">
+</form>
+</body>
+</html>
+
+
+=> 주민번호 체크
+
+
+#11장 jQuery 라이브러리
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+#문서 객체 선택
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<!-- <script src="../js/jquery-3.5.1.js"></script> -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<!-- 다운받은 jquery파일을 사용하거나 링크를 통해서 사용 -->
+	<script>
+		//이벤트를 연결합니다.
+		$(document).ready(function(){
+			//스타일 속성을 변경한다.
+			$('h1').css('color','red');
+			$('h1').css('background','black');
+		});
+	</script>
+</head>
+<body>
+	<h1>Header</h1>
+	<h1>Header</h1>
+	<h1>Header</h1>
+</body>
+</html>
+
+#문서 객체 속성 추출
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			var src=$('script').attr('src');
+			alert(src);
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
+
+#속성 값을 입력해 속성 지정하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('img').attr('alt','jQuery 라이브러리를 사용한 속성지정');
+			$('img').attr('src','http://placehold.it/100x100');
+			$('img').attr('width','100');
+		});
+	</script>
+</head>
+<body>
+	<img>
+	<img>
+	<img>
+</body>
+</html>
+
+
+
+#속성 값을 입력해 스타일 속성 지정하기 (자주쓰는방법)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//스타일을 적용합니다.
+			$('.box').css('float','left');
+			$('.box').css('margin',10);
+			$('.box').css('width',100);
+			$('.box').css('height',100);
+			$('.box').css('backgroundColor','red');
+		})
+	</script>
+</head>
+<body>
+	<div class="box"></div>
+	<div class="box"></div>
+	<div class="box"></div>
+</body>
+</html>
+
+#객체를 입력해 스타일 속성 지정하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//스타일 적용
+			$('.box').css({
+				float: 'left',
+				margin: 10,
+				width: 100,
+				height: 100,
+				backgroundColor: 'red'
+			})
+		})
+	</script>
+</head>
+<body>
+	<div class="box"></div>
+	<div class="box"></div>
+	<div class="box"></div>
+</body>
+</html>
+
+#함수를 이용해 스타일 속성 지정하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//문서 객체를 추가합니다.
+			var output = '';
+			for(var i=0; i<256;i++){
+				output += '<div></div>';
+			}
+			document.body.innerHTML = output;
+			
+			//스타일 적용
+			$('div').css({
+				height: 2,
+				backgroundColor: function(i){
+					return 'rgb('+i+','+i+','+i+')';
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

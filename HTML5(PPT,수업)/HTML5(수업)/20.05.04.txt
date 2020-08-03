@@ -1,0 +1,177 @@
+#HTML공부할 수 있는 사이트
+https://www.w3schools.com/
+
+#명령 프롬프트
+*ipconfig : ip주소 확인
+*nslookup : DNS 서버이름, ip주소 (한국통신)
+
+#TOMCAT
+포트넘버 : 8080
+
+#메모장에 명령문을 적고 저장할때 모든파일로 설정바꾼뒤, 톰캣 하위 ROOT폴더안에 저장
+#저장할 때 제목은 index.html 또는 index.htm으로 저장
+#index.html > index.htm > index.jsp 순으로 우선순위 실행한다. 실행되면 그 뒤에는 실행안됨.
+
+#환경설정
+이클립스-> File -> Switch Workspace -> others -> Jsp_Source
+재실행 이후
+Window -> Preference -> Server -> Runtime Environment -> Add -> Apache Tomcat v8.5, Create a new local server체크 -> 디렉토리 (C:\Program Files\Apache Software Foundation\Tomcat 8.5) -> Finish
+
+Tomcat admin port => 8005
+
+#웹에서 인코딩 방식
+utf-8(주로 사용)   or   euc-kr
+
+Window -> Preferences -> Web -> HTML files,JSP Files 둘다 Encoding방식 UTF-8로 바꿈.
+
+
+2장 웹페이지 기본 구조와 작성 방법
+
+01. HTML5 기본 용어
+
+#태그와 요소
+요소 : HTML 페이지를 구성하는 각 부품(제목,본문 등)
+태그 : 요소를 만들 때 사용하는 작성 방법
+
+02.페이지 구조와 작성법
+#스타일시트 (태그에 설정해서 사용 : 해당 태그가 사용된 문서에 대해 적용)
+1) 내부 스타일시트
+ : 해당 문서에만 적용 <style> 사용
+ #000000 : RGB 색상(16진수로 표현,2개씩 각각 R,G,B를 나타냄)
+Ex)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>HTML5 Basic</title>
+	<style>
+		h1{
+			color: white;
+			background: black;
+		}
+		h2{
+			color: blue;
+			background: black;
+		}
+	</style>
+</head>
+<body>
+	<h1>Hello World..!1</h1>
+	<h2>Hello World..!2</h2>
+	<h1>Hello World..!3</h1>
+	<h2>Hello World..!4</h2>
+</body>
+</html>
+
+#인라인 스타일 방식
+<h6 style="color:red;">Hello World..!4</h6>
+ : 태그 안에 직접 스타일을 집어넣음
+
+2) 외부 스타일시트
+ : 별도의 파일로 만들어 사용
+ css문서와 같은 위치에 있어야 한다.
+
+
+3장 HTML5 기본 태그
+#01. 글자 태그
+<br> : 줄바꿈
+<p> </p> : 본문설정
+<hr> : 수평줄 삽입
+
+*앵커태그
+하이퍼텍스트 : 사용자의 선택에 따라 특정 정보로 이동하는 조직된 문서
+a 태그(Anchor) : 다른 웹 페이지나 웹 페이지 내부의 특정 위치로 이동
+Href : Hyper Reference를 의미. 
+
+Ex)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML TEXT Basic Page</title>
+</head>
+<body>
+	<a href="http://www.hanbit.co.kr" target="_blank">한빛미디어</a><br>
+	<a href="http://www.naver.com" target="_blank">네이버</a><br>
+	<a href="http://www.daum.net" target="_blank">다음</a><br>
+</body>
+</html>
+
+ target = "_blank"  :  새 창을 열어서 링크 열어줌.
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML TEXT Basic Page</title>
+</head>
+<body>
+	<a href="mbc.html" >mbc</a><br>
+	<a href="kbs.html" >kbs</a><br>
+	<a href="sbs.html" >sbs</a><br>
+	<a href="#alpha" >Alpha 부분</a><br>
+	<a href="#beta" >Beta 부분</a><br>
+	<a href="#gamma" >Gamma 부분</a><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<h1 id="alpha">Alpha</h1>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<h1 id="beta"> Beta</h1>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<h1 id="gamma">gamma</h1>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
+
+ : 페이지 내에서 특정 문서로 이동. ( _blank를 넣어주면 새창으로 특정문서 이동)
+ : # 기능을 사용하여 페이지 내 특정 부분으로 이동(책갈피기능)
+
+#폰트 크기조절
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>HTML5 Basic</title>
+</head>
+<body>
+	<font size = "1">font size =1 </font><br>
+	<font size = "2">font size =2 </font><br>
+	<font size = "3">font size =3 </font><br>
+	<font size = "4">font size =4 </font><br>
+	<font size = "5">font size =5 </font><br>
+	<font size = "6">font size =6 </font><br>
+	<font size = "7">font size =7 </font><br>
+	<font size = "-1">font size =-1 </font><br>
+	<font size = "+1">font size =+1 </font><br>
+</body>
+</html>
+ : 기본 크기는 3이다. 즉 -1 은 2, +1은 4의 크기를 나타낸다.
+<font size = "5" color = "pink" face = "궁서">
+ : 글자체 변경은 face를 이용.
+
+#글자 모양 태그
+b : 굵은 글자   i : 기울어진 글자
+small : 작을 글자   sub : 아래 첨자  sup : 위 첨자
+ins : 밑줄 글자     del : 취소선이 그어진 글자
+
+
+
+
+#02. 목록 태그
+
+#내비게이션 메뉴
+<li> 는 목록요소 생성
+
+*순서가 없는 메뉴(ul)
+<body>
+	<ul>
+		<li>사과</li>
+		<li>바나나</li>
+		<li>오렌지</li>
+	</ul>
+</body>
+
+*순서가 있는 메뉴(ol)
+

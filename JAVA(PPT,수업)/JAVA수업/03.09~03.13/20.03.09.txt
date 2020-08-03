@@ -1,0 +1,228 @@
+###OT###
+Java - 6주 ~ 8주
+Oracle - 2주
+HTML / CSS - 1주	   부트스트랩(?) 따로공부해야됨.
+Javascript / jQuery - 1주
+JSP - 3주 ~ 4주
+Spring(MyBatis) - 4주
+Team Project - 8주
+
+www.eclipse.org
+
+\\192.168.0.22
+
+압축풀고 C드라이브에 Project156폴더만들기 안에 Java_Source폴더만들기.
+프로젝트폴더안에 eclipse폴더 복사. eclipse.exe 바탕화면에 바로가기 만들기
+
+C:\Program Files\Java\jdk1.8.0_241\bin
+
+
+####################################################
+#class앞에오는 것을 접근 제한자라고한다.
+ 1. public
+ 2. protected
+ 3. private
+ 4. 생략한 경우(default) 범위는 protected와 private사이 
+
+####public static void main(String[] args){	}
+#static이 붙은경우: 객체생성유무에 상관없이 호출이 가능하다.
+모든 메소드는 하나의 값을 저장할 수 있다.
+void는 메소드에 값을 저장하지 않고 비워둘때 쓴다.
+
+#소괄호안에는 인수(parameter)를 넣는다.
+ 1. 메소드를 정의할 때 쓰는 인수: 형식매개변수 or 가인수
+ 2. 호출할 때 쓰는 인수: 실매개변수 or 실인수
+
+#String[] : 명령행 매개변수
+#args : 변수
+
+
+###new Scanner(System.in);
+#Scanner : 생성자 / 클래스명과 동일한 이름을 가져야 한다.
+#System.in : keyboard에서의 입력
+#System.out : 모니터에서의 출력
+-둘다 앞에 static이 생략되어있다. 따라서 따로 객체 생성없이 사용이 가능하다.
+
+키보드 입력 한개를 유니코드(16bit)로 표현
+4bit - byte - 1. 문자표현의 최소단위
+             - 2. 데이터의 양을 나타내는 단위
+
+스택 : 변수들이 저장되는 공간
+힙 : 객체가 만들어지는 공간
+
+*print()
+*println()
+*printf()
+
+
+###구구단/정수 2개 입력/입력의 오름차순 출력###
++ (if else)를 먼저 해서 작은 값을 min에 저장 큰값을 max에 저장한뒤
+for문의 범위에 사용하고 만들 수도 있다.
+
+Test01.java
+
+package bitcamp;
+
+import java.util.Scanner;
+
+public class Test01 {
+
+	public static void main(String[] args){
+		// TODO Auto-generated method stub
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("첫 번째 수: ");
+		int input = scan.nextInt();
+		System.out.print("두 번째 수: ");
+		int input2 = scan.nextInt();
+		int mul,mul2;
+		
+		if(input<input2) {
+		
+			for(int i=input;i<=input2;i+=1) {
+				System.out.print("***"+ i +"단***\t");
+			}
+			System.out.println();
+			for(int k = 1;k<10;k+=1) {
+				for(int i =input;i<=input2;i+=1) {
+					mul=i*k;
+					System.out.print(i+" * "+k+" = "+mul+"\t");
+				}	
+				System.out.println();
+			}
+			
+		}else {
+			for(int i=input2;i<=input;i+=1) {
+				System.out.print("***"+ i +"단***\t");
+			}
+			System.out.println();
+			for(int k = 1;k<10;k+=1) {
+				for(int i =input2;i<=input;i+=1) {
+					mul=i*k;
+					System.out.print(i+" * "+k+" = "+mul+"\t");
+				}	
+				System.out.println();
+			}
+			
+		}
+		
+	}// end main
+
+}
+
++ (if else)를 먼저 해서 작은 값을 min에 저장 큰값을 max에 저장한뒤
+for문의 범위에 사용하고 만들 수도 있다.
+
+GugudanEx01.java
+
+import java.util.Scanner;
+
+public class GugudanEx01 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		@SuppressWarnings("resource")
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("첫 번째 수: ");
+		int input = scan.nextInt();
+		System.out.print("두 번째 수: ");
+		int input2 = scan.nextInt();
+		
+		int min,max;
+		
+		if(input<input2) {
+			min = input;
+			max = input2;
+		}else {
+			min = input2;
+			max = input;
+		}
+		
+		for(int i=min;i<=max;i+=1) {
+			System.out.print("***"+ i +"단***\t");
+		}
+		System.out.println();
+		
+		for(int k = 1;k<10;k+=1) {
+			for(int i =min;i<=max;i+=1) {
+				int mul=i*k;
+				System.out.print(i+" * "+k+" = "+mul+"\t");
+			}	
+			System.out.println();
+		}
+		
+	} // end main
+}
+
+
+###클래스 사용###
+Gugudan.java
+
+package bitcamp;
+
+public class Gugudan {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Multiply gugu = new Multiply();
+		gugu.multi();
+	}
+
+}
+
+Multiply.java
+
+package bitcamp;
+
+import java.util.Scanner;
+
+public class Multiply {
+	
+	Scanner scan;
+	int i,j,k;
+	
+	
+	public Multiply() {
+		scan = new Scanner(System.in);
+	
+	}
+	
+	public void multi() {
+		System.out.print("첫 번째 정수: ");
+		int input = scan.nextInt();
+		System.out.print("두 번째 정수: ");
+		int input2 = scan.nextInt();
+		
+		if(input<input2) {
+			for(i=input;i<=input2;i+=1) {
+				System.out.print("***"+i+"단***\t");
+			}
+			System.out.println();
+			for(i=1;i<=9;i+=1) {
+				for(j=input;j<=input2;j++) {
+					k=j*i;
+					System.out.print(j+" * "+i+" = "+k+"\t");
+				}
+				System.out.println();
+			}
+			
+		}else {
+			for(i=input2;i<=input;i+=1) {
+				System.out.print("***"+i+"단***\t");
+			}
+			System.out.println();
+			for(i=1;i<=9;i+=1) {
+				for(j=input2;j<=input;j++) {
+					k=j*i;
+					System.out.print(j+" * "+i+" = "+k+"\t");
+				}
+				System.out.println();
+			}
+		}
+		
+	}
+}
+
+
+

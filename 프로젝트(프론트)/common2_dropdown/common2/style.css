@@ -1,0 +1,302 @@
+/* CSS RESET */
+* {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: 'Noto Sans', 'Nanum Gothic', sans-serif;
+    letter-spacing: -1px;
+/*    border: 1px solid;*/
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+li {list-style: none;}
+
+
+/* 모든 페이지 공통 영역 */
+
+/* desktop-size(min:1280) */
+/* 광고 배너 및 헤더 by 하나 */
+/* -- 광고 배너 */
+.ad__banner {
+    width: 100%;
+    height: 70px;
+    background-color: #C2C2C2;
+    position: relative;
+}
+
+.ad__banner--img {width: 100%;} /* 임의의 값 */
+
+.ad__banner--closeBtn {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: url(img/header/close_btn.png);
+}
+
+/* -- 헤더 > 위 */
+.upper_header {
+    width: 100%;
+    height: 32px;
+    background-color: #BDBDBD;
+}
+
+.upper_header--nav {
+    width: 1200px;
+    margin: 0 auto;
+    font-size: 12px;
+    line-height: 32px;
+}
+
+.upper_header--nav a {
+    color: #ffffff;
+}
+
+.upper_header--nav ul, li, p {
+    display: inline-block;
+}
+
+.upper_header--nav ul {
+    float: right;
+}
+
+.upper_header--nav ul::after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.upper_header--nav li:first-child {
+    padding-right: 16px;
+}
+
+
+/* -- 헤더 > 아래 */
+.lower_header {
+    width: 100%;
+    height: 80px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(112, 112, 112, 0.1);
+}
+
+/* 스크롤 작동할 때 --*/
+.lower_header.sticky {
+    position: fixed;
+    top: 0;
+    z-index: 999998;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    transition: 0.8s;
+}
+
+.lower_header--nav {
+    width: 1200px;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+.logo {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+
+.logo a {
+    color: #F9A825;
+    font-size: 36px;
+}
+
+.category {
+    display: inline-block;
+    padding-left: 50px;
+    vertical-align: middle;
+}
+
+.category img {
+    width: 44px;
+    height: 40px;
+}
+
+.search {
+    height: 40px;
+    display: inline-block;
+    margin-left: -4px;
+    padding-top: 20px;
+}
+
+.search--select {
+    height: 40px;
+    border-top: 2px solid #F9A825;
+    border-bottom: 2px solid #F9A825;
+    border-left: 2px solid #F9A825;
+    padding-left: 8px;
+    padding-right: 4px;
+}
+
+.search--select option {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.search__input {
+    width: 590px;
+    height: 40px;
+    border-top: 2px solid #F9A825;
+    border-bottom: 2px solid #F9A825;
+    border-right: 2px solid #F9A825;
+    margin-left: -4px;
+    padding-left: 12px;
+}
+
+.member_info {
+    float: right;
+    margin-top: 10px;
+}
+
+.member_info li {
+    text-align: center;
+    margin-left: 14px;
+    width: 48px;
+}
+
+.member_info li a {
+    display: inline-block;
+}
+
+/*
+.member_info li a img {
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+}
+*/
+
+.member_info .material-icons {
+    color: #575757;
+    font-size: 40px;
+}
+
+.member_info li a span {
+    font-size: 10px;
+    color: #575757;
+}
+
+/*메인 바디 by HONG*/
+.main_body{
+    height: 500px;
+}
+.dropdown-loginmenu{
+    position: relative;
+    display: inline-block;
+}
+.dropbtn-login{
+    background-color: white;
+    color: black;
+    margin-left: 15px;
+    font-size: 16px;
+    border: none;
+}
+.dropdown-login{
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    min-width:80px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-login a{
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-login a:hover{
+    background-color: black;
+    color: white;
+}
+.dropdown-loginmenu:hover .dropdown-login{
+    display: block;
+}
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+.dropbtn{
+    background-color: white;
+    color: black;
+    margin-left: 15px;
+    font-size: 16px;
+    border: none;
+}
+.dropdown-content{
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a{
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover{
+    background-color: black;
+    color: white;
+}
+
+.dropdown:hover .dropdown-content{
+    display: block;
+    
+}
+
+
+
+/* desktop-size(min:1280) */
+/* 푸터 영역 by 하나 */
+.upper_footer {
+    width: 100%;
+    height: 52px;
+    border-top: 1px solid rgba(112, 112, 112, 0.2);
+}
+
+.upper_footer--list {
+    width: 1200px;
+    height: inherit;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.upper_footer--list li {
+    font-size: 16px;
+    line-height: 52px;
+}
+
+.upper_footer--list li a {
+    border-right: 1px solid rgba(112, 112, 112, 0.5);
+    padding: 0 46px;
+}
+
+.upper_footer--list li:last-child a {
+    border-right: none;
+}
+
+.lower_footer {
+    width: 100%;
+    height: 280px;
+    background-color: #F5F5F5;
+}
+

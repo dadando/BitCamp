@@ -1,0 +1,8 @@
+try {
+	menu = scan.nextInt();
+}
+catch(InputMismatchException ime) {
+	System.out.println("입력 오류!!!");
+	scan.nextLine();
+	continue;
+}

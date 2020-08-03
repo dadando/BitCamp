@@ -1,0 +1,129 @@
+#03. 테이블 태그
+ table : 표 삽입
+ tr : 표에 행삽입
+ th : (글자를 굵게,위치는 가운데) 표의 제목 셀 생성 (열 생성)
+ td : 표의 일반 셀 생성
+
+Ex)
+<body>
+	<table border="1" align="center" bgcolor = "skyblue" width="500px"
+height ="150px" cellspacing = "10" cellpadding="5">
+		<tr>
+			<th></th>
+			<th>월</th>
+			<th>화</th>
+			<th>수</th>
+			<th>목</th>
+			<th>금</th>
+		</tr>
+		<tr align = "right" bgcolor="red" valign = "bottom">
+			<th>1교시</th>
+			<th>영어</th>
+			<th>국어</th>
+			<th>과학</th>
+			<th>미술</th>
+			<th>기술</th>
+		</tr>
+		<tr>
+			<th>2교시</th>
+			<th>도덕</th>
+			<th>체육</th>
+			<th>영어</th>
+			<th>수학</th>
+			<th>사회</th>
+		</tr>
+	</table>
+</body>
+
+= border : 테이블 선구분
+= align : 위치선정 (가로)
+= bgcolor : 백그라운드색
+= width : 셀의 크기(가로)조절
+= height : 셀의 크기(세로)
+= cellspacing : 셀간의 간격
+= cellpadding : 셀 내부의 여백
+= valign : 위치 (세로)
+
+
+<body>
+	<table border="1">
+		<tr><!-- 1행 -->
+			<th colspan="2">지역별 홍차</th>
+		</tr>
+		<tr><!-- 2행 -->
+			<th rowspan="3">중국</th>
+			<td>정산소종</td>
+		</tr>
+		<tr><td>가문</td></tr>
+		<tr><td>운남</td></tr>
+		<tr><!-- 3행 -->
+			<th rowspan="4">인도 및 스리랑카</th>
+			<td>아삼</td>
+		</tr>
+		<tr><td>실론</td></tr>
+		<tr><td>다질링</td></tr>
+		<tr><td>닐기리</td></tr>
+	</table>
+</body>
+
+= colspan : 열병합
+= rowspan : 행병합
+= (1,1)에 가까운 셀이 기준점.
+
+#04. 미디어 태그
+*img태그
+src : 이미지의 경로지정
+alt : 이미지가 없을 때 나오는 글자 지정
+width : 너비지정
+height : 이미지의 높이 지정
+
+: 준비된 파일(이미지,비디오 등)을 HTML페이지와 같은 폴더에 넣어서 준비한다.
+
+<body>
+	<img src="song.jpg" alt="송중기" width="300">
+	<img src="Nothing" alt="그림이 존재하지 않습니다." width="300">
+</body>
+
+*다른폴더에 있을 때
+*audio,video태그
+src : 경로지정
+preload : 음악,비디오를 준비 중일 때 데이터를 모두 불러올지 여부 지정
+autoplay : 자동 재생 여부
+loop : 반복 여부
+controls : 재생 도구 출력 여부 지정
+width,height
+
+<audio src="Kalimba.mp3" controls = "controls"></audio>
+
+
+#4장 HTML5 입력 양식
+#01. 입력 양식 태그
+ *<form>태그 : 영역 생성
+ : method속성의 방식으로 action속성 장소에 데이터 전달.
+ GET방식 : 주소에 데이터를 입력해서 전달
+ POST방식 : 주소 변경 없이 비밀스럽게 데이터 전달
+
+<body>
+	<form>
+		<!-- 사용자가 입력하는 입력 양식 -->
+		<input type="text" name="text" value="text" /><br />
+		<input type="password" name="password" value="password" /><br />
+		<input type="file" name="file" value="file" /><br />
+		<input type="checkbox" name="checkbox" value="checkbox" /><br />
+		<input type="radio" name="radio" value="radio" /><br />
+		
+		<!-- 보이지 않는 입력 양식 -->
+		<input type="hidden" name="hidden" value="hidden" /><br />
+		
+		<!-- 버튼 -->
+		<input type="button" value="button"/><br/>
+		<input type="reset" value="reset"/><br/>
+		<input type="submit" value="submit"/><br/>
+		<input type="image" src="../images/song.jpg"/><br/>
+	</form>
+</body>
+
+#입력 양식 종류
+ radio는 한개만 선택가능, checkbox는 다중선택가능.
+
+

@@ -1,0 +1,78 @@
+#src/main/resources 폴더 하위에
+com폴더 생성후 하위에
+spring폴더 생성후 하위에
+mapper 폴더 생성후 하위에
+MemberMapper.xml파일 생성.
+
+MemberMapper.java 인터페이스 안의 메소드 이름과 
+MemberMapper.xml 내부의 id이름과 '반드시' 일치해야 한다.
+##########################내용#########################
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<!-- namespace="com.spring.mapper.MemberMapper는 MemberMapper인터페이스
+	(MemberMapper.class)의 이름을 사용한다. -->
+<mapper namespace="com.spring.mapper.MemberMapper">
+	<!-- HashMap 이용시 추가부분 -->
+	<resultMap type="java.util.HashMap" id="hashmapVO">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+	</resultMap>
+	
+	<resultMap type="com.spring.springmybatis.MemberVO" id="MemberResultMap">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+	</resultMap>
+	
+	<!-- id는 Mapper.java(여기선 MemberMapper.java)에 동일하게 사용해야 된다. -->
+	
+	<select id="getMembers" resultMap="MemberResultMap">
+		SELECT * FROM tab_mybatis order by id
+	</select>
+	
+	<!-- 
+	<select id="getMembers" parameterType="String" resultMap="MemberResultMap">
+		SELECT * FROM ${value} order by name
+	</select>
+	
+	<select id="getMember" parameterType="String" resultMap="MemberResultMap">
+		SELECT * FROM tab_mybatis WHERE id=#{id, javaType=String}
+	</select>
+	-->
+	
+	<select id="getMember" parameterType="String" resultMap="hashmapVO">
+		SELECT * FROM tab_mybatis WHERE id=#{id, javaType=String}
+	</select>
+	
+	<!-- parameterType 에는 구문에 전달될 파라미터의 패키지 경로를 패키지 경로를 포함한 전체 클래스명이나 별칭이 들어간다. -->
+	<!-- root-context에서 아래와 같이 typeAliasesPackage를 설정하면 패키지 경로 생략 가능.
+	<property name="typeAliasesPackage" value="com.spring.springmybatis" /> 추가시
+	<insert id="insertMember" parameterType="MemberVO" > 로 표현가능
+	-->
+	<insert id="insertMember" parameterType="com.spring.springmybatis.MemberVO" >
+		INSERT INTO tab_mybatis VALUES(#{id,javatype=String},#{name,jdbcType=VARCHAR},#{email},#{phone})
+	</insert>
+	<insert id="insertMember2" parameterType="hashmap">
+		INSERT INTO tab_mybatis VALUES(#{id,javatype=String},#{name,jdbcType=VARCHAR},#{email},#{phone})
+	</insert>
+	
+	<update id="updateMember" parameterType="com.spring.springmybatis.MemberVO">
+		UPDATE tab_mybatis SET name=#{name}, email=#{email}, phone=#{phone} WHERE id=#{id}
+	</update>
+	
+	<delete id="deleteMember" parameterType="String">
+		DELETE FROM tab_mybatis WHERE id=#{id}
+	</delete>
+	
+	<select id="getCount" resultType="int">
+		SELECT count(*) FROM tab_mybatis
+	</select>
+	
+</mapper>

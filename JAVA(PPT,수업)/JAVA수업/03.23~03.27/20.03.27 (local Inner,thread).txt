@@ -1,0 +1,285 @@
+16장   로컬이너클래스
+ : 메소드 본체안에 선언된 네스티드 클래스
+
+Ex)
+package InnerClassEx;
+
+import java.util.HashMap;
+
+public class NextedClassExample7 {
+
+	public static void main(String[] args) {
+		class ContactInfo{
+			String address;
+			String phoneNo;
+			ContactInfo(String address, String phoneNo){
+				this.address = address;
+				this.phoneNo = phoneNo;
+			}
+		}
+		HashMap<String,ContactInfo> hashtable = new HashMap<String,ContactInfo>();
+		hashtable.put("이순희", new ContactInfo("서울시 강남구","02-547-0000"));
+		hashtable.put("한지영", new ContactInfo("서울시 강북구","02-920-0000"));
+		hashtable.put("박철규", new ContactInfo("경기도 고양시","031-915-0000"));
+		ContactInfo obj = hashtable.get("한지영");
+		System.out.println("<한지영의 연락처>");
+		System.out.println("주소: "+obj.address);
+		System.out.println("전화번호: "+obj.phoneNo);
+	}
+}
+
+#일회용으로 쓰이는 로컬이너클래스를 사용할때
+별도로 이름을 지정해주지 않고 슈퍼클래스 타입으로 변수를 선언하여 사용한다.
+=> 이름 없는 이너클래스(anonymous inner class).
+Ex)
+(추상클래스)
+package InnerClassEx;
+
+abstract class MessageSender {
+	abstract void send(String message);
+}
+(본문)
+package InnerClassEx;
+
+public class NestecClassExample8 {
+	public static void main(String args[]) {
+		MessageSender obj = new MessageSender() {
+			void send(String message) {
+				System.out.println("발신: 마이다스");
+				System.out.println("수신: 빌 게이츠");
+				System.out.println("메시지: "+message);
+			}
+		};
+		obj.send("굿 모닝");
+	}
+}
+
+#인터페이스를 이용한 로컬이너클래스
+//인터페이스의 메소드에는 abstract public이 자동 추가된다.
+package LocalInnerEx;
+
+public interface Player {
+	abstract public void play(String source);
+	abstract public void stop();
+}
+
+package LocalInnerEx;
+
+public class NestedClassExample10 {
+	
+	public static void main(String[] args) {
+		//인터페이스를 오버라이딩한 메소드들은 접근제한자 public을 무조건 붙여야 한다.
+		Player obj = new Player() {
+			public void play(String source) {
+				System.out.println("플레이 시작: "+source);
+			}
+			public void stop() {
+				System.out.println("플레이 종료");
+			}
+		};
+		obj.play("Let It Be.mp3");
+		obj.stop();
+	}
+}
+
+연습) 상품클래스
+package LocalInnerEx;
+
+public class SangpumEx01 {
+
+	public static void main(String[] args) {
+		Sangpum obj = new Sangpum() {
+			
+		};
+		obj.input();
+		obj.process();
+		obj.output();
+	}
+}
+
+#네스티드 인터페이스는 정적네스티드 인터페이스 한종류만 있다.
+==> 앞에 static을 안붙혀도 static이 자동삽입된다.
+
+
+18장 멀티스레드 프로그래밍 (채팅 프로그램에 이용)
+
+스레드(thread) : CPU가 실행할 수 있는 최소 실행 단위.
+
+#멀티클래스 프로그램의 작성방법
+1. java.lang.Thread클래스를 이용하는 방법
+2. java.lang.Runnable인터페이스를 이용하는 방법 <--- 주로 사용
+
+###########Thread클래스를 상속받게 되면##############
+      무조건 run() 메소드를 오버라이딩해서 사용해야된다.
+스레드를 실행하려면 thread.start(); 메소드를 호출해서 실행해야 된다.
+
+Ex)
+package ThreadEx;
+
+public class DigitThread extends Thread {
+	public void run() {
+		for(int cnt=0; cnt<10; cnt++) {
+			System.out.println(cnt);
+		}
+	}
+}
+package ThreadEx;
+
+public class MultithreadExample1 {
+
+	public static void main(String[] args) {
+		Thread thread = new DigitThread();  //스레드를 생성
+		thread.start();		          // 스레드를 시작
+		for(char ch = 'A';ch<='Z';ch++) {
+			System.out.println(ch);
+		}
+	}
+}
+
+#Thread.sleep(1000);  //static메소드
+ : 주어진 시간이 경과되기를 기다리는 메소드(ms단위)
+InterruptedException 발생 처리해야 된다.
+
+Ex)
+package ThreadEx;
+
+public class DigitThread extends Thread {
+	public void run() {
+		for(int cnt=0; cnt<10; cnt++) {
+			System.out.println(cnt);
+			try {
+				Thread.sleep(1000);
+			}
+			catch(InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+package ThreadEx;
+
+public class MultithreadExample1 {
+
+	public static void main(String[] args) {
+		Thread thread = new DigitThread();  //스레드를 생성
+		thread.start();	    	          // 스레드를 시작
+		for(char ch = 'A';ch<='Z';ch++) {
+			System.out.println(ch);
+			try {
+				Thread.sleep(1000);
+			}
+			catch(InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+#Runnable 인터페이스 이용
+package ThreadEx;
+
+class SmallLetters implements Runnable{
+	public void run() {
+		for(char ch='a';ch<='z';ch++) {
+			System.out.println(ch);
+		}
+	}
+}
+
+package ThreadEx;
+
+public class MultithreadExample3 {
+
+	public static void main(String[] args) {
+		Thread thread = new Thread(new SmallLetters());
+		thread.start();
+		char arr[] = {'ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ'
+				,'ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'};
+		for(char ch : arr) {
+			System.out.println(ch);
+		}
+	}
+}
+
+
+##스레드간의 데이터 교환(공유영역)
+ 공유영역에 공유 데이터를 저장한다.
+ synchronized(공유_객체) 를 이용해서 동기화를 시킨다.
+
+
+#스레드간의 신호 전송
+obj.notify();  : 다른 스레드로 신호를 보내는 메소드
+obj.wait();    : 다른 스레드로부터 신호가 오기를 기다리는 메소드
+
+#스레드의 상태를 알아내는 메소드
+Thread.State state = thread.getState();
+(열거타입)        (스레드객체)(상태를 리턴)
+
+Ex)
+package StateEx;
+
+public class MonitorThread extends Thread{
+	Thread thread;
+	MonitorThread(Thread thread){
+		this.thread = thread;
+	}
+	public void run() {
+		while(true) {
+			Thread.State state = thread.getState();
+			System.out.println("쓰레드의 상태: "+state);
+			if(state==Thread.State.TERMINATED)
+				break;
+			try {
+				Thread.sleep(2000);
+			}
+			catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

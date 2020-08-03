@@ -1,0 +1,432 @@
+/*상세페이지 by.HONG*/
+.main_body {
+    width: 1200px;
+    position: relative;
+}
+
+.product_summary {
+    margin-top: 30px;
+    padding: 20px;
+    height: 630px;
+    display: flex;
+    margin-bottom: 72px;
+    /*border-left: 1px solid #F9A825;
+    border-right: 1px solid #F9A825;*/
+}
+
+/*여기부터 사진슬라이드*/
+
+/* 돋보기 */
+.magnifier {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    border-radius: 100%;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85), 0 0 3px 3px rgba(0, 0, 0, 0.25);
+    display: none;
+}
+
+.summary_slideshow {
+    margin-top: 20px;
+    width: 600px;
+    height: 100%;
+    justify-content: flex-start;
+}
+
+.mySlides {
+    display: none;
+    width: 100%;
+
+}
+
+.mySlides img {
+    vertical-align: middle;
+    width: 600px;
+    height: 500px;
+}
+
+/* Slideshow container */
+.slideshow-container {
+    max-width: 600px;
+
+    position: relative;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: #F9A825;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev {
+    left: 0;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.next {
+    right: 0;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+
+.prev:hover,
+.next:hover {
+    color: rgba(256, 256, 256, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    cursor: pointer;
+    height: 12px;
+    width: 12px;
+    margin: 0 2px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.dot_group {
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+
+}
+
+.active,
+.dot:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Fading animation */
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+/* 화면에 따른 폰트 크기 조절 */
+@media only screen and (max-width: 300px) {
+
+    .prev,
+    .next,
+    .text {
+        font-size: 12px
+    }
+}
+
+/*여기까지 사진 슬라이드*/
+
+/*여기부터 summary의 텍스트 부분*/
+#seller_check_btn {
+    width: 110px;
+    height: 20px;
+    border-radius: 2px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.summary_information {
+    width: 600px;
+    justify-content: flex-end;
+    padding: 0 0 0 40px;
+    margin-top: 4px;
+    line-height: 40px;
+}
+
+.summary_info_category span {
+    font-size: 14px;
+}
+
+.summary_info font, .summary_info p {
+    font-size: 16px;
+    color: #616161;
+}
+
+.summary_information label {
+/*    padding-left: 10px;*/
+    margin-right: 10px;
+}
+
+.summary_info_nowPrice label {
+    width: 100px;
+    float: left;
+    font-size: 16px;
+}
+
+.summary_info_nowPrice li {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.summary_info_nowPrice li:first-child {
+    padding-bottom: 18px;
+    margin-bottom: 6px;
+    line-height: 24px;
+    border-bottom: 1px solid rgba(112, 112, 112, 0.2);
+}
+
+.summary_info label {
+    float: left;
+    font-size: 16px;
+    width: 100px;
+    color: #000000;
+}
+
+.btns {margin-top: 30px;}
+
+.btns button {
+    font-size: 18px;
+    width: 48%;
+    height: 48px;
+    border: 1px solid #F9A825;
+    border-radius: 4px;
+    color: #000000;
+    cursor: pointer;
+    background-color: #ffffff;
+    padding: 4px 0;
+}
+
+.btns button:hover,
+.btns button:active {
+    background-color: #F9A825;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.btns1 {
+    font-size: 12px;
+    width: 78px;
+    border-radius: 2px;
+    background-color: #616161;
+    color: white;
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+/*여기까지 summary */
+
+/*여기부터 응찰자리스트*/
+.bid_list {
+    margin: 20px 0;
+    width: 1200px;
+}
+
+.bid_list_column div {
+    width: 300px;
+    border-bottom: 1px solid gray;
+    margin-bottom: 10px;
+    margin-left: -4px;
+    line-height: 30px;
+    background-color: darkgray;
+    color: white;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+
+.bidder div {
+    width: 300px;
+    border-bottom: 1px solid gray;
+    padding: 0 0 10px 0;
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-left: -4px;
+    font-size: 14px;
+}
+
+.bidder div:first-child, .bid_list_column div:first-child {margin-left: 0;}
+
+.bid_price {font-weight: bold;}
+
+/*여이까지 응찰자 리스트*/
+
+/*여기부터 product_information*/
+.product_information {
+
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.product_information .dot1 {
+    height: 11px;
+    width: 11px;
+    margin: 0 2px;
+    background-color: dimgray;
+    border-radius: 50%;
+    display: inline-block;
+
+}
+
+.product_information img {
+    height: 800px;
+}
+
+.img_1,
+.img_2,
+.img_3 {
+    margin-top: 30px;
+    height: 800px;
+}
+
+.information_detail {
+    padding-left: 20px;
+    margin-top: 30px;
+    height: 400px;
+}
+
+.img_1 img,
+.img_2 img,
+.img_3 img {
+    width: 1000px;
+    height: 800px;
+    margin-top: 20px;
+}
+
+.information_detail p {
+    padding: 20px;
+}
+
+.seller_detail {
+    padding-top: 30px;
+    padding-left: 20px;
+}
+
+
+.seller_detail ul {
+    padding: 20px;
+    font-size: 15px;
+    margin-bottom: 40px;
+}
+
+.seller_detail label {
+    float: left;
+    font-size: 15px;
+    width: 150px;
+
+}
+
+/*여기까지 product_information*/
+/*네비게이션바 요약내용 아래*/
+.detail_page_nav li {
+    display: inline-block;
+    margin: 72px 0 36px -4px;
+    width: 300px;
+    height: 48x;
+    text-align: center;
+    line-height: 48px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.detail_page_nav li:first-child {margin-left: 0;}
+
+
+.detail_page_nav li:hover {font-weight: bold;}
+
+/*Modal css*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 10px 20px 30px 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close {
+    color: #BBBBBB;
+    float: right;
+    font-size: 46px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*seller_info 모달창css*/
+#seller_info ul{
+    border-top: thin solid darkgray;
+    border-bottom: thin solid darkgray;
+}
+
+#seller_info label{
+    width: 150px;
+}
+#seller_info legend{
+    font-size: 20px;
+    color: cornflowerblue;
+}
+
+/*bid_notify 모달창 css*/
+#bid_notify ul{
+    border-top: thin solid darkgray;
+    border-bottom:thin solid darkgray;
+}
+#bid_notify li{
+    border-bottom: thin solid darkgray;
+}
+
+#bid_notify label{
+    border-right: thin solid darkgray;
+}
+#bid_notify legend{
+    font-size: 20px;
+    color: cornflowerblue;
+}

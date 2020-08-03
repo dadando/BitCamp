@@ -1,0 +1,621 @@
+#1. text() 메서드로 내부글자 조작하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//내부글자를 변경합니다.
+			$('h1:nth-child(1)').text('<a href="#">text()</a>');
+			$('h1:nth-child(2)').html('<a href="#">html()</a>');
+		})
+	</script>
+</head>
+<body>
+	<h1>Header-0</h1>
+	<h1>Header-1</h1>
+</body>
+</html>
+
+#2. html() 메서드로 내부 글자 조작하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//변수를 선언합니다.
+			var text=$('h1').text();
+			var html=$('h1').html();
+			
+			//출력합니다.
+			alert("text: "+text);
+			alert("html: "+html);
+		})
+	</script>
+</head>
+<body>
+	<h1>Header-0</h1>
+	<h1>Header-1</h1>
+</body>
+</html>
+
+
+#클래스 조작
+addClass() : 클래스 추가
+removeClass() : 클래스 제거
+toggleClass() : 클래스 전환
+
+##마우스를 올렸다 내렸다 할때 이미지변경
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		#box{
+			width: 100px; height: 100px;
+			background-color: red;
+		}
+		#box.hover{
+			background-color: blue;
+			border-radius: 50px;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('#box').hover(function(){
+				//스타일을 변경합니다.
+				$('#box').addClass('hover');
+			}, function(){
+				//스타일을 변경합니다.
+				$('#box').removeClass('hover');
+			});
+		});
+	</script>
+	
+</head>
+<body>
+	<div id="box"></div>
+</body>
+</html>
+
+=> 마우스를 올리면 class가 추가되고 마우스를 빼면 class가 삭제된다.
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//스타일 변경 및 이벤트 연결
+			$('#box').css({
+				width: 100,
+				height: 100,
+				background: 'orange'
+			}).on('click',function(){
+				$(this).css('background','red');
+			}).on('mouseenter',function(){
+				$(this).css('background','blue');
+			}).on('mouseleave',function(){
+				$(this).css('background','orange');
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="box"></div>
+</body>
+</html>
+
+=> 마우스를 올리면 파랑색,빼면 주황색, 클리하면 빨간색으로 변함
+
+(위와같음)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			//스타일 변경 및 이벤트 연결
+			$('#box').css({
+				width: 100,
+				height: 100,
+				background: 'orange'
+			}).on({
+				click: function(){
+				$(this).css('background','red');
+				},
+				mouseenter: function(){
+				$(this).css('background','blue');
+				},
+				mouseleave: function(){
+				$(this).css('background','orange');
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="box"></div>
+</body>
+</html>
+
+=> 이벤트를 하나의 on에 묶어서 정의
+
+
+
+##mouseover/mouseout  vs  mouseenter/mouseleave
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		div.out{
+			width: 40%;
+			height: 120px;
+			margin: 0 15px;
+			background-color: #D6EDFC;
+			float: left;
+		}
+		div.in{
+			width: 60%;
+			height: 60%;
+			background-color: #FFCC00;
+			margin: 10px auto;
+		}
+		p{
+			line-height:1em;
+			margin:0;
+			padding:0;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+<body>
+	<div class="out overout">
+		<p>mouse event(moseover/mouseout)</p>
+		<div class="in overout">
+			<p>mouse event<br>(mouseover/mouseout)</p>
+			<p>0</p>
+		</div>
+		<p>0</p>
+	</div>
+	<div class="out enterleave">
+		<p>mouse event(mouseenter/mouseleave)</p>
+		<div class="in enterleave">
+			<p>mouse event(mouseenter/mouseleave)</p>
+			<p>0</p>
+		</div>
+		<p>0</p>
+	</div>
+	<script>
+		var i=0;
+		$("div.overout").mouseover(function(){
+			$("p:first",this).text("mouse over");
+			$("p:last",this).text(++i);
+		}).mouseout(function(){
+			$("p:first",this).text("mouse out");
+		});
+		
+		var n=0;
+		$("div.enterleave").mouseenter(function(){
+			$("p:first",this).text("mouse enter");
+			$("p:last",this).text(++n);
+		}).mouseleave(function(){
+			$("p:first",this).text("mouse leave");
+		});
+	</script>
+</body>
+</html>
+
+
+#이벤트를 주고 제거하기
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		//이벤트를 연결합니다.
+		$(document).ready(function(){
+			//이벤트를 연결합니다.
+			$('a').click(function(event){
+				//출력합니다.
+				alert('click');
+				alert(event.type+","+event.currentTarget);
+				
+				//기본 이벤트를 제거합니다.
+				event.preventDefault();
+			});
+		});
+	</script>
+</head>
+<body>
+	<a href="http://hanb.co.kr">Hanbit Media</a>
+</body>
+</html>
+
+
+#05. 시각 효과
+#메서드
+ show(속도)
+ hide
+ toggle
+ slideDown
+ slideUp
+ slideToggle
+ fadeIn
+ fadeOut
+ fadeToggle
+
+#속도 종류
+ slow / normal / fast
+
+#태그가 사라졌다가 나타나는 효과
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		//이벤트를 연결합니다.
+		$(document).ready(function(){
+			//이벤트를 연결합니다.
+			$('button').click(function(){
+				//간단한 효과를 적용합니다.
+				$('.page').fadeToggle('slow');
+			});
+		});
+	</script>
+</head>
+<body>
+	<button>Toggle Show</button>
+	<div class="page">
+		<h1>Lorem ipsum dolor sit amet</h1>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	</div>
+</body>
+</html>
+
+=>button을 누르면 클래스'page'가 사라지고 나타나고 한다.
+
+
+###12장 자바스크립트와 jQuery 응용
+
+#01. 입력 양식 포커스
+
+
+#02. 프레임 애니메이션
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		#image{
+			position: absolute;
+			left: 60px;
+			top: 150px;
+		}
+		#buttons{
+			position: absolute;
+			left:50px;
+			top:50px;
+		}
+		
+	</style>
+	<script>
+		var str;
+		function start(){
+			//변수를 선언합니다.
+			var count=0;
+			var image=document.getElementById('image');
+			var frames = [
+				'0.png','1.png','2.png','3.png','4.png','5.png','6.png',
+				'7.png','8.png','9.png','10.png','11.png','12.png','13.png',
+				'14.png'
+			];
+			//타이버 반복을 시작합니다.
+			str = setInterval(function(){
+				image.src = frames[count % frames.length];
+				count = count +1;
+			}, 1000/20);
+		}
+		function stop(){
+			clearInterval(str);
+		}
+	</script>
+</head>
+<body>
+	<img id="image">
+	<div id="buttons">
+		<button id="start_btn" onclick="start();">시작</button>
+		<button id="stop_btn" onclick="stop();">중지</button>
+	</div>
+	<p></p>
+</body>
+</html>
+
+
+#03. 문서 객체 생성과 추가
+
+#append()
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		//이벤트를 연결합니다.
+		$(document).ready(function(){
+			//10회 반복합니다.
+			for(var i=0;i<10;i++){
+				//문서 객체를 생성합니다.
+				$('<h1>Create Document Object + '+i+'</h>').css({
+					backgroundColor: 'black',
+					color: 'red'
+				}).appendTo('body');
+			}
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
+
+#04. 무한 스크롤
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		// 이벤트를 연결합니다.
+		$(document).ready(function(){
+			//문서 객체 추가 함수
+			var appendDocument = function(){
+				for(var i=0;i<20;i++){
+					//문서 객체를 생성합니다.
+					$('<h1>Infinity Scroll</h>').appendTo('body');
+				}
+			};
+			
+			//초기에 문서 객체를 추가합니다.
+			appendDocument();
+			
+			//이벤트를 연결합니다.
+			$(window).scroll(function(){
+				//변수를 선언합니다.
+				var scrollHeight = $(window).scrollTop() + $(window).height();
+				var documentHeight = $(document).height();
+				
+				//검사합니다.
+				if(scrollHeight == documentHeight){
+					appendDocument();
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
+
+##테이블 추가/삭제(jQuery 사용)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script>
+		$(document).ready(function(){
+			$("#btnAdd").click(function(){
+				var row = '<tr><td><input type="text" name="id" size="10"></td>';
+					row += '<td><input type="text" name="irum" size="10"></td>';
+					row += '<td><input type="button" class="btnDel" value="Del">';
+					row += '</td></tr>';
+					
+				$("#list").append(row); //list라는 아이디어에 html을 추가
+			});
+			
+			//list안의 btnDel에 대한 이벤트를 동적으로 등록시 on을 사용
+			$("#list").on("click",".btnDel",function(){
+				$(this).parent().parent().remove(); //this(btnDel)의 부모(td)의 부모(tr)
+			});
+		});
+	</script>
+</head>
+<body>
+	<input type="button" id="btnAdd" value="추가"><br><br>
+	<table id="list" border="1">
+	</table>
+</body>
+</html>
+
+
+
+##사진 시간에따라 자동으로 바뀜
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* {
+	box-sizing: border-box;
+}
+body {
+	font-family: Verdana, sans-serif;
+}
+.mySlides {
+	display: none;
+}
+img {
+	vertical-align: middle;
+}
+
+.slideshow-container {
+  max-width: 400px;
+  max-height: 300px;
+  position: relative;
+  margin: auto;
+}
+
+/* Caption text */
+.text {
+  color: #F6CEF5;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text */
+.numbertext {
+  color: red;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0px 0px 2px 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 2s;
+  animation-name: fade;
+  animation-duration: 2s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+/* 모바일 화면 글자 크기 조정 */
+@media only screen and (max-width: 200px) {
+  .text {font-size: 11px}
+}
+</style>
+
+</head>
+<body translate="no">
+<div class="slideshow-container">
+	<div class="mySlides fade">
+		<div class="numbertext">1 / 4</div>
+		<img src="../images/jeju1.jpg" width="400px" height="300px">
+		<div class="text">제주 1</div>
+	</div>
+	<div class="mySlides fade">
+		<div class="numbertext">2 / 4</div>
+		<img src="../images/jeju2.jpg" width="400px" height="300px">
+		<div class="text">제주 2</div>
+	</div>
+	<div class="mySlides fade">
+		<div class="numbertext">3 / 4</div>
+		<img src="../images/jeju3.jpg" width="400px" height="300px">
+		<div class="text">제주 3</div>
+	</div>
+	<div class="mySlides fade">
+		<div class="numbertext">4 / 4</div>
+		<img src="../images/jeju4.jpg" width="400px" height="300px">
+		<div class="text">제주 4</div>
+	</div>
+</div>
+<br>
+<div style="text-align:center">
+	<span class="dot"></span>
+	<span class="dot"></span>
+	<span class="dot"></span>
+	<span class="dot"></span>
+</div>
+<script>
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1;}
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex - 1].style.display = "block";
+  dots[slideIndex - 1].className += " active";
+  setTimeout(showSlides, 2000); 
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

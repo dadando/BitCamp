@@ -1,0 +1,93 @@
+폴더안에서 Git Bash Here 실행
+
+#깃 세팅
+git init			: .git 설치 (깃 연동)
+git config --global user.name "dadando" : 유저이름 설정 (전체)
+git config --global user.email "dadando@naver.com" : 이메일 설정
+git status               : 깃 상태확인 (커밋안된 파일 확인할때 사용)
+git add *		  : 깃에다가 추가
+git commit -m *	   : 전체 파일 커밋
+git remote add orgin https://github.com/dadando/mybatis.git	: 깃허브와 연동
+git push origin master	: 깃허브에 푸쉬 작업
+--------------------------------------------이후 깃허브 repository 에서 확인가능
+
+git config --list
+git add --all
+git commit -m*
+$ git commit -m " -  commit 메시지 - "
+
+$ git commit -m "파란색으로 쓰여있는거 그대로쓰기"
+--------------------------------------------------------------------강제로 전체 업로드하는법---
+#깃 리모트 삭제
+git remote rm 리모트한이름
+ex) git remote rm origin
+
+#지정하고 싶은 것만 올릴때
+git add 폴더(파일)이름그대로
+
+#파일 커밋
+git commit -m "file"
+
+
+###특정 되돌아가고 싶은 커밋이 있는경우 
+>>git reflog
+명령을 통해 커밋 내용을 확인 후
+
+>>git reset HEAD@{number} 또는 >>git reset 커밋ID
+
+를 통해 되돌아가고 싶은 커밋으로 돌아간다.
+(기준은 되돌아가고싶은곳! 삭제하고 싶은커밋의 이전커밋! 마지막으로 남았으면 하는 커밋)
+
+되돌아갔으니 커밋을 한다
+>>git commit -m "커밋삭제"
+
+강제 push 
+>>git push origin master(또는 브런치이름) -f
+원하는 commit으로 돌아갔다
+
+--------------------------------------------------------------------------------------------
+// 원격 저장소와 로컬 저장소에 있는 파일을 삭제한다.
+$ git rm [File Name]
+// 원격 저장소에 있는 파일을 삭제한다. 로컬 저장소에 있는 파일은 삭제하지 않는다.
+$ git rm --cached [File Name]
+
+// .idea/modules.xml 파일 삭제
+$ git rm --cached .idea/modules.xml
+// .idea 폴더 하위의 모든 파일 삭제 
+$ git rm --cached -r .idea/
+
+// 버전 관리에서 완전히 제외하기 위해서는 반드시 commit 명령어를 수행해야 한다.
+$ git commit -m "Fixed untracked files"
+// 원격 저장소(origin)에 push
+$ git push origin master
+
+git reset HEAD [file] 명령어를 통해 git add를 취소할 수 있다.
+뒤에 파일명이 없으면 add한 파일 전체를 취소한다.
+
+git reset HEAD^ 명령어를 통해 git commit을 취소할 수 있다.
+
+
+commit message를 잘못 적은 경우, git commit –amend 명령어를 통해 git commit message를 변경할 수 있다.
+
+
+git reset 명령은 아래의 옵션과 관련해서 주의하여 사용해야 한다.
+reset 옵션
+–soft : index 보존(add한 상태, staged 상태), 워킹 디렉터리의 파일 보존. 즉 모두 보존.
+–mixed : index 취소(add하기 전 상태, unstaged 상태), 워킹 디렉터리의 파일 보존 (기본 옵션)
+–hard : index 취소(add하기 전 상태, unstaged 상태), 워킹 디렉터리의 파일 삭제. 즉 모두 취소.
+
+
+가장 최근의 commit을 취소 (기본 옵션: --mixed)
+$ git reset HEAD^
+
+
+
+
+
+
+
+
+
+
+
+

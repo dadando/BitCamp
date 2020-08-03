@@ -1,0 +1,477 @@
+/* CSS RESET */
+* {
+    padding: 0;
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: 'Noto Sans', 'Nanum Gothic', sans-serif;
+    letter-spacing: -1px;
+/*    border: 1px solid;*/
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+li {list-style: none;}
+
+
+/* 모든 페이지 공통 영역 */
+
+/* desktop-size(min:1280) */
+/* 광고 배너 및 헤더 by 하나 */
+/* -- 광고 배너 */
+.ad__banner {
+    width: 100%;
+    height: 70px;
+    background-color: #C2C2C2;
+    position: relative;
+}
+
+.ad__banner--img {
+    width: 100%;
+    height: 100%;
+} /* 임의의 값 */
+
+.ad__banner--closeBtn {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: url(img/header/close_btn.png);
+}
+
+/* -- 헤더 > 위 */
+.upper_header {
+    width: 100%;
+    height: 32px;
+    background-color: #BDBDBD;
+}
+
+.upper_header--nav {
+    width: 1200px;
+    margin: 0 auto;
+    font-size: 12px;
+    line-height: 32px;
+}
+
+.upper_header--nav a {
+    color: #ffffff;
+}
+
+.upper_header--nav ul, .upper_header--nav li, .upper_header--nav p {
+    display: inline-block;
+} /* 200619 pm12:55 수정됨 -- 이유: 클래스 명 생략해서 전체 li, p 태그에 적용됨 */
+
+.upper_header--nav ul {
+    float: right;
+}
+
+.upper_header--nav ul::after {
+    clear: both;
+    display: block;
+    content: "";
+}
+
+.upper_header--nav li:first-child {
+    padding-right: 16px;
+}
+
+
+/* -- 헤더 > 아래 */
+.lower_header {
+    width: 100%;
+    height: 80px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(112, 112, 112, 0.1);
+}
+
+/* 스크롤 작동할 때 --*/
+.lower_header.sticky {
+    position: fixed;
+    top: 0;
+    z-index: 999998;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    transition: 0.8s;
+}
+
+.lower_header--nav {
+    width: 1200px;
+    margin: 0 auto;
+    font-size: 12px;
+}
+
+.logo {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+
+.logo a {
+    color: #F9A825;
+    font-size: 36px;
+}
+
+.category {
+    display: inline-block;
+    padding-left: 50px;
+    vertical-align: middle;
+}
+
+.category img {
+    width: 44px;
+    height: 40px;
+}
+
+.search {
+    height: 40px;
+    display: inline-block;
+    margin-left: -4px;
+    padding-top: 20px;
+}
+
+.search--select {
+    height: 40px;
+    border-top: 2px solid #F9A825;
+    border-bottom: 2px solid #F9A825;
+    border-left: 2px solid #F9A825;
+    padding-left: 8px;
+    padding-right: 4px;
+}
+
+.search--select option {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.search__input {
+    width: 590px;
+    height: 40px;
+    border-top: 2px solid #F9A825;
+    border-bottom: 2px solid #F9A825;
+    border-right: 2px solid #F9A825;
+    margin-left: -4px;
+    padding-left: 12px;
+}
+
+.member_info {
+    float: right;
+    margin-top: 10px;
+    display: inline-block; /* 2020-06-19 pm12:58 수정됨 */
+}
+
+.member_info li {
+    text-align: center;
+    margin-left: 14px;
+    width: 48px;
+    display: inline-block; /* 2020-06-19 pm12:57 수정됨 */
+}
+
+.member_info li a {
+    display: inline-block;
+}
+
+/*
+.member_info li a img {
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+}
+*/
+
+.member_info .material-icons {
+    color: #575757;
+    font-size: 40px;
+}
+
+
+.member_info li a span {
+    font-size: 10px;
+    color: #575757;
+}
+
+/* desktop-size(min:1280) */
+/* 푸터 영역 by 하나 */
+.upper_footer {
+    width: 100%;
+    height: 52px;
+    border-top: 1px solid rgba(112, 112, 112, 0.2);
+}
+
+.upper_footer--list {
+    width: 1200px;
+    height: inherit;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.upper_footer--list li {
+    font-size: 16px;
+    line-height: 52px;
+    display: inline-block; /* 2020-06-19 pm 01:10 수정됨 */
+}
+
+.upper_footer--list li a {
+    border-right: 1px solid rgba(112, 112, 112, 0.5);
+    padding: 0 46px;
+}
+
+.upper_footer--list li:last-child a {
+    border-right: none;
+}
+
+.lower_footer {
+    width: 100%;
+    height: 280px;
+    background-color: #F5F5F5;
+}
+
+/* 메인 페이지 - index.html */
+/* desktop-size(min:1280) */
+/* -- 배너 영역 */
+.banner {
+    width: 1200px;
+    height: 540px;
+    background-color: #828282;
+    margin: 0 auto;
+}
+
+/* desktop-size(min:1280) */
+/* -- 메뉴 영역 */
+.menu {
+    width: 1200px;
+    margin: 112px auto;
+}
+
+.menu__tab {
+    width: 100%;
+    height: 1180px;
+}
+
+/*
+.menu__tab ul {
+    float: left;
+}
+
+.menu__tab ul::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+*/
+
+input[type="radio"] {display: none;}
+input[type="radio"] + label {
+    margin-left: -4px;
+    display: inline-block;
+    width: 300px;
+    height: 54px;
+    text-align: center;
+    line-height: 54px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(225, 217, 90, 0.16);
+}
+
+input[type="radio"] + label:hover, input[type="radio"]:checked + label{
+    color: #ffffff;
+    background-color: #ffd149;
+    border-radius: 4px 4px 0 0;
+}
+
+input[type="radio"]:checked + label{
+    color: #ffffff;
+    background-color: #F9A825;
+    border-radius: 4px 4px 0 0;
+}
+
+input[id="popular-items"] + label {
+    margin-left: 0;
+}
+
+.menu-box {
+    width: 1200px;
+    margin: 0 auto;
+    display: none;
+} /* 모든 메뉴에 해당 */
+
+input[id="popular-items"]:checked ~ .content1 {display: block;}
+input[id="deadline-items"]:checked ~ .content2 {display: block;}
+input[id="resell-items"]:checked ~ .content3 {display: block;}
+input[id="premium-items"]:checked ~ .content4 {display: block;}
+
+/* desktop-size(min:1280) */
+/* -- 인기 경매 */
+/*
+.menu--title {
+    margin-left: 10px;
+    margin-bottom: 14px;
+    font-weight: 800;
+    font-size: 30px;
+}
+*/
+
+.items__list {
+    display: inline-block;
+}
+
+.items__list {
+    margin-top: 52px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.items__list li {
+    flex-basis: 25%;
+    margin-bottom: 64px;
+    padding: 0 10px;
+}
+
+.product-box {
+    width: 100%;
+    height: 280px;
+    text-align: center;
+    border: 1px solid rgba(112, 112, 112, 0.15);
+}
+
+.product-box img {
+    width: 100%;
+    height: auto;
+}
+
+.items__product--info {position: relative;}
+
+.product_name {
+    font-size: 20px;
+    font-weight: 800;
+    margin-top: 18px;
+    margin-bottom: 2px;
+}
+
+.material-icons.timer {
+    font-size: 18px;
+    color: #6C6C6C;
+    vertical-align: middle;
+}
+
+.bookmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+}
+
+.material-icons.bookmark_border {
+    font-size: 26px;
+}
+
+.bookmark--count {
+    font-size: 12px;
+    margin-top: -8px;
+}
+
+.countdown {
+    font-size: 14px;
+    color: #6C6C6C;
+}
+
+.price-txt {
+    margin-top: 28px;
+}
+
+.price_text, .price_text {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.current_price {
+    color: #FFAE36;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.direct_price {
+    font-size: 16px;
+}
+
+/* desktop-size(min:1280) */
+/* -- 마감 임박 */
+.deadline-items--product {display: none;}
+
+.deadline-items--product.active {display: block;}
+
+.deadline-items__category {
+    line-height: 64px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(224, 220, 220, 0.1);
+}
+
+.deadline-items__category li {
+    display: inline-block;
+    font-size: 16px;
+    text-align: center;
+}
+
+.deadline-items__detail_menu {
+    height: 100%;
+    border-right: 1px solid rgba(112, 112, 112, 0.2);
+    padding: 0 56px;
+}
+
+.deadline-items__category li a:hover {font-weight: bold;}
+
+.deadline-items__detail_menu, .deadline-items__detail_menu ul, .deadline-items__detail_menu ul li {
+    display: inline-block;
+}
+
+/*
+.items__list.deadline > li:first-child {
+    text-align: center;
+}
+*/
+
+.deadline-items__detail_menu {
+    padding-top: 70px;
+    text-align: center;
+}
+
+.deadline-items__detail {
+    font-size: 24px;
+    font-weight: 600;
+/*    margin-left: 14px;*/
+}
+
+.deadline-items__detail_menu ul {
+    display: flex;
+    flex-flow: column nowrap;
+    margin-top: 18px;
+}
+
+.deadline-items__detail_menu ul li {
+    margin: 4px;
+    color: #616161;
+}
+
+.deadline-items__detail_menu ul li a:hover {
+    text-decoration: underline;
+}
+
+/* desktop-size(min:1280) */
+/* -- 프리미엄관 */
+
+/* desktop-size(min:1280) */
+/* -- 경매 규칙 및 회원 등급 제도 설명 */
+.rules {
+    width: 100%;
+    height: 400px;
+    background-color: 
+}

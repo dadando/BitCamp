@@ -1,0 +1,95 @@
+<div class="menuboard">
+            <div class="dropdown-loginmenu">
+                <div class="dropbtn-login">로그인</div>
+                <div class="dropdown-login">
+                    <a href="#">로그인</a>
+                    <a href="#">회원가입</a>
+                </div>
+            </div>
+            <div class = "office">
+                <a href="#">고객센터</a>
+            </div>
+            <div class="dropdown">
+                <div class="dropbtn">메뉴</div>
+                <div class="dropdown-content">
+                    <a href="#">홈</a>
+                    <a href="#">블로그소개</a>
+                    <a href="#">자기소개</a>
+                    <a href="#">기타사항</a>
+                </div>
+            </div>
+        </div>
+
+
+CSS
+
+.dropdown-loginmenu{
+    position: relative;
+    display: inline-block;
+}
+.dropbtn-login{
+    background-color: white;
+    color: black;
+    margin-left: 15px;
+    font-size: 16px;
+    border: none;
+}
+.dropdown-login{
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    min-width:80px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-login a{
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-login a:hover{
+    background-color: black;
+    color: white;
+}
+.dropdown-loginmenu:hover .dropdown-login{
+    display: block;
+}
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+.dropbtn{
+    background-color: white;
+    color: black;
+    margin-left: 15px;
+    font-size: 16px;
+    border: none;
+}
+.dropdown-content{
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a{
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover{
+    background-color: black;
+    color: white;
+}
+
+.dropdown:hover .dropdown-content{
+    display: block;
+    
+}

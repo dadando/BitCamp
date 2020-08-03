@@ -1,0 +1,266 @@
+#인터페이스 다중상속
+ : 인터페이스는 다중상속이 가능하다. 
+인터페이스 다중상속 받을 때 동일한 형식의 메소드는 있으면 안된다.
+
+###클래스 사용 연습###
+package Practice_ClassEx;
+
+import java.util.Scanner;
+
+public class Sawon {
+	String sabun,deptname,irum,gender,email;
+	private static int sawon_cnt=0;
+	Sawon(){
+		
+	}
+	
+	boolean inputData() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("사원번호 입력=> ");
+		sabun = scan.next();
+		if(sabun.equals("exit"))
+			return true;
+		System.out.print("부서명 입력=> ");
+		deptname = scan.next();
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("성별 입력=> ");
+		gender = scan.next();
+		System.out.print("이메일 입력=> ");
+		email = scan.next();
+		System.out.println();
+		sawon_cnt++;
+		return false;
+	}
+	void outputData() {
+		System.out.printf("%4s   %5s   %3s   %6s%20s\n",sabun,deptname, irum, gender, email);
+	}
+	static int getSawonCnt() {
+		return sawon_cnt;
+	}
+}
+
+
+package Practice_ClassEx;
+
+public class Sawon_Ex {
+	static final int MAX =100;
+	public static void main(String[] args) {
+		Sawon obj[] = new Sawon[MAX];
+		
+		printIn(obj);
+		printOut(obj);
+		
+	}
+	static void printIn(Sawon obj[]) {
+		for(int i=0;i<MAX;i++) {
+			obj[i] = new Sawon();
+			if(obj[i].inputData()) {
+				return;
+			}
+		}
+		System.out.println();
+	}
+	static void printOut(Sawon obj[]) {
+		System.out.println("\t\t### 사원정보 ###");
+		System.out.println("===============================================");
+		System.out.println("사원번호    부서명   이름\t성별                 이메일   ");
+		System.out.println("===============================================");
+		for(int i=0;i<Sawon.getSawonCnt();i++) {
+			obj[i].outputData();
+		}
+		System.out.println("===============================================");
+		System.out.println("총 사원수: "+Sawon.getSawonCnt());
+	}
+
+}
+
+
+####인터페이스(다형성)연습 #####
+
+package Practice_InterfaceEx;
+
+public interface Datable {
+	public abstract boolean inputData();
+	public abstract void outputData();
+}
+
+package Practice_InterfaceEx;
+
+public class Person {
+	String irum;
+	String gender;
+	String email;
+	Person(){
+		
+	}
+}
+
+package Practice_InterfaceEx;
+
+import java.util.Scanner;
+
+public class Member extends Person implements Datable{
+	String id,passwd;
+	
+	Member(){
+	}
+	
+	public boolean inputData() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		if(irum.equals("exit")) {
+			return true;
+		}
+		System.out.print("성별 입력=> ");
+		gender = scan.next();
+		System.out.print("이메일 입력=> ");
+		email = scan.next();
+		System.out.print("아이디 입력=> ");
+		id = scan.next();
+		System.out.print("패스워드 입력=> ");
+		passwd = scan.next();
+		
+		return false;
+	}
+	
+	public void outputData() {
+		
+		System.out.printf("%3s  %6s%10s%10s %10s\n",irum,gender,email,id,passwd);
+	}
+	
+}
+
+package Practice_InterfaceEx;
+
+import java.util.Scanner;
+
+public class Sawon extends Person implements Datable{
+	String sabun,deptname;
+	
+	Sawon(){
+		
+	}
+	
+	public boolean inputData() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("사원번호 입력=> ");
+		sabun = scan.next();
+		if(sabun.equals("exit"))
+			return true;
+		System.out.print("부서명 입력=> ");
+		deptname = scan.next();
+		System.out.print("이름 입력=> ");
+		irum = scan.next();
+		System.out.print("성별 입력=> ");
+		gender = scan.next();
+		System.out.print("이메일 입력=> ");
+		email = scan.next();
+		
+		return false;
+	}
+	public void outputData() {
+		System.out.printf("%4s   %5s   %3s   %6s %10s\n",sabun,deptname, irum, gender, email);
+	}
+	
+}
+
+package Practice_InterfaceEx;
+
+public class 임홍섭 {
+	static final int MAX = 100;
+	public static void main(String[] args) {
+		Member obj1[] = new Member[MAX];
+		Sawon obj2[] = new Sawon[MAX];
+		
+		int cnt1 = memberInput(obj1);
+		int cnt2 = sawonInput(obj2);
+		
+		System.out.println("\t\t*** 회원 정보 ***");
+		System.out.println("==============================================");
+		System.out.println("이름\t성별\t이메일\t아이디\t   패스워드");
+		System.out.println("==============================================");
+		printOut(obj1,cnt1);
+		System.out.println("==============================================");
+		System.out.printf("\t\t총 회원수: %d\n",cnt1);
+		System.out.println();
+		System.out.println("\t\t*** 사원 정보***");
+		System.out.println("==============================================");
+		System.out.println("사원번호\t부서명\t  이름\t  성별\t  이메일");
+		System.out.println("==============================================");
+		printOut(obj2,cnt2);
+		System.out.println("==============================================");
+		System.out.printf("\t\t총 사원수: %d",cnt2);
+		
+	}
+	
+	static int memberInput(Member obj[]) {
+		int cnt=0;
+		for(int i=0;i<MAX;i++) {
+			obj[i] = new Member();
+			if(obj[i].inputData()) {
+				break;
+			}
+			cnt++;
+			System.out.println();
+		}
+		return cnt;
+	}
+	static int sawonInput(Sawon obj[]) {
+		int cnt=0;
+		for(int i=0;i<MAX;i++) {
+			obj[i] = new Sawon();
+			if(obj[i].inputData()) 
+				break;
+			cnt++;
+			System.out.println();
+		}
+		return cnt;
+	}
+	static void printOut(Datable obj[],int cnt) {
+		for(int i=0;i<cnt;i++) {
+			obj[i].outputData();
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

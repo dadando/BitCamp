@@ -1,0 +1,19 @@
+sql구문에 비교문자있을시
+<select>
+<![CDATA[select * from emp where sal>=?]]>
+</select>
+
+HashMap<String,String>
+
+ArrayList<HashMap<String,String>>
+알아서 형변환됨
+
+(1번방식) 서브쿼리
+select * from (select rownum as rnum,num,id,subject,content,re_ref,re_lev,re_seq,readcount,boarddate from
+(select * from smemberboard2 order by re_ref,re_seq desc,re_seq asc)) where rnum between 1 and 4;
+
+(2번방식) 오라클 내장함수 row_number() 사용
+select *
+from(select row_number() over (order by re_ref desc,re_seq asc) rnum, s.*
+    from smemberboard2 s) 
+where rnum between 1 and 4;

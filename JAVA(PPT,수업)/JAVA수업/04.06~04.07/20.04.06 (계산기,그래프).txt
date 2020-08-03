@@ -1,0 +1,812 @@
+####계산기####
+(본문)
+package Calculator;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Panel;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class GUI_Cal {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("사칙계산기");
+        frame.setPreferredSize(new Dimension(270, 300));
+        frame.setLocation(500, 400);
+        Container contentPane = frame.getContentPane();
+        JTextField txtVal = new JTextField();
+        txtVal.setPreferredSize(new Dimension(270, 35));
+        Panel panel1 = new Panel();
+        panel1.setLayout(new GridLayout(5, 3));
+        // 버튼의 갯수가 많아서 배열을 이용.
+        JButton btn[] = new JButton[17];
+        btn[0] = new JButton("0");
+        btn[1] = new JButton("1");
+        btn[2] = new JButton("2");
+        btn[3] = new JButton("3");
+        btn[4] = new JButton("4");
+        btn[5] = new JButton("5");
+        btn[6] = new JButton("6");
+        btn[7] = new JButton("7");
+        btn[8] = new JButton("8");
+        btn[9] = new JButton("9");
+        btn[10] = new JButton("+");
+        btn[11] = new JButton("-");
+        btn[12] = new JButton("*");
+        btn[13] = new JButton("/");
+        btn[14] = new JButton("=");
+        btn[15] = new JButton("Clear");
+        btn[15].setPreferredSize(new Dimension(169, 35));
+        btn[16] = new JButton("Back");
+        btn[16].setPreferredSize(new Dimension(101, 35));
+        Panel panel2 = new Panel(new BorderLayout());
+        panel2.add(btn[15], BorderLayout.WEST);
+        panel2.add(btn[16], BorderLayout.CENTER);
+        for (int i=0; i< btn.length-2; i++)
+        {
+        	panel1.add(btn[i]);
+        }
+        contentPane.add(txtVal, BorderLayout.NORTH);
+        contentPane.add(panel1, BorderLayout.CENTER);
+        contentPane.add(panel2, BorderLayout.SOUTH);
+        for (int i=0; i< btn.length; i++)
+        {
+        	btn[i].addActionListener(new Event_Cal(txtVal));
+        }
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+	}
+}
+
+((Event클래스))
+
+package Calculator;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.StringTokenizer;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class Event_Cal implements ActionListener{
+	JTextField txtVal;
+	
+	Event_Cal(JTextField txtVal)
+	{
+		
+		this.txtVal = txtVal;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("0"))
+	    {
+			txtVal.setText(txtVal.getText() + "0");
+		}
+	    else if (e.getActionCommand().equals("1"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "1");
+	    }
+	    else if (e.getActionCommand().equals("2"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "2");
+	    }
+	    else if (e.getActionCommand().equals("3"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "3");
+	    }
+	    else if (e.getActionCommand().equals("4"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "4");
+	    }
+	    else if (e.getActionCommand().equals("5"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "5");
+	    }
+	    else if (e.getActionCommand().equals("6"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "6");
+	    }
+	    else if (e.getActionCommand().equals("7"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "7");
+	    }
+	    else if (e.getActionCommand().equals("8"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "8");
+	    }
+	    else if (e.getActionCommand().equals("9"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "9");
+	    }
+	    else if (e.getActionCommand().equals("+"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "+");
+	    }
+	    else if (e.getActionCommand().equals("-"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "-");
+	    }
+	    else if (e.getActionCommand().equals("*"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "*");
+	    }
+	    else if (e.getActionCommand().equals("/"))
+	    {
+	    	txtVal.setText(txtVal.getText() + "/");
+	    }
+	    else if (e.getActionCommand().equals("="))
+	    {
+	    	calcu();
+	    }
+	    else if (e.getActionCommand().equals("Clear")) {
+	    	txtVal.setText("");
+	    }
+	    else { //"back" 버튼
+	    	// 0번째 위치부터 text의 길이-1 까지 읽어서 다시 저장.
+	    	txtVal.setText(txtVal.getText().substring(0, txtVal.getText().length()-1));
+	    }
+	}
+	void calcu() {
+		String str = txtVal.getText();
+		StringTokenizer token = new StringTokenizer(str, "+-*/", true);
+		  
+		String token_str = token.nextToken();  // 첫번째 토큰 읽음 
+		if (input_check(token_str)) // input_check():토큰이 숫자인지 검사
+		{
+			//showMessageDialog => 메시지창을 띄워줌.
+			//null <= 프레임 이름
+			JOptionPane.showMessageDialog(null, "수식 입력 오류-1!!!");// 토큰이 숫자가 아님
+			return;  
+		}
+	
+		int result = Integer.parseInt(token_str); // 토큰을 숫자로 변환
+	  
+		while(token.hasMoreTokens())  // 토큰이 없을때까지 반복
+		{
+			token_str = token.nextToken(); // 짝수번째 토큰 읽음(연산자)
+			char ch = token_str.charAt(0);  // 문자열에서 연산자 추출
+	   
+			if (token.hasMoreTokens())
+				token_str = token.nextToken();  // 홀수번째 토큰을 읽음(숫자)
+			else
+			{
+				JOptionPane.showMessageDialog(null, "수식 입력 오류-2!!!");//연산자로 수식이 끝나는 경우
+				return;
+			}
+	   
+			if (input_check(token_str)) // input_check():토큰이 숫자인지 검사
+			{
+				JOptionPane.showMessageDialog(null, "수식 입력 오류-3!!!");
+				return;
+			}
+			
+			switch(ch)
+			{
+				case '+':
+					result += Integer.parseInt(token_str);
+					break;
+				case '-':
+				     result -= Integer.parseInt(token_str);
+				     break;
+				case '*':
+					result *= Integer.parseInt(token_str);
+					break;
+				case '/':
+					result /= Integer.parseInt(token_str); 
+					break;
+			} // switch
+		} // while()
+		txtVal.setText(txtVal.getText() + "=" + result);
+	}
+	boolean input_check(String str)
+	{
+		char ch;
+		
+		for (int i=0; i<str.length(); i++) //토큰을 전달 받아 문자열 길이만큼 한문자씩 검사
+		{
+			ch = str.charAt(i);  ////문자열에서 한문자씩 추출			
+			if (ch < '0' || ch > '9') // ch가 숫자인지 검사(유니코드로 비교)
+				return true;  // 숫자 아닌 문자가 있음
+		}
+		return false;
+	}
+}
+
+
+##그래픽과 이미지 디스플레이
+
+#그래픽 프리미티브로 그림그리기
+JPaner의 서브클래스로 클래스선언.
+paint 메소드는 패널이 디스플레이 될 때 자동 호출됨.
+
+g.drawRect(100,110,200,40); <= (100,110)위치에  200x40크기의 사각형 그리기.
+g.drawOval(125,150,30,30); <= (125,150)위치에 지름이 30인 원 그리기.
+g.drawLine(50,180,350,180); <= (50,180)부터 (350,180)위치까지 직선 그리기.
+
+package CarEx;
+
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+public class CarDrawingPanel extends JPanel {
+	public void paint(Graphics g) {
+		g.drawRect(100, 110, 200, 40);
+		g.drawRect(150, 70, 100, 40);
+		g.drawOval(125, 150, 30, 30);
+		g.drawOval(245, 150, 30, 30);
+		g.drawLine(50, 180, 350, 180);
+	}
+}
+
+package CarEx;
+
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+
+public class GraphicExample1 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("자동차 프로그램");
+		frame.setLocation(500,200);
+		frame.setPreferredSize(new Dimension(400,300));
+		Container contentPane = frame.getContentPane();
+		CarDrawingPanel drawingPanel = new CarDrawingPanel();
+		contentPane.add(drawingPanel);
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+
+#repaint(); <= paint 메소드를 간접 호출하는 메소드.
+데이터를 이용해서 그래프 그리기.
+
+package GraphEx;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+public class DrawingPanel extends JPanel {
+	int korean,english,math;
+	public void paint(Graphics g) {
+		g.clearRect(0,0,getWidth(),getHeight()); //호출할 때 기존의 그래프를 전부 삭제.
+		g.drawLine(50, 250, 350, 250);
+		for(int cnt=1;cnt<11;cnt++) {
+			g.drawString(cnt*10+"", 25, 255-20*cnt);
+			g.drawLine(50, 250-20*cnt, 350, 250-20*cnt);
+		}
+		g.drawLine(50, 20, 50, 250);
+		g.drawString("국어", 100, 270);
+		g.drawString("영어", 200, 270);
+		g.drawString("수학", 300, 270);
+		g.setColor(Color.RED);
+		if(korean>0)
+			g.fillRect(110,250-korean*2,10,korean*2);
+		if(english>0)
+			g.fillRect(210,250-english*2,10,english*2);
+		if(math>0)
+			g.fillRect(310,250-math*2,10,math*2);
+	}
+	void setScores(int korean,int english,int math) {
+		this.korean = korean;
+		this.english = english;
+		this.math = math;
+	}
+}
+
+package GraphEx;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+public class DrawActionListener implements ActionListener {
+
+	JTextField text1,text2,text3;
+	DrawingPanel drawingPanel;
+	
+	DrawActionListener(JTextField text1,JTextField text2,JTextField text3,
+			DrawingPanel drawingPanel){
+		this.text1 = text1;
+		this.text2 = text2;
+		this.text3 = text3;
+		this.drawingPanel = drawingPanel;
+	}
+	public void actionPerformed(ActionEvent e) {
+		try {
+			int korean = Integer.parseInt(text1.getText());
+			int english = Integer.parseInt(text2.getText());
+			int math = Integer.parseInt(text3.getText());
+			drawingPanel.setScores(korean,english,math);
+			drawingPanel.repaint();
+			text1.setText("");
+			text2.setText("");
+			text3.setText("");
+		}
+		catch(NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(drawingPanel,"잘못된 숫자 포맷입니다.",
+					"에러 메시지",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+}
+
+
+package GraphEx;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class GraphicExample2 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("성적 그래프 프로그램");
+		frame.setLocation(500,200);
+		frame.setPreferredSize(new Dimension(400,350));
+		Container contentPane = frame.getContentPane();
+		DrawingPanel drawingPanel = new DrawingPanel();
+		contentPane.add(drawingPanel,BorderLayout.CENTER);
+		JPanel controlPanel = new JPanel();
+		JTextField text1 = new JTextField(3);
+		JTextField text2 = new JTextField(3);
+		JTextField text3 = new JTextField(3);
+		JButton button = new JButton("그래프 그리기");
+		controlPanel.add(new JLabel("국어"));
+		controlPanel.add(text1);
+		controlPanel.add(new JLabel("영어"));
+		controlPanel.add(text2);
+		controlPanel.add(new JLabel("수학"));
+		controlPanel.add(text3);
+		controlPanel.add(button);
+		contentPane.add(controlPanel,BorderLayout.SOUTH);
+		button.addActionListener(new DrawActionListener(text1,text2,text3,
+				drawingPanel));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+
+
+##이미지로딩 예제##
+
+package ImageEx;
+
+import java.awt.*;
+
+import javax.swing.JPanel;
+
+public class ImagePanel extends JPanel {
+	Image image;
+	Toolkit toolkit = getToolkit();
+	void setPath(String path) {
+		image = toolkit.getImage(path);
+	}
+	public void paint(Graphics g) {
+		g.clearRect(0, 0, getWidth(), getHeight());
+		if(image !=null)
+			g.drawImage(image, 0, 0, this);
+	}
+}
+
+package ImageEx;
+
+import java.awt.event.*;
+import javax.swing.*;
+
+public class LoadActionListener implements ActionListener {
+	JTextField text;
+	ImagePanel imagePanel;
+
+	LoadActionListener(JTextField text,ImagePanel imagePanel){
+		this.text = text;
+		this.imagePanel = imagePanel;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		imagePanel.setPath(text.getText());
+		imagePanel.repaint();
+	}
+}
+
+package ImageEx;
+
+import java.awt.*;
+import javax.swing.*;
+
+public class ImageExample1 {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("이미지 로딩 프로그램");
+		frame.setLocation(500,200);
+		frame.setPreferredSize(new Dimension(500,400));
+		Container contentPane = frame.getContentPane();
+		ImagePanel imagePanel = new ImagePanel();
+		contentPane.add(imagePanel,BorderLayout.CENTER);
+		JPanel controlPanel = new JPanel();
+		JTextField text = new JTextField(30);
+		JButton button = new JButton("이미지 로드");
+		controlPanel.add(text);
+		controlPanel.add(button);
+		contentPane.add(controlPanel,BorderLayout.SOUTH);
+		button.addActionListener(new LoadActionListener(text,imagePanel));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}
+###성적그래프###
+package Sungjuk_Graph;
+import java.util.Scanner;
+
+public class Sungjuk {
+	String num, name;
+	int kor, eng, math;
+	int tot;
+	double avg;
+	String grade;
+	
+	static double totavg;
+	static int cnt = 0;
+	
+	Sungjuk(){
+		
+	}
+	
+	void input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		num = scan.next();
+		System.out.print("이름 입력=> ");
+		name = scan.next();
+		System.out.print("국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		math = scan.nextInt();
+		System.out.println();
+		
+	}
+	void process() {
+		tot = kor+eng+math;
+		avg = tot/3.;
+		
+		switch((int)avg/10) {
+		case 10:
+		case 9:
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		default:
+			grade = "가";
+				
+		}
+	}
+	void output() {
+		System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",num,name,kor,eng,math,tot,avg,grade);
+	}
+	
+}
+
+
+package Sungjuk_Graph;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+public class DrawingPanel extends JPanel {
+	int korean,english,math,avg;
+	public void paint(Graphics g) {
+		g.clearRect(0,0,getWidth(),getHeight()); //호출할 때 기존의 그래프를 전부 삭제.
+		g.drawLine(50, 250, 450, 250);
+		for(int cnt=1;cnt<11;cnt++) {
+			g.drawString(cnt*10+"", 25, 255-20*cnt);
+			g.drawLine(50, 250-20*cnt, 450, 250-20*cnt);
+		}
+		g.drawLine(50, 20, 50, 250);
+		g.drawString("국어", 100, 270);
+		g.drawString("영어", 200, 270);
+		g.drawString("수학", 300, 270);
+		g.drawString("평균", 400, 270);
+		g.setColor(Color.RED);
+		if(korean>0)
+			g.fillRect(110,250-korean*2,10,korean*2);
+		if(english>0)
+			g.fillRect(210,250-english*2,10,english*2);
+		if(math>0)
+			g.fillRect(310,250-math*2,10,math*2);
+		g.setColor(Color.BLUE);
+		if(avg>0)
+			g.fillRect(410,250-avg*2,10,avg*2);
+	}
+	void setScores(int korean,int english,int math,int avg) {
+		this.korean = korean;
+		this.english = english;
+		this.math = math;
+		this.avg = avg;
+	}
+}
+
+package Sungjuk_Graph;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+public class EventAction implements ActionListener {
+	JTable table;
+	JTextField text1,text2,text3,text4,text5;
+	DrawingPanel drawingPanel;
+	EventAction(){
+		
+	}
+	EventAction(JTable table){
+		this.table = table;
+	}
+	EventAction(JTable table,DrawingPanel drawingPanel){
+		this.table = table;
+		this.drawingPanel = drawingPanel;
+	}
+	EventAction(JTable table,JTextField text1,JTextField text2,JTextField text3,JTextField text4,JTextField text5){
+		this(table);
+		this.text1 = text1;
+		this.text2 = text2;
+		this.text3 = text3;
+		this.text4 = text4;
+		this.text5 = text5;
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("추가")) {
+			add();
+		}else if(e.getActionCommand().equals("삭제")) {
+			delete();
+		}else if(e.getActionCommand().equals("수정")) {
+			revise();
+		}else {
+			graph();
+		}
+	}
+	
+	void add() {
+		Sungjuk obj = new Sungjuk();
+		int i,rowNum,flag =0;
+		DefaultTableModel model = (DefaultTableModel)table.getModel();
+		obj.num=text1.getText();
+		rowNum = model.getRowCount();
+		for(i=0;i<rowNum;i++) {
+			String hakbun = model.getValueAt(i, 0).toString().trim();
+			if(hakbun.equals(obj.num)) {
+				flag =1;
+				break;
+			}
+		}
+		if(flag==0) {
+			obj.name = text2.getText().trim();
+			obj.kor = Integer.parseInt(text3.getText().trim());
+			obj.eng = Integer.parseInt(text4.getText().trim());
+			obj.math = Integer.parseInt(text5.getText().trim());
+			obj.process();
+			
+			Object arr[] = new Object[8];
+			arr[0] = obj.num;
+			arr[1] = obj.name;
+			arr[2] = obj.kor;
+			arr[3] = obj.eng;
+			arr[4] = obj.math;
+			arr[5] = obj.tot;
+			arr[6] = obj.avg;
+			arr[7] = obj.grade;
+			
+			model.addRow(arr);
+			System.out.println("학생 정보 입력 성공!!!");
+		}
+		else {
+			System.out.println("학생 정보 입력 오류(중복)!!!");
+		}
+		text1.setText("");
+		text2.setText("");
+		text3.setText("");
+		text4.setText("");
+		text5.setText("");
+	}
+	void delete() {
+		int row = table.getSelectedRow();
+		if(row==-1) {
+			return;
+		}
+		DefaultTableModel model = (DefaultTableModel)table.getModel();
+		model.removeRow(row);
+		System.out.println("학생 정보 삭제 성공!!!");
+	}
+	void revise() {
+		Sungjuk obj = new Sungjuk();
+		DefaultTableModel model = (DefaultTableModel)table.getModel();
+		int rowNum = table.getRowCount();
+		int i,flag=0;
+		obj.num = text1.getText();
+		
+		for(i=0;i<rowNum;i++) {
+			String hakbun = table.getValueAt(i, 0).toString();
+			if(hakbun.equals(obj.num)) {
+				obj.kor = Integer.parseInt(text3.getText().toString());
+				obj.eng = Integer.parseInt(text4.getText().toString());
+				obj.math = Integer.parseInt(text5.getText().toString());
+				obj.process();
+				model.setValueAt(obj.kor,i,2);
+				model.setValueAt(obj.eng,i,3);
+				model.setValueAt(obj.math,i,4);
+				model.setValueAt(obj.tot,i,5);
+				model.setValueAt(obj.avg,i,6);
+				model.setValueAt(obj.grade,i,7);
+				flag =1;
+				break;
+			}
+		}
+		if(flag==0) {
+			System.out.println("성적 정보 수정 실패!!");
+		}else {
+			System.out.println("성적 정보 수정 성공!!");
+		}
+		text1.setText("");
+        text2.setText("");
+        text3.setText("");
+        text4.setText("");
+        text5.setText("");
+	
+	}
+	void graph() {
+		try {
+			int row = table.getSelectedRow();
+			if(row==-1) {
+				return;
+			}
+			DefaultTableModel model = (DefaultTableModel)table.getModel();
+			int korean = (int)model.getValueAt(row,2);
+			int english = (int)model.getValueAt(row,3);
+			int math = (int)model.getValueAt(row,4);
+			double avg = (double)model.getValueAt(row,6);
+			drawingPanel.setScores(korean,english,math,(int)avg);
+			drawingPanel.repaint();
+		}
+		catch(NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(drawingPanel,"잘못된 숫자 포맷입니다.",
+					"에러 메시지",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+}
+
+package Sungjuk_Graph;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+public class Sungjuk_Graph {
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame("성적 프로그램");
+		frame.setPreferredSize(new Dimension(500,650));
+		frame.setLocation(400,200);
+		Container contentpane = frame.getContentPane();
+		DrawingPanel drawingPanel = new DrawingPanel();
+		contentpane.add(drawingPanel,BorderLayout.CENTER);
+		//디폴트 모델
+		String colNames[]= {"학번","이름","국어","영어","수학","총점","평균","등급"};
+		DefaultTableModel model = new DefaultTableModel(colNames,0);
+		JTable table = new JTable(model);
+		table.setPreferredScrollableViewportSize(new Dimension(500,200));
+		//스크롤작업
+		
+		contentpane.add(new JScrollPane(table),BorderLayout.NORTH);
+		
+		//패널작업
+		JPanel panel1 = new JPanel();
+		JPanel panel2 = new JPanel();
+		JPanel panel3 = new JPanel();
+		panel3.setLayout(new BorderLayout());
+		
+		JTextField text1 = new JTextField(6);
+		JTextField text2 = new JTextField(6);
+		JTextField text3 = new JTextField(3);
+		JTextField text4 = new JTextField(3);
+		JTextField text5 = new JTextField(3);
+		JLabel label1 = new JLabel("학번");
+		JLabel label2 = new JLabel("이름");
+		JLabel label3 = new JLabel("국어");
+		JLabel label4 = new JLabel("영어");
+		JLabel label5 = new JLabel("수학");
+		JButton button1 = new JButton("추가");
+		JButton button2 = new JButton("삭제");
+		JButton button3 = new JButton("수정");
+		JButton button4 = new JButton("그래프 출력");
+		
+		panel1.add(label1);
+		panel1.add(text1);
+		panel1.add(label2);
+		panel1.add(text2);
+		panel1.add(label3);
+		panel1.add(text3);
+		panel1.add(label4);
+		panel1.add(text4);
+		panel1.add(label5);
+		panel1.add(text5);
+		
+		panel2.add(button1);
+		panel2.add(button2);
+		panel2.add(button3);
+		panel2.add(button4);
+		
+		panel3.add(panel1,BorderLayout.CENTER);
+		panel3.add(panel2,BorderLayout.SOUTH);
+		contentpane.add(panel3,BorderLayout.SOUTH);
+		
+		button1.addActionListener(new EventAction(table,text1,text2,text3,text4,text5));
+		button2.addActionListener(new EventAction(table));
+		button3.addActionListener(new EventAction(table,text1,text2,text3,text4,text5));
+		button4.addActionListener(new EventAction(table,drawingPanel));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,450 @@
+10장
+버퍼를 이용해서 입출력 성능을 향상시키는 클래스들
+
+#Argument index
+$를 붙여서 위치를 나타낸다.
+ex) printf("%$2d, %$1d", 30 , 50);   <-- 30은 $1위치, 50은 $2위치
+ ===> 50, 30 출력됨.
+
+
+#####File클래스######
+ - (파일의 내용이 아니라) 파일 자체를 관리하는 클래스
+ - 다음과 같은 메소드 제공
+   1. 파일 정보를 가져오는 메소드
+   2. 파일 정보를 수정하는 메소드
+   3. 파일을 생성/삭제하는 메소드
+
+#사용 방법
+- File 객체 생성
+  1) File file = new File("poem.txt");
+  2) File file = new File("C:\\work\\chap10");
+
+#파일/디렉토리 생성/삭제하기
+Ex) File file = new File("poem.txt");
+    file.createNewFile();    //파일 생성
+    file.delete();             //파일 삭제
+Ex) File file1 = new File("C:\\올빼미");
+    file1.mkdir();           //디렉토리 생성
+    file1.delete();	      //디렉토리 삭제
+
+
+11장 object 클래스
+
+##toString(); 을 사용할때 toString은 object클래스의 메소드이므로 필요없는 값이 나올때가있다.
+그때, 클래스에서 toString을 오버라이딩하여 사용하면 원하는 값이 나온다.
+Ex)
+package ObjectEx;
+
+public class ObjectExample2 {
+	public static void main(String args[]) {
+	GoodsStock obj = new GoodsStock("57293", 100);
+	String str = obj.toString();
+	System.out.println(str);
+	}
+}
+package ObjectEx;
+
+public class GoodsStock {
+	String goodsCode;
+	int stockNum;
+	GoodsStock(String goodsCode, int stockNum){
+		this.goodsCode = goodsCode;
+		this.stockNum = stockNum;
+	}
+	public String toString() {
+		String str = "상품코드: "+goodsCode+" 재고수량: "+stockNum;
+		return str;
+	}
+}
+
+##equals 메소드##
+: 객체가 가지고 있는 값을 비교하는 메소드
+
+생성된 해쉬코드(객체의 주소)가 같으면 값을 비교하게되고
+생성된 해쉬코드(객체의 주소)가 다르면 주소를 비교하게된다.
+
+package ObjectEx;
+
+public class ObjectExample6 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Circle obj1 = new Circle(5);
+		Circle obj2 = new Circle(5);
+		if(obj1.equals(obj2)) {
+			System.out.println("같음");
+		}
+		else {
+			System.out.println("다름");
+		}
+	}
+}
+package ObjectEx;
+
+public class Circle {
+	int radius;
+	Circle(int radius){
+		this.radius = radius;
+	}
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Circle))  //캐스트가 가능하면 true 불가능하면 false
+			return false;
+		Circle circle = (Circle)obj;
+		if(radius == circle.radius)
+			return true;
+		else
+			return false;
+	}
+	
+}
+
+##toString메소드+equals메소드 (성적)##
+package ObjectEx;
+
+public class ObjectSungjuk {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Sungjuk obj1 = new Sungjuk();
+		Sungjuk obj2 = new Sungjuk();
+		obj1.input();
+		obj1.process();
+		System.out.println();
+		obj2.input();
+		obj2.process();
+		if(obj1.equals(obj2)) {
+			System.out.println("\n같다\n");
+			System.out.println(obj1);
+		}else {
+			System.out.println("\n다르다\n");
+			System.out.println(obj2);
+		}
+	}
+}
+
+package ObjectEx;
+import java.io.Serializable;
+import java.util.Scanner;
+
+public class Sungjuk implements Serializable{
+	String num, name;
+	int kor, eng, math;
+	int tot;
+	double avg;
+	String grade;
+	
+	static double totavg;
+	static int cnt = 0;
+	
+	Sungjuk(){
+		
+	}
+	
+	void input() {
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("학번 입력=> ");
+		num = scan.next();
+		System.out.print("이름 입력=> ");
+		name = scan.next();
+		System.out.print("국어 점수=> ");
+		kor = scan.nextInt();
+		System.out.print("영어 점수=> ");
+		eng = scan.nextInt();
+		System.out.print("수학 점수=> ");
+		math = scan.nextInt();
+		System.out.println();
+		
+	}
+	void process() {
+		tot = kor+eng+math;
+		avg = tot/3.;
+		
+		switch((int)avg/10) {
+		case 10:
+		case 9:
+			grade = "수";
+			break;
+		case 8:
+			grade = "우";
+			break;
+		case 7:
+			grade = "미";
+			break;
+		case 6:
+			grade = "양";
+			break;
+		default:
+			grade = "가";
+				
+		}
+	}
+	void output() {
+		System.out.printf("%4s\t%3s\t%d\t%d\t%d\t%d\t%3.2f\t%2s\n",num,name,kor,eng,math,tot,avg,grade);
+	}
+	
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Sungjuk))  //캐스트가 가능하면 true 불가능하면 false
+			return false;
+		Sungjuk pyo = (Sungjuk)obj;
+		if( (num.equals(pyo.num))&&(name.equals(pyo.name))&&(kor==pyo.kor)
+				&&(eng==pyo.eng)&&(math==pyo.math))
+			return true;
+		else
+			return false;
+		
+	}
+	public String toString() {
+		String str = "학번: "+num +"\n이름: "+name+"\n국어: "+kor
+				+"\n영어: "+eng+"\n수학: "+math+"\n총점: "+tot
+				+"\n등급: "+grade+"\n";
+		return str;
+	}
+}
+
+##clone 메소드##
+ : 객체를 복제하는 메소드
+클래스명에 Cloneable을 implements 해서 추가하고
+clone()메소드를 오버라이딩한다.
+public Object clone(){
+	try{
+		return super.clone();
+	}
+	catch(CloneNotSupportedException e){
+		return null;
+	}
+}
+
+Ex)
+package ObjectEx;
+
+public class Rectangle implements Cloneable{
+	int width, height;
+	Rectangle(int width,int height){
+		this.width = width;
+		this.height = height;
+	}
+	public Object clone() {
+		try {
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e) {
+			return null;
+		}
+	}
+}
+
+package ObjectEx;
+
+public class ObjectExample8 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Rectangle obj1 = new Rectangle(10,20);
+		Rectangle obj2 = (Rectangle)obj1.clone();
+		System.out.println("obj1= "+obj1.width+"x"+obj1.height);
+		System.out.println("obj2= "+obj2.width+"x"+obj2.height);
+	}
+}
+
+Ex2)
+package ObjectEx;
+
+public class CloneSungjuk {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Sungjuk obj1 = new Sungjuk();
+		obj1.input();
+		obj1.process();
+		Sungjuk obj2 = (Sungjuk)obj1.clone();
+		if(obj1.equals(obj2)) {
+			System.out.println("\n같다\n");
+			System.out.println(obj1.toString());
+		}else {
+			System.out.println("\n다르다\n");
+			System.out.println(obj2);
+		}
+		
+	}
+
+}
+
+(클래스)기존 성적클래스명에 Cloneable추가하고 clone()메소드 오버라이딩
+public Object clone() {
+		try {
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+##finalize메소드##
+ : 객체가 제거되기 전에(쓰레기객체가 제거되기 전에) 자동으로 호출되는 메소드
+하지만, 자바에는 객체를 제거하는 명령문은 없다.
+
+##getClass메소드##
+ : 객체가 속하는 클래스의 정보를 알아내는 메소드
+package ObjectEx;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+public class ObjectExample9 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Rectangle obj = new Rectangle(10,20);
+		Class cls = obj.getClass();
+		String name = cls.getName();
+		System.out.println("클래스 이름: "+name);
+		Class superCls = cls.getSuperclass();
+		String superName = superCls.getName();
+		System.out.println("슈퍼클래스 이름: "+superName);
+		Field field[] = cls.getDeclaredFields();
+		System.out.println("필드: ");
+		for(int cnt = 0;cnt<field.length;cnt++) {
+			System.out.println("   "+field[cnt]);
+		}
+		Method method[] = cls.getDeclaredMethods();
+		System.out.println("메소드: ");
+		for(int cnt=0;cnt<method.length;cnt++) {
+			System.out.println("   "+method[cnt]);
+		}
+	}
+
+}
+
+package ObjectEx;
+
+public class Rectangle implements Cloneable{
+	int width, height;
+	Rectangle(int width,int height){
+		this.width = width;
+		this.height = height;
+	}
+	int getArea() {
+		return width*height;
+	}
+	public Object clone() {
+		try {
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+}
+
+
+
+12장 Wrapper클래스
+ : 프리미티브 타입을 객체로 표현하는 데 사용되는 클래스들의 통칭
+  프리미티브 타입 데이터를 감싸는 역할을 수행함.
+  첫글자를 대문자로 해서 클래스 선언.
+  int랑 char 은 각각 Integer , Character
+
+Ex)
+package WrapperEx;
+
+public class WrapperExample1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Integer obj1 = new Integer(12);
+		Integer obj2 = new Integer(7);
+		int sum = obj1.intValue()+obj2.intValue();
+		System.out.println(sum);
+	}
+}
+
+##문자열 파라미터를 받는 생성자
+수치로된 문자열파라미터를 -Value메소드와 함께 사용하면
+문자열을 프리미티브 값으로 바꿀 수 있다.
+Ex)
+package WrapperEx;
+
+public class WrapperExample2 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int total = 0;
+		for(int cnt = 0;cnt<args.length;cnt++) {
+			Integer obj = new Integer(args[cnt]);
+			total += obj.intValue();
+		}
+		System.out.println(total);
+	}
+}
+출력: 0
+
+Run Configurations 을 통해 Arguments에 '10 20 30'을 파라미터로 넘겨주면
+출력: 60
+
+## .parse프리미티브타입
+=> 문자열을 프리미티브 타입으로 바꿔주는 메소드
+
+
+########Boxing과 Unboxing#############
+Integer obj = new Integer(12000); // Boxing
+int num = obj.intValue(); // Unboxing
+
+#자동 Boxing과 Unboxing
+ 자동 Boxing : 객체를 써야할 자리에 프리미티브 값을쓰면된다.
+ 자동 Unboxing : 프리미티브 값을 써야할 자리에 객체를 쓰면된다.
+
+Ex) 자동 Unboxing
+package WrapperEx;
+
+public class WrapperExample4 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Integer obj = new Integer("10");
+		int sum = obj+30;
+		System.out.println(sum);
+	}
+}
+
+Ex) 자동 Boxing
+
+package WrapperEx;
+
+public class WrapperExample5 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		printDouble(new Double(123.45));
+		printDouble(123.45);
+	}
+	static void printDouble(Double obj) {
+		System.out.println(obj);
+	}
+}
+
+문제) 상품처리예제클래스 이용해서 Object메소드 복습.
++ Reader Writer 복습
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

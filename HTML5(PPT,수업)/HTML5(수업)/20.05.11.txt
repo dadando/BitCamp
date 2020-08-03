@@ -1,0 +1,294 @@
+#9장 자바스크립트 기본문법
+
+#2. 자료형과 변수
+- 자바스크립트는 모든 자료형과 변수선언은 var로 한다.
+- 문자열은 따옴표를 사용해서 구분한다.
+
+<head>안에 <script>를 사용해서 만든다.
+
+#3. 조건문과 반복문
+#조건문
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script>
+		if(273>52){
+			alert('273>52 => true');
+		}
+		alert('프로그램 종료');
+	</script>
+</head>
+<body>
+	<h1>Click</h1>
+</body>
+</html>
+=>첫번째 경고창이 뜨고난뒤, 2번째 경고창이 뜬다.
+
+
+#3. 반복문
+#배열 ' [ ] '사용
+<script>
+	var array = ['가','나','다','라'];
+	
+	array[0]='윤';
+	
+	alert(array[0]);
+	alert(array[1]);
+	alert(array[2]);
+	alert(array[3]);
+</script>
+
+#while 반복문
+<script>
+	//변수 선언
+	var i = 0;
+	var array = ['가','나','다'];
+	//var array = new Array('가','나','다'); 위와 동일하게 사용가능
+	//반복을 수행.
+	while(i<array.length){
+		alert(i+'번째 출력: '+array[i]);
+		i++;
+	}
+</script>
+
+*
+array.push(); : 배열마지막에 추가하는 메소드
+array.pop(); : 배열의 마지막부터 데이터를 반환하고 삭제시킨다.
+
+#for문
+<script>
+	//변수 선언
+	var array = ['가','나','다'];
+	
+	for(var i=0;i<3;i++){
+		alert(i + '번째 출력: '+array[i]);
+	}
+</script>
+
+
+#prompt 메소드 
+ : 사용자로부터 값을 입력받을 수 있다.
+<script>
+	var num1 = parseInt(prompt("첫번째 숫자 입력"));
+	var num2 = parseInt(prompt("두번째 숫자 입력"));
+</script>
+
+#document.write를 이용한 구구단 테이블
+<script>
+	var num1,num2,min,max,i,j,res;	
+	num1 = parseInt(prompt("첫번째 숫자 입력"));
+	num2 = parseInt(prompt("두번째 숫자 입력"));
+	
+	if(num1<num2){
+		min = num1;
+		max = num2;
+	}else{
+		min = num2;
+		max = num1;
+	}
+	document.write("<table border='1' align='center' style='border-collapse: collapse'>");
+	document.write("<tr align='center'>");
+	for(i=min;i<=max;i++){
+		document.write("<th>"+i+"단"+"</th>");
+	}
+	document.write("</tr>");
+	for(i=1;i<=9;i++){
+		document.write("<tr align='center'>");
+		
+		for(j=min;j<=max;j++){
+			res=j*i;
+			document.write("<td>"+j+" * "+i+" = "+res+"</td>");
+		}
+		document.write("</tr>");
+	}
+	document.write("</table");
+</script>
+
+#04. 함수
+익명 함수: function(){ }
+선언적 함수: function 함수이름(){ }
+<script>
+	//함수를 생성
+	/*
+	function f(x){
+		return x*x;
+	}
+	*/
+	var f = function (x){
+		return x*x;
+	};
+	
+	//함수 호출
+	alert(f(5));
+</script>
+
+#콜백 함수
+<script>
+	//함수 선언
+	function callTenTimes(callback){
+		//10회 반복
+		for(var i=0;i<10;i++){
+			callback();
+		}
+	}
+	//변수 선언
+	var callback = function(){
+		alert('함수 호출');
+	}
+	callTenTimes(callback); //함수 호출
+</script>
+
+#05. 객체
+객체에 접근할때에는 키를 사용한다.
+
+#for in 반복문
+<script>
+	//객체를 선언합니다.
+	var product = {
+		제품명: '7D 건조 망고',
+		유형: '당절임',
+		성분: '망고, 설탕, 메타중아황산나트륨, 치자황색소',
+		원산지: '필리핀'
+	};
+	//출력합니다.
+	for(var i in product){
+		alert(i+':'+product[i]);
+	}
+</script>
+
+#this 키워드 사용
+<script>
+	//객체를 선언합니다.
+	var person = {
+		name: '윤인성',
+		eat: function(food){
+			alert(this.name+'이'+food+'을/를 먹습니다.');
+		}
+	};
+	//메소드 호출
+	person.eat('밥');
+</script>
+
+#브라우저 내장 객체
+- window 객체
+- history 객체
+- location 객체
+- document 객체
+
+#history객체.
+history.go / history.back / history.forward
+
+
+#10장 문서 객체 모델
+#01. 기본용어와 개념
+- 요소 노드 : <h1>과 <script>태그처럼 요소를 생성하는 노드
+- 텍스트 노드 : 화면에 출력되는 문자열
+
+- 정적 생성 : HTML 태그로 적힌 문서 객체를 생성하는 것
+- 동적 생성 : 자바스크립트를 사용해 문서 객체를 생성하는 것
+- 문서 객체 모델(DOM) : 웹 브라우저가 HTML파일을 분석하고 출력하는 방식
+
+document.querySelector().style.backgroundColor = ' ';
+
+window.onload = function( ){ } : 문서를 다읽고 나서 함수 이벤트 발생시킨다.
+
+
+#02. 문서 객체 선택 메소드
+#1개 선택
+ document.getElementById(아이디)
+ document.querySelector(선택자)
+
+#여러 개 선택
+ document.getElementsByName(이름)
+ document.getElementsByClassName(클래스)
+ document.querySelectorAll(선택자)
+
+
+#03. 문서 객체 조작
+#글자 조작
+- 글자 속성
+ textContent : 문서 객체 내부 글자를 순수 텍스트 형식으로 가져온다.
+ innerHTML : HTML 태그를 반영해 가져온다.
+
+<script>
+	window.onload = function(){
+		var output='';
+		for(var i=0;i<10;i++){
+			output+= '<h1>header - '+i+'</h1>';
+		}
+		//document.body.textContent = output;
+		document.body.innerHTML = output;
+	};
+</script>
+
+#스타일 조작
+<script>
+	window.onload = function(){
+		var output='';
+		for(var i=0;i<256;i++){
+			output+= '<div></div>';
+		}
+		document.body.innerHTML = output;
+		
+		var divs = document.querySelectorAll('div');
+			for(var i=0;i< divs.length;i++){
+			var div = divs[i];
+			
+			div.style.height = '2px';
+			div.style.background = 'rgb('+i+','+i+','+i+')';
+		}
+	};
+</script>
+
+#속성 조작
+ setAttribute(속성 이름,속성 값) : 속성 지정
+ getAttribute(속성 이름) : 속성 추출
+
+
+#문서 객체를 사용한 시간 표시
+<script>
+	window.onload = function(){
+		var clock = document.getElementById('clock');
+		
+		setInterval(function() {
+			var now = new Date();
+			clock.innerHTML = now.toString();
+		},1000);
+	};
+</script>
+
+#04. 이벤트
+#인라인 이벤트 모델
+<body>
+	<button onclick = "alert('click')">버튼</button>
+</body>
+#script태그에 인라인 이벤트 모델
+<script>
+	function buttonClick(){
+		alert('click');
+	}
+</script>
+<body>
+	<button onclick = "buttonClick()">버튼</button>
+</body>
+
+#기본 이벤트 제거
+<script>
+	//이벤트를 연결
+	window.onload = function(){
+		//문서 객체를 선택
+		var button = document.getElementById('button');
+		
+		//이벤트 연결
+		button.onclick = function(){
+			//기본 이벤트를 제거
+			return false;
+		};
+	};
+</script>
+<body>
+	<a id="button" href = "http://hanbit.co.kr">버튼</a>
+</body>
+

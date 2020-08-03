@@ -1,0 +1,1146 @@
+# HTTP 헤더 정보와 관련된 메소드들 (참고정도로만 볼것)
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import="java.util.Enumeration" %>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>헤더정보 예제</h1>
+	<table border="1">
+		<tr>
+			<td>헤더이름</td>
+			<td>헤더값</td>
+		</tr>
+	<%
+		Enumeration e = request.getHeaderNames();
+		while(e.hasMoreElements()){
+			String headerName=(String)e.nextElement();
+	%>
+		<tr>
+			<td><%=headerName %></td>
+			<td><%=request.getHeader(headerName)%></td>
+		</tr>
+	<%} %>	
+	</table>
+</body>
+</html>
+
+
+#쿠키,URL/URI,요청방식과 관련된 메소드들
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>쿠키,URL/URI,요청방식에 관련된 정보 예제</h1>
+	<table border="1">
+		<tr>
+			<td>쿠키정보</td>
+	<%
+	Cookie[] cookie = request.getCookies();
+	if(cookie==null){
+	%>
+			<td>쿠키가 존재하지 않습니다</td>
+	<%
+	}else{
+		for(int i=0;i<cookie.length;i++){
+			%>
+			<td><%=cookie[i].getName() %>(<%=cookie[i].getValue() %>)&nbsp;&nbsp;</td>
+			<%
+		}
+	}
+	%>	
+		</tr>
+		<tr>
+			<td>서버 도메인명</td>
+			<td><%=request.getServerName() %></td>
+		</tr>
+		<tr>
+			<td>서버 포트번호</td>
+			<td><%=request.getServerPort() %></td>
+		</tr>
+		<tr>
+			<td>요청 URL</td>
+			<td><%=request.getRequestURL() %></td>
+		</tr>
+		<tr>
+			<td>요청 URL</td>
+			<td><%=request.getRequestURI() %></td>
+		</tr>
+		<tr>
+			<td>요청 쿼리</td>
+			<td><%=request.getQueryString() %></td>
+		</tr>
+		<tr>
+			<td>클라이언트 호스트명</td>
+			<td><%=request.getRemoteHost() %></td>
+		</tr>
+		<tr>
+			<td>클라이언트 IP주소</td>
+			<td><%=request.getRemoteAddr() %></td>
+		</tr>
+		<tr>
+			<td>프로토콜</td>
+			<td><%=request.getProtocol() %></td>
+		</tr>
+		<tr>
+			<td>요청 방식</td>
+			<td><%=request.getMethod() %></td>
+		</tr>
+		<tr>
+			<td>컨텍스트 경로</td>
+			<td><%=request.getContextPath() %></td>
+		</tr>
+	</table>
+	세션 아이디 : <%=session.getId() %> <!-- 세션객체의 세션아이디를 구하는 방법 -->
+</body>
+</html>
+
+
+#내장 객체
+#response 객체 : 클라이언트의 요청에 대한 HTTP응답을 나타내는 객체
+
+#responseTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+response.sendRedirect("responseTest2.jsp");
+%>
+
+
+#responseTest2.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Insert title here</title>
+</head>
+<body>
+	<h1>현재 페이지는 responseTest1.jsp에 의해 <br>리다이렉트 된 페이지입니다.</h1>
+</body>
+</html>
+
+=>실행은 Test1을 하고 화면엔 Test2가 출력된다. URL도 Test2가 나온다.
+
+
+#pageContext객체
+
+#pageContextTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+pageContext.forward("pageContextTest2.jsp");
+%>
+
+#pageContextTest2.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<%
+	pageContext.include("pageContextTest3.jsp");
+	%>
+	<h2>pageContext의 forward 메소드로 포워딩된 페이지입니다.</h2>
+</body>
+</html>
+
+#pageContextTest3.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<h3>include 되는 pageContextTest3.jsp페이지입니다.</h3>
+<hr>
+
+
+
+#session객체
+#sessionTest1.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+session.setMaxInactiveInterval(10);
+%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>세션 부스트</h2>
+	isNew():<%=session.isNew() %><br>
+	생성시간: <%=session.getCreationTime() %><br>
+	최종 접속 시간: <%=session.getLastAccessedTime() %><br>
+	세션ID:<%=session.getId() %><br>
+</body>
+</html>
+
+=>10초뒤에 리로드하면 isNew는 true를 반환하고 세션ID가 새로 바뀐다.
+
+
+#application객체
+#applicationTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>application테스트</h2>
+	<table border="1">
+		<tr>
+			<td>JSP버전</td>
+			<td><%=application.getMajorVersion() %>.<%=application.getMinorVersion() %></td>
+		</tr>
+		<tr>
+			<td>컨테이너 정보</td>
+			<td><%=application.getServerInfo() %></td>
+		</tr>
+		<tr>
+			<td>웹 애플리케이션의 실제 파일시스템 경로</td>
+			<td><%=application.getRealPath("/") %></td>
+	</table>
+</body>
+</html>
+
+
+#out객체 : 응답 페이지를 만들기 위해 사용하는 출력 스트림 객체
+
+#config객체 : 서블릿 인스턴스가 생성될 때 참조해야 할 초기 설정 정보들을 저장해 놓은 객체
+
+#page객체 : 서블릿 인스턴스 자체를 나타내는 객체
+
+#exception객체 : 예외가 발생할 경우 그 예외를 처리할 에러 페이지를 사용자가 지정한 경우에 
+	          해당 에러 페이지에 전달되는 예외 객체
+
+
+#영역 객체와 속성
+#영역(Scope) : 속성을 공유할 수 있는 유효 범위
+#속성(Attribute) : 공유되는 데이터
+
+예제)
+#attributeTest1_Form.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Attribute Test Form</title>
+</head>
+<body>
+	<h2>영역과 속성 테스트</h2>
+	<form action="attributeTest1.jsp" method="post">
+		<table border="1">
+			<tr><td colspan="2">Application 영역에 저장할 내용들</td></tr>
+			<tr>
+				<td>이름</td>
+				<td><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td>아이디</td>
+				<td><input type="text" name="id"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="전송"></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
+
+#attributeTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Attribute Test</title>
+</head>
+<body>
+	<h2>영역과 속성 테스트</h2>
+	<%
+	request.setCharacterEncoding("utf-8");
+	String name=request.getParameter("name");
+	String id = request.getParameter("id");
+	if(name!=null&&id!=null){
+		application.setAttribute("name",name);
+		application.setAttribute("id",id);
+	}
+	%>
+	<h3><%=name %>님 반갑습니다.<br><%=name %>님의 아이디는 <%=id %>입니다.</h3>
+	<form action="attributeTest2.jsp" method="post">
+		<table border="1">
+			<tr><td colspan="2">Session영역에 저장할 내용들</td></tr>
+			<tr>
+				<td>e-mail주소</td>
+				<td><input type="text" name="email"></td>
+			</tr>
+			<tr>
+				<td>집 주소</td>
+				<td><input type="text" name="address"></td>
+			</tr>
+			<tr>
+				<td>전화번호</td>
+				<td><input type="text" name="tel"></td>
+			</tr>
+			<tr><td colspan="2"><input type="submit" value="전송"></td></tr>
+		</table>
+	</form>
+</body>
+</html>
+
+#attributeTest2.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Attribute Test</title>
+</head>
+<body>
+	<h2>영역과 속성 테스트</h2>
+	<%
+	request.setCharacterEncoding("utf-8");
+	String email=request.getParameter("email");
+	String address=request.getParameter("address");
+	String tel=request.getParameter("tel");
+	session.setAttribute("email", email);
+	session.setAttribute("address", address);
+	session.setAttribute("tel", tel);
+	
+	String name=(String)application.getAttribute("name");
+	%>
+	<h3><%=name %>님의 정보가 모두 저장되었습니다.</h3>
+	<a href="attributeTest3.jsp">확인하러 가기</a>
+</body>
+</html>
+
+#attributeTest3.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@page import = "java.util.Enumeration" %>
+<html>
+<head>
+	<title>Attribute Test</title>
+</head>
+<body>
+	<h2>영역과 속성 테스트</h2>
+	<table border="1">
+		<tr><td colspan="2">Application 영역에 저장된 내용들</td></tr>
+		<tr>
+			<td>이름</td>
+			<td><%=application.getAttribute("name") %></td>
+		</tr>
+		<tr>
+			<td>아이디</td>
+			<td><%=application.getAttribute("id") %></td>
+		</tr>
+	</table>
+	<br>
+	<table border="1">
+		<tr><td colspan="2">Session영역에 저장된 내용들</td></tr>
+	<%
+	Enumeration e = session.getAttributeNames();
+	while(e.hasMoreElements()){
+		String attributeName = (String)e.nextElement();
+		String attributeValue = (String)session.getAttribute(attributeName);
+	%>
+		<tr>
+			<td><%=attributeName %></td>
+			<td><%=attributeValue %></td>
+		</tr>
+	<%
+	}
+	%>
+	</table>
+</body>
+</html>
+
+=>크롬창을 닫으면 Application객체는 남아있고 Session객체는 사라진다.
+    Application객체는 서버가 중지되면 사라진다.
+
+
+#page영역과 request영역 비교
+
+#액션태그
+ : 스크립트 언어를 사용하지 않고도 다른 페이지의 서블릿이나 객체에 접근할 수 있도록 태그를 이용해 구현된 기능
+
+#forwardTest.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Forward Action Test</title>
+</head>
+<body>
+	<h2>포워드 액션 테스트</h2>
+	<form action="forwardTest1.jsp" method="POST">
+	<input type="hidden" name="forwardPage" value="forwardTest2.jsp">
+	<table>
+		<tr>
+			<td>이름</td>
+			<td><input type="text" name="name"></td>
+		</tr>
+		<tr>
+			<td>나이</td>
+			<td><input type="text" name="age"></td>
+		</tr>
+		<tr>
+			<td>주소</td>
+			<td><input type="text" name="address"></td>
+		</tr>
+		<tr><td><input type="submit" value="전송"></td></tr>
+	</table>
+	</form>
+</body>
+</html>
+
+#forwardTest1.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<html>
+<body>
+	<jsp:forward page='<%=request.getParameter("forwardPage") %>'>
+		<jsp:param name="tel" value="034-1234-5678"/>
+	</jsp:forward>
+</body>
+</html>
+
+#forwardTest2.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+	<title>Forward Action Test</title>
+</head>
+<body>
+	<h2>포워드 된 페이지(forwardTest2.jsp)</h2>
+	<table>
+		<tr>
+			<td>이름</td>
+			<td><%=request.getParameter("name") %></td>
+		</tr>
+		<tr>
+			<td>나이</td>
+			<td><%=request.getParameter("age") %></td>
+		</tr>
+		<tr>
+			<td>주소</td>
+			<td><%=request.getParameter("address") %></td>
+		</tr>
+		<tr>
+			<td>전화번호</td>
+			<td><%=request.getParameter("tel") %></td>
+		</tr>
+	</table>
+</body>
+</html>
+
+
+#include 액션 태그
+ : 임시로 제어권을 include되는 페이지로 넘겻다가 그 페이지의 처리가 끝나면 처리결과를
+   원래 페이지로 리턴하고 다시 원래의 페이지로 제어권을 반환하는 방식
+
+
+#7장 자바빈(JavaBean)
+ - 멤버 변수는 private, 각 set/get메소드는 public, 클래스도 public으로 정의해야 한다.
+ - 생성자는 파라미터가 존재하지 않아야 한다.
+
+#자바빈을 이용한 회원가입 폼 작성
+
+#JoinBean.java
+package join;
+
+public class JoinBean {
+	private String id;
+	private String pass;
+	private String name;
+	private String sex;
+	private int age;
+	private String email;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPass() {
+		return pass;
+	}
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+		
+}
+
+#joinFormjsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8");%>
+<jsp:useBean id="join" class="join.JoinBean"/>
+<jsp:setProperty name="join" property="*"/>
+
+<html>
+<head>
+	<title>회원가입 입력 정보 확인 페이지</title>
+</head>
+<body>
+<center>
+	<table border=1>
+		<tr>
+			<td bgcolor="yellow"><font size=2>아이디:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="id"/></td>
+		</tr>
+		<tr>
+			<td bgcolor="yellow"><font size=2>비밀번호:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="pass"/></td>
+		</tr>
+		<tr>
+			<td bgcolor="yellow"><font size=2>이름:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="name"/></td>
+		</tr>
+		<tr>
+			<td bgcolor="yellow"><font size=2>성별:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="sex"/></td>
+		</tr>
+		<tr>
+			<td bgcolor="yellow"><font size=2>나이:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="age"/></td>
+		</tr>
+		<tr>
+			<td bgcolor="yellow"><font size=2>이메일주소:</font></td>
+			<td bgcolor="yellow"><jsp:getProperty name="join" property="email"/></td>
+		</tr>
+	</table>
+</center>
+</body>
+</html>
+
+#joinChk.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<html>
+<head>
+<title>회원가입 폼</title>
+</head>
+<body>
+<center>
+	<form action="joinChk.jsp" method="post">
+		<table border=0>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>아이디:</font></td>
+				<td bgcolor="yellow"><input type="text" name="id"></td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>비밀번호:</font></td>
+				<td bgcolor="yellow"><input type="password" name="pass"></td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>이름:</font></td>
+				<td bgcolor="yellow"><input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>성별:</font></td>
+				<td bgcolor="yellow">
+					<input type="radio" name="sex" value="남자" checked><font size=2>남</font>
+					<input type="radio" name="sex" value="여자"><font size=2>여</font>
+				</td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>나이:</font></td>
+				<td bgcolor="yellow"><input type="text" name="age"></td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow"><font size=2>이메일주소:</font></td>
+				<td bgcolor="yellow"><input type="text" name="email"></td>
+			</tr>
+			<tr>
+				<td align=right bgcolor="yellow" colspan=2><input type="submit" value="가입">
+				<input type="reset" value="다시 작성">
+				</td>
+			</tr>
+		</table>
+	</form>
+</center>
+</body>
+</html>
+
+
+######응용 예제 (회원가입)####
+#join_Menu.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+	<title>회원 가입</title>
+	<style>
+		#table1{
+			width: 70%;
+			align: center;
+			text-align: left;
+		}
+	</style>
+	<script type="text/javascript">
+		
+		function check_id(){
+			var str = document.form1.id.value;
+			var str1 = "";
+			if(document.form1.id.value==str1){
+				alert("아이디를 입력하세요!");
+				document.form1.id.focus();
+				return false;
+			}else if(!(str.length >= 6 && str.length <= 10)){
+				alert("최소6자리~최대10자리를 입력해주세요!");
+				document.form1.id.focus();
+				return false;
+			}else{
+				for(var i=0;i<str.length;i++){
+					var ch = str.substring(i,i+1);
+					if(!((ch >= "0" && ch<="9")||(ch >= "a" && ch <= "z"))){
+						alert("아이디 입력(특수문자)오류!!");
+						document.form1.id.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		function check_pw(){
+			var str = document.form1.pw.value;
+			var str1 = "";
+			if(document.form1.pw.value==str1){
+				alert("패스워드를 입력하세요!");
+				document.form1.pw.focus();
+				return false;
+			}else if(!(str.length >= 6 && str.length <= 10)){
+				alert("최소6자리~최대10자리를 입력해주세요!")
+				document.form1.pw.focus();
+				return false;
+			}else{
+				for(var i=0;i<str.length;i++){
+					var ch = str.substring(i,i+1);
+					if(!((ch >= "0" && ch<="9")||(ch >= "a" && ch <= "z"))){
+						alert("패스워드 입력(특수문자)오류!!");
+						document.form1.pw.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
+		function check_pw2(){
+			if(document.form1.pw.value != document.form1.pw_check.value){
+				alert("패스워드가 일치하지 않습니다.!!");
+				document.form1.pw_check.focus();
+				return false;
+			}
+			return true;
+		}
+		
+		function check_jumin(){
+			var str = document.form1.ju1.value;
+			if (str == "")
+			{
+				alert("주민번호(앞자리)를 입력하세요!!!");
+				document.form1.ju1.focus();
+				return false;
+			}else if(str.length!=6){
+				alert("생년월일을 확인해주세요.");
+				return false;
+			}
+			return true;
+		}
+		
+		function check_jumin2(){
+			var str1 = document.form1.ju1.value;
+			var str2 = document.form1.ju2.value;
+			var chk_list = "";
+			
+			if(document.form1.ju2.value == ""){
+				alert("주민번호(뒷자리)를 입력하세요!!!");
+				document.form1.ju2.focus();
+				return false;
+			}else{
+				if (str2.length != 7){
+					alert("주민번호 확인(7자리)!!!");
+					document.form1.ju2.focus();
+					return false;
+				}else{
+					str = str1 + str2;
+					var w = 2, hap = 0, chk;
+					
+					for (i=0; i<str.length-1; i++){
+						ch = str.substring(i, i+1);
+						
+						if (!(ch >= "0" && ch <= "9")){
+							alert("특수문자,일반문자가 포함, 다시 입력!!!");
+							document.form1.ju1.focus();
+							return false;
+						}else{
+							hap += parseInt(ch) * w;
+							w++;
+							if (w == 10)
+								w = 2;
+						}
+					}
+					chk = 11 - (hap % 11);
+					if (chk == 10)
+						chk = 0;
+					else if (chk == 11)
+						chk = 1;
+					
+					if (chk != parseInt(
+						str.substring(str.length-1, str.length))){
+						alert("주민번호 오류, 다시 입력!!!");
+						document.form1.ju1.value="";
+						document.form1.ju2.value="";
+						document.form1.ju1.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		// 주민번호까지 완료...
+		function check_gender(){
+			if(!(document.form1.gender[0].checked||document.form1.gender[1].checked)){
+				alert("성별을 체크해주세요.");
+				return false;
+			}
+			return true;
+		}
+		function check_tel1(){
+			if(document.form1.tel1.value.length!=3){
+				alert("전화번호 입력오류!(3자리)");
+				document.form1.tel1.focus();
+				return false;
+			}else{
+				var str=document.form1.tel1.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel1.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_tel2(){
+			if(document.form1.tel2.value.length!=4){
+				alert("전화번호 입력오류!(4자리)");
+				document.form1.tel2.focus();
+				return false;
+			}else{
+				var str=document.form1.tel2.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel2.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_tel3(){
+			if(document.form1.tel3.value.length!=4){
+				alert("전화번호 입력오류!(4자리)");
+				document.form1.tel3.focus();
+				return false;
+			}else{
+				var str=document.form1.tel3.value;
+				for(i=0;i<str.length;i++){
+					ch=str.substring(i,i+1);
+					if(ch<"0"||ch>"9"){
+						alert("숫자만 입력해주세요.");
+						document.form1.tel3.focus();
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		function check_email(){
+			if(document.form1.email.value.length==0){
+				alert("이메일을 입력하세요!");
+				document.form1.email.focus();
+				return false;
+			}
+			return true;
+		}
+		function check_domain(){
+			if(document.form1.email_domain.value==""){
+				alert("메일 도메인을 선택해주세요");
+				return false;
+			}
+			return true;
+		}
+		function check_hobby(){
+			if((document.form1.hobby[0].checked==false)&&
+				(document.form1.hobby[1].checked==false)&&
+				(document.form1.hobby[2].checked==false)&&
+				(document.form1.hobby[3].checked==false)&&
+				(document.form1.hobby[4].checked==false)){
+				alert("취미를 선택해주세요.");
+				return false;
+			}
+			return true;
+		}
+		function check_textarea(){
+			if(document.form1.text_area.value==""){
+				alert("자기소개항목을 입력하세요");
+				document.form1.text_area.focus();
+				return false;
+			}
+			return true;
+		}
+		function check(){
+			if(check_id()==false){
+				return false;
+			}
+			else if(!check_pw()){
+				return false;
+			}
+			else if(!check_pw2()){
+				return false;
+			}
+			else if(!check_jumin()){
+				return false;
+			}
+			else if(!check_jumin2()){
+				return false;
+			}
+			else if(!check_gender()){
+				return false;	
+			}
+			else if(!check_tel1()){
+				return false;
+			}
+			else if(!check_tel2()){
+				return false;	
+			}
+			else if(!check_tel3()){
+				return false;
+			}
+			else if(!check_email()){
+				return false;
+			}
+			else if(!check_domain()){
+				return false;
+			}
+			else if(!check_hobby()){
+				return false;
+			}
+			else if(!check_textarea()){
+				return false;
+			}else{
+			//취미 값 저장
+			var str="";
+			for(var i=0;i<5;i++){
+				if(document.form1.hobby[i].checked==true){
+					str+=document.form1.hobby[i].value+" ";
+				}
+			}
+			//알림창 출력
+			alert("아이디: "+document.form1.id.value+
+					"\n비밀번호: "+document.form1.pw.value+
+					"\n생년월일: "+document.form1.ju1.value+
+					"\n성별: "+document.form1.gender.value+
+					"\n전화번호: "+document.form1.tel1.value+" - "+document.form1.tel2.value+" - "+document.form1.tel3.value+
+					"\n이메일: "+document.form1.email.value+"@"+document.form1.email_domain.value+
+					"\n취미: "+str+
+					"\n자기소개: "+document.form1.text_area.value);
+			}
+			return true;
+		}
+	</script>
+</head>
+<body>
+<form name="form1" action="menuChk.jsp" method="post" onsubmit="return check();">
+	<table border="1" id="table1" align="center">
+		<tr>
+			<th>&nbsp;아이디</th>
+			<td>&nbsp;<input type="text" name="id" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_id();" /></td>
+		</tr>
+		<tr>
+			<th>&nbsp;비밀번호</th>
+			<td>&nbsp;<input type="password" name="pw" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_pw();"/></td>
+		</tr>
+		<tr>
+			<th>&nbsp;비밀번호 확인</th>
+			<td>&nbsp;<input type="password" name="pw_check" size="30" maxlength="10" placeholder="최소6~최대10,숫자와 알파벳만 사용" onchange="check_pw2();"/></td>
+		</tr>
+		<tr>
+			<th>&nbsp;주민번호</th>
+			<td>&nbsp;
+				<input type="text" name="ju1" size="6" maxlength="6" onchange="check_jumin();"/> - 
+				<input type="password" name="ju2" size="7" maxlength="7" onchange="check_jumin2();"/>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;성별</th>
+			<td>&nbsp;
+				<input type="radio" name="gender" value="남자" checked/> 남자&nbsp;&nbsp;
+				<input type="radio" name="gender" value="여자" /> 여자
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;전화번호</th>
+			<td>&nbsp;
+				<input type="text" name="tel1" size="3" maxlength="3" onchange="check_tel1();" /> - 
+				<input type="text" name="tel2" size="4" maxlength="4" onchange="check_tel2();" /> - 
+				<input type="text" name="tel3" size="4" maxlength="4" onchange="check_tel3();" />
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;이메일</th>
+			<td>&nbsp;
+				<input type="text" name="email" size="10" maxlength="10" onchange="check_email();"/> @ 
+				<select name="email_domain">
+					<option value=""> 메일주소선택 </option>
+					<option>naver.com</option>
+					<option>daum.net</option>
+					<option>google.com</option>
+					<option>gmail.com</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;취미</th>
+			<td>&nbsp;
+				<input type="checkbox" name="hobby" value="등산" />등산 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="독서" />독서 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="스키" />스키 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="음악" />음악 &nbsp;&nbsp;
+				<input type="checkbox" name="hobby" value="영화" />영화 &nbsp;&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<th>&nbsp;자기소개</th>
+			<td>&nbsp;
+				<textarea name="text_area" rows="15" cols="60"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<input type="submit" name="check_btn"  value="입력" />&nbsp;&nbsp;
+				<input type="reset" name="cancel_btn" value="취소" />
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>
+
+#JoinMenu.java
+package join;
+
+public class JoinMenu {
+	private String id;
+	private String pw;
+	private String pass_check;
+	private String ju1;
+	private String ju2;
+	private String gender;
+	private String tel1;
+	private String tel2;
+	private String tel3;
+	private String email;
+	private String email_domain;
+	private String hobby[];
+	private String text_area;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPw() {
+		return pw;
+	}
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+	public String getPass_check() {
+		return pass_check;
+	}
+	public void setPass_check(String pass_check) {
+		this.pass_check = pass_check;
+	}
+	public String getJu1() {
+		return ju1;
+	}
+	public void setJu1(String ju1) {
+		this.ju1 = ju1;
+	}
+	public String getJu2() {
+		return ju2;
+	}
+	public void setJu2(String ju2) {
+		this.ju2 = ju2;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getTel1() {
+		return tel1;
+	}
+	public void setTel1(String tel1) {
+		this.tel1 = tel1;
+	}
+	public String getTel2() {
+		return tel2;
+	}
+	public void setTel2(String tel2) {
+		this.tel2 = tel2;
+	}
+	public String getTel3() {
+		return tel3;
+	}
+	public void setTel3(String tel3) {
+		this.tel3 = tel3;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getEmail_domain() {
+		return email_domain;
+	}
+	public void setEmail_domain(String email_domain) {
+		this.email_domain = email_domain;
+	}
+	public String getText_area() {
+		return text_area;
+	}
+	public void setText_area(String text_area) {
+		this.text_area = text_area;
+	}
+	public String[] getHobby() {
+		return hobby;
+	}
+	public void setHobby(String[] hobby) {
+		this.hobby = hobby;
+	}
+	public String hobby_res() {
+		String res="";
+		int i;
+		for(i=0; i<hobby.length; i++){
+			res+=hobby[i]+"  ";
+		}
+		return res;
+	}
+}
+
+
+#menuChk.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8");%>
+<jsp:useBean id="join1" class="join.JoinMenu"/> <!-- Sungjuk obj = new Sungjuk(); -->
+<jsp:setProperty name="join1" property="*"/> <!-- obj.input(); -->
+<!-- 1.html로 정보 입력
+	 2.제출시 menuChk.jsp파일 연결 (action)
+	 3.JoinMenu클래스파일 인스턴스 객체 생성 (jsp:useBean id=~~)
+	 4.JoinMenu클래스파일에 입력받은 정보를 입력 (jsp:setProperty ~~)
+	 5.정보를 불러와서 실행(<body>)
+	 5-1.불러오는 코드는 
+	   1)<jsp:getProperty name="객체이름" property="변수이름"/>
+<%--   2) <%=객체이름.get메소드이름() %> --%>
+	   1),2)둘다 같은의미.
+ -->
+ <!-- 아래로~ obj.output(); -->
+<html>
+<head>
+	<title>회원 가입 정보</title>
+</head>
+<body>
+	<table border="1" id="table1" align="center">
+		<tr>
+			<th>&nbsp;아이디</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="id"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->
+		</tr>
+		<tr>
+			<th>&nbsp;비밀번호</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="pw"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->	
+		</tr>
+		<tr>
+			<th>&nbsp;생년월일</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="ju1"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->	
+		</tr>
+		<tr>
+			<th>&nbsp;성별</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="gender"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->	
+		</tr>
+		<tr>
+			<th>&nbsp;전화번호</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="tel1"/>-
+			<jsp:getProperty name="join1" property="tel2"/>-
+			<jsp:getProperty name="join1" property="tel3"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->	
+		</tr>
+		<tr>
+			<th>&nbsp;이메일</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="email"/>@<jsp:getProperty name="join1" property="email_domain"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->
+		</tr>
+		<tr>
+			<th>&nbsp;취미</th>
+			<td>&nbsp;<%=join1.hobby_res() %></td>
+		</tr>
+		<tr>
+			<th>&nbsp;자기소개</th>
+			<td>&nbsp;<jsp:getProperty name="join1" property="text_area"/></td>
+		<!-- <td>&nbsp;<%=join1.getId() %></td> -->
+		</tr>
+	</table>
+</body>
+</html>
+

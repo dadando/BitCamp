@@ -1,0 +1,41 @@
+#Spring  DB연동하는 방법
+
+pom.xml 에서 properies태그 다음에 
+<!-- Oracle(변경된부분: 2017.06.12 현재) -->
+<repositories>
+	<repository>
+		<id>oracle</id>
+		<url>http://maven.jahia.org/maven2</url>
+	</repository>
+</repositories>
+을 추가하고
+
+dependency태그 내부 마지막에
+<!-- Oracle(변경된 부분: 2017.06.12현재) -->
+<dependency>
+	<groupId>com.oracle</groupId>
+	<artifactId>ojdbc6</artifactId>
+	<version>12.1.0.2</version>
+</dependency>
+을 추가한다.
+
+Maven Dependencies에서 ojdbc6-12.1.0.2.jar가 다운로드됐는지 확인한다. 
+(최초 다운로드시 안정된 인터넷연결필수)
+
+
+#Maven방식을 이용해서 jar파일을 다운로드
+pom.xml 내부 dependencies 태그 내부에
+<!-- File Upload 시작 -->
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.3</version>
+</dependency>
+<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>1.4</version>
+</dependency>
+<!-- File Upload 끝 -->
+추가한다.
+확인은 Maven Dependencies폴더에서 확인한다.
